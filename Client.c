@@ -8,14 +8,22 @@
 #define LARGURA_TELA 940
 #define ALTURA_TELA 780
 
-void TelaMenu();
+void ChecaPonteiro(void * ptr, char erro[50]){
+
+	if(ptr == NULL){
+
+		printf("Deu merda na linha: [%s]\n", erro);
+		exit(0);
+	}
+
+}
 
 int main(){
 	
 	ALLEGRO_DISPLAY *janela = NULL;
 	ALLEGRO_BITMAP *menu = NULL, *gameName = NULL, *botaoPlay = 0;
-
-	ALLEGRO_EVENT_QUEUE *fila_eventos = NULL; //declara a fila de eventos
+	ALLEGRO_EVENT_QUEUE *filaEventosMouse = NULL; //declara a fila de eventos
+	int apertouBotaoPlay = 0, inMenu = 1;
 
 	al_init();
 	al_init_image_addon();
@@ -25,81 +33,81 @@ int main(){
 	al_set_window_title(janela, "Battle Of Feuds"); 	// Configura o título da janela
 	al_set_system_mouse_cursor(janela, ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT);	// Atribui o cursor padrão do sistema para ser usado
 
-	if (!janela){ //caso al_create_display retorne NULL, encerra programa
-		printf("Falha ao criar janela");
-		return -1;
-	}
+	ChecaPonteiro(janela, "Erro na janela"); 	//Checa erro!
 
 	menu = al_load_bitmap("Menu.png"); //carrega imagem
 	gameName = al_load_bitmap("BattleLogo.png");
+	botaoPlay = al_load_bitmap("StartButton00.png");
 
-	if (!menu){       //caso al_load_bitmap retorne NULL, encerra programa
-		printf("Falha ao carregar o arquivo de imagem");
-		al_destroy_display(janela);
-		return -1;
-	}
+	ChecaPonteiro(menu, "Erro no menu"); 	//Checa erro!
+	ChecaPonteiro(gameName, "Erro no gamename"); 	//Checa erro!
+	ChecaPonteiro(botaoPlay, "Erro no botaoplay"); 	//Checa erro!
 
+	filaEventosMouse = al_create_event_queue(); //cria fila de eventos
 
-	fila_eventos = al_create_event_queue(); //cria fila de eventos
+	ChecaPonteiro(filaEventosMouse, "Erro na fila de eventos Mouse"); 	//Checa erro!
 
-	if (!fila_eventos){ //caso al_create_event_queue retorne NULL, destroi a janela e encerra o programa
-		printf("Falha ao criar fila de eventos");
-		al_destroy_display(janela);
-		return -1;
-	}
-
-	al_register_event_source(fila_eventos, al_get_display_event_source(janela)); //registra eventos da janela em fila_eventos
-	al_register_event_source(fila_eventos, al_get_mouse_event_source());
+	al_register_event_source(filaEventosMouse, al_get_mouse_event_source());
 	al_draw_bitmap(menu, 0, 0, 0); //desenha imagem no display ativo em X:0 Y:0
 	al_draw_bitmap(gameName, 200, 100, 0);
-	botaoPlay = al_create_bitmap(LARGURA_TELA / 2, ALTURA_TELA / 2);
 	al_flip_display(); //atualiza tela
-
-	int noBotaoPlay = 0;
 
 	while (1){
 
-		while (!al_is_event_queue_empty(fila_eventos)){
+		while (inMenu){
 
-		    ALLEGRO_EVENT evento;	//declara vriavel que recebe evento e timeout
-            al_wait_for_event(fila_eventos, &evento);
+		    ALLEGRO_EVENT eventoMouse;	//declara variavel que recebe evento e timeout
 
-				if (evento.type == ALLEGRO_EVENT_MOUSE_AXES){
-                // Verificamos se ele está sobre a região do botao play
-                if (evento.mouse.x >= LARGURA_TELA / 2 - al_get_bitmap_width(botaoPlay) / 2 &&
-                	evento.mouse.x <= LARGURA_TELA / 2 + al_get_bitmap_width(botaoPlay) / 2 &&
-                	evento.mouse.y >= ALTURA_TELA / 2 - al_get_bitmap_height(botaoPlay) / 2 &&
-                	evento.mouse.y <= ALTURA_TELA / 2 + al_get_bitmap_height(botaoPlay) / 2){
+            al_wait_for_event(filaEventosMouse, &eventoMouse);
+			printf("%d\n", eventoMouse.type);
 
-                    noBotaoPlay = 1;
+				if (eventoMouse.type == ALLEGRO_EVENT_MOUSE_AXES){
+                
+                if (eventoMouse.mouse.x >= LARGURA_TELA / 2 - al_get_bitmap_width(botaoPlay) / 2 &&  // Verificamos se ele está sobre a região do botao play
+                	eventoMouse.mouse.x <= LARGURA_TELA / 2 + al_get_bitmap_width(botaoPlay) / 2 &&
+                	eventoMouse.mouse.y >= ALTURA_TELA / 2 - al_get_bitmap_height(botaoPlay) / 2 &&
+                	eventoMouse.mouse.y <= ALTURA_TELA / 2 + al_get_bitmap_height(botaoPlay) / 2){
+
+						while (!al_is_event_queue_empty(filaEventosMouse)){
+
+							if(eventoMouse.type == ALLEGRO_EVENT_MOUSE_AXES){
+
+								apertouBotaoPlay = 1;
+								printf("Apertasse puto\n");
+							}
+
+							else{
+							//printf("to aq");
+                    		apertouBotaoPlay = 0;
+                			}
+
+						}        
                 }
-                else{
-                    noBotaoPlay = 0;
-                }
+                
             }
+
+			al_draw_bitmap(menu, 0, 0, 0);
+			al_draw_bitmap(gameName, 200, 100, 0);
+			al_set_target_bitmap(botaoPlay);
+			if (!apertouBotaoPlay){
+            botaoPlay = al_load_bitmap("StartButton00.png");
+        	}
+        	else{
+            botaoPlay = al_load_bitmap("StartButton2.jpg");
+        	}
+			al_set_target_bitmap(al_get_backbuffer(janela));
+			al_draw_bitmap(botaoPlay, LARGURA_TELA / 2 - al_get_bitmap_width(botaoPlay) / 2,
+        			   		ALTURA_TELA / 2 - al_get_bitmap_height(botaoPlay) / 2, 0);
+					   
+			al_flip_display();
+
 		}
 
-		al_draw_bitmap(menu, 0, 0, 0);
-		al_draw_bitmap(gameName, 200, 100, 0);
-
-		al_set_target_bitmap(botaoPlay);
-        if (!noBotaoPlay){
-            al_clear_to_color(al_map_rgb(255, 255, 255));
-        }
-        else{
-            al_clear_to_color(al_map_rgb(0, 255, 0));
-        }
-		
-		al_set_target_bitmap(al_get_backbuffer(janela));
-		al_draw_bitmap(botaoPlay, LARGURA_TELA / 2 - al_get_bitmap_width(botaoPlay) / 2,
-        			   ALTURA_TELA / 2 - al_get_bitmap_height(botaoPlay) / 2, 0);
-					   
-		al_flip_display();
 	}
 
 	//destroi janela e fila de eventos ao fim
 	al_destroy_display(janela);
-	al_destroy_event_queue(fila_eventos);
+	al_destroy_event_queue(filaEventosMouse);
 
 	return 0;
 }
