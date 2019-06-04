@@ -1,49 +1,40 @@
 // Os arquivos de cabeçalho
+#include <stdio.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_image.h>
 
 // Atributos da tela
-#define LARGURA_TELA 640
-#define ALTURA_TELA 480
+#define LARGURA_TELA 940
+#define ALTURA_TELA 780
 
-void error_msg(char *text){
-	al_show_native_message_box(NULL,"ERRO",
-		"Ocorreu o seguinte erro e o programa sera finalizado:",
-		text,NULL,ALLEGRO_MESSAGEBOX_ERROR);
-}
+void TelaMenu();
 
 int main(){
+	
 	ALLEGRO_DISPLAY *janela = NULL;
-	ALLEGRO_BITMAP *menu = NULL;
+	ALLEGRO_BITMAP *menu = NULL, *gameName = NULL, *botaoPlay = 0;
 
 	ALLEGRO_EVENT_QUEUE *fila_eventos = NULL; //declara a fila de eventos
 
-
-	if (!al_init()){        //Inicialização da biblioteca Allegro
-		error_msg("Falha ao inicializar a Allegro");
-		return -1;
-	}
-
-
-	if (!al_init_image_addon()){    //tenta iniciar o módulo de imagens
-		error_msg("Falha ao inicializar add-on allegro_image");
-		return -1;
-	}
-
+	al_init();
+	al_init_image_addon();
+	al_install_mouse(); 
 
 	janela = al_create_display(LARGURA_TELA, ALTURA_TELA); //cria display em janela
+	al_set_window_title(janela, "Battle Of Feuds"); 	// Configura o título da janela
+	al_set_system_mouse_cursor(janela, ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT);	// Atribui o cursor padrão do sistema para ser usado
 
 	if (!janela){ //caso al_create_display retorne NULL, encerra programa
-		error_msg("Falha ao criar janela");
+		printf("Falha ao criar janela");
 		return -1;
 	}
 
-
 	menu = al_load_bitmap("Menu.png"); //carrega imagem
+	gameName = al_load_bitmap("BattleLogo.png");
 
 	if (!menu){       //caso al_load_bitmap retorne NULL, encerra programa
-		error_msg("Falha ao carregar o arquivo de imagem");
+		printf("Falha ao carregar o arquivo de imagem");
 		al_destroy_display(janela);
 		return -1;
 	}
@@ -52,35 +43,57 @@ int main(){
 	fila_eventos = al_create_event_queue(); //cria fila de eventos
 
 	if (!fila_eventos){ //caso al_create_event_queue retorne NULL, destroi a janela e encerra o programa
-		error_msg("Falha ao criar fila de eventos");
+		printf("Falha ao criar fila de eventos");
 		al_destroy_display(janela);
 		return -1;
 	}
 
-
 	al_register_event_source(fila_eventos, al_get_display_event_source(janela)); //registra eventos da janela em fila_eventos
-
-
+	al_register_event_source(fila_eventos, al_get_mouse_event_source());
 	al_draw_bitmap(menu, 0, 0, 0); //desenha imagem no display ativo em X:0 Y:0
-
-
+	al_draw_bitmap(gameName, 200, 100, 0);
+	botaoPlay = al_create_bitmap(LARGURA_TELA / 2, ALTURA_TELA / 2);
 	al_flip_display(); //atualiza tela
+
+	int noBotaoPlay = 0;
 
 	while (1){
 
-		ALLEGRO_EVENT evento; //declara vriavel que recebe evento e timeout
+		while (!al_is_event_queue_empty(fila_eventos)){
 
-		al_wait_for_event(fila_eventos, &evento); //espero por um evento da fila, e guarda em evento
+		    ALLEGRO_EVENT evento;	//declara vriavel que recebe evento e timeout
+            al_wait_for_event(fila_eventos, &evento);
 
+				if (evento.type == ALLEGRO_EVENT_MOUSE_AXES){
+                // Verificamos se ele está sobre a região do botao play
+                if (evento.mouse.x >= LARGURA_TELA / 2 - al_get_bitmap_width(botaoPlay) / 2 &&
+                	evento.mouse.x <= LARGURA_TELA / 2 + al_get_bitmap_width(botaoPlay) / 2 &&
+                	evento.mouse.y >= ALTURA_TELA / 2 - al_get_bitmap_height(botaoPlay) / 2 &&
+                	evento.mouse.y <= ALTURA_TELA / 2 + al_get_bitmap_height(botaoPlay) / 2){
 
-		if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE) { //se teve eventos e foi um evento de fechar janela, encerra repetição
-
-			int resp = al_show_native_message_box(janela,"Fechar","Deseja sair do programa?","",NULL,ALLEGRO_MESSAGEBOX_YES_NO);
-			if (resp) break;
-
+                    noBotaoPlay = 1;
+                }
+                else{
+                    noBotaoPlay = 0;
+                }
+            }
 		}
 
 		al_draw_bitmap(menu, 0, 0, 0);
+		al_draw_bitmap(gameName, 200, 100, 0);
+
+		al_set_target_bitmap(botaoPlay);
+        if (!noBotaoPlay){
+            al_clear_to_color(al_map_rgb(255, 255, 255));
+        }
+        else{
+            al_clear_to_color(al_map_rgb(0, 255, 0));
+        }
+		
+		al_set_target_bitmap(al_get_backbuffer(janela));
+		al_draw_bitmap(botaoPlay, LARGURA_TELA / 2 - al_get_bitmap_width(botaoPlay) / 2,
+        			   ALTURA_TELA / 2 - al_get_bitmap_height(botaoPlay) / 2, 0);
+					   
 		al_flip_display();
 	}
 
