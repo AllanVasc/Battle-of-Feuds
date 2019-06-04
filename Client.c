@@ -12,7 +12,7 @@ void ChecaPonteiro(void * ptr, char erro[50]){
 
 	if(ptr == NULL){
 
-		printf("Deu merda na linha: [%s]\n", erro);
+		printf("Deu merda em: [%s]\n", erro);
 		exit(0);
 	}
 
@@ -21,9 +21,9 @@ void ChecaPonteiro(void * ptr, char erro[50]){
 int main(){
 	
 	ALLEGRO_DISPLAY *janela = NULL;
-	ALLEGRO_BITMAP *menu = NULL, *gameName = NULL, *botaoPlay = 0;
+	ALLEGRO_BITMAP *menu = NULL, *gameName = NULL, *botaoPlay = NULL, *botaoHTP = NULL, *botaoExit = NULL;
 	ALLEGRO_EVENT_QUEUE *filaEventosMouse = NULL; //declara a fila de eventos
-	int apertouBotaoPlay = 0, inMenu = 1;
+	int apertouBotaoPlay = 0, inMenu = 1, apertouBotaoExit = 0, apertouBotaoHowtoPlay = 0;
 
 	al_init();
 	al_init_image_addon();
@@ -37,11 +37,15 @@ int main(){
 
 	menu = al_load_bitmap("Menu.png"); //carrega imagem
 	gameName = al_load_bitmap("BattleLogo.png");
-	botaoPlay = al_load_bitmap("StartButton00.png");
+	botaoPlay = al_load_bitmap("StartGameButton00.png");
+	botaoHTP = al_load_bitmap("HowToPlayButton.png");
+	botaoExit = al_load_bitmap("ExitButton.png");
 
-	ChecaPonteiro(menu, "Erro no menu"); 	//Checa erro!
+	ChecaPonteiro(menu, "Erro no menu"); 			//Checa erro!
 	ChecaPonteiro(gameName, "Erro no gamename"); 	//Checa erro!
 	ChecaPonteiro(botaoPlay, "Erro no botaoplay"); 	//Checa erro!
+	ChecaPonteiro(botaoHTP, "Erro no botaoHTP"); 	//Checa erro!
+	ChecaPonteiro(botaoExit, "Erro no botaoExit"); 	//Checa erro!
 
 	filaEventosMouse = al_create_event_queue(); //cria fila de eventos
 
@@ -49,59 +53,69 @@ int main(){
 
 	al_register_event_source(filaEventosMouse, al_get_mouse_event_source());
 	al_draw_bitmap(menu, 0, 0, 0); //desenha imagem no display ativo em X:0 Y:0
-	al_draw_bitmap(gameName, 200, 100, 0);
+	al_draw_bitmap(gameName, 200, 20, 0);
+	al_draw_bitmap(botaoPlay, 500, 300, 0);
+	al_draw_bitmap(botaoHTP, 500, 350, 0);
+	al_draw_bitmap(botaoExit, 500, 400, 0);
 	al_flip_display(); //atualiza tela
 
-	while (1){
+	while (inMenu){
 
-		while (inMenu){
+		ALLEGRO_EVENT eventoMouse;	//declara variavel que recebe evento e timeout
 
-		    ALLEGRO_EVENT eventoMouse;	//declara variavel que recebe evento e timeout
+		al_wait_for_event(filaEventosMouse, &eventoMouse);
 
-            al_wait_for_event(filaEventosMouse, &eventoMouse);
-			printf("%d\n", eventoMouse.type);
+			if (eventoMouse.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
+			
+				if (eventoMouse.mouse.x >= 500 &&  // Verificamos se ele está sobre a região do botao play
+					eventoMouse.mouse.x <= 500 + al_get_bitmap_width(botaoPlay) &&
+					eventoMouse.mouse.y >= 300 &&
+					eventoMouse.mouse.y <= 300 + al_get_bitmap_height(botaoPlay) ){
 
-				if (eventoMouse.type == ALLEGRO_EVENT_MOUSE_AXES){
-                
-                if (eventoMouse.mouse.x >= LARGURA_TELA / 2 - al_get_bitmap_width(botaoPlay) / 2 &&  // Verificamos se ele está sobre a região do botao play
-                	eventoMouse.mouse.x <= LARGURA_TELA / 2 + al_get_bitmap_width(botaoPlay) / 2 &&
-                	eventoMouse.mouse.y >= ALTURA_TELA / 2 - al_get_bitmap_height(botaoPlay) / 2 &&
-                	eventoMouse.mouse.y <= ALTURA_TELA / 2 + al_get_bitmap_height(botaoPlay) / 2){
+					apertouBotaoPlay = 1;
 
-						while (!al_is_event_queue_empty(filaEventosMouse)){
+					printf("Apertasse botão Play\n");
 
-							if(eventoMouse.type == ALLEGRO_EVENT_MOUSE_AXES){
+				}else if (eventoMouse.mouse.x >= 500 &&  // Verificamos se ele está sobre a região do botao How to play
+						eventoMouse.mouse.x <= 500 + al_get_bitmap_width(botaoHTP) &&
+						eventoMouse.mouse.y >= 350 &&
+						eventoMouse.mouse.y <= 350 + al_get_bitmap_height(botaoHTP) ){
 
-								apertouBotaoPlay = 1;
-								printf("Apertasse puto\n");
-							}
+					apertouBotaoHowtoPlay = 1;
+					
+					printf("Apertasse botão How to play\n");
 
-							else{
-							//printf("to aq");
-                    		apertouBotaoPlay = 0;
-                			}
+				}else if (eventoMouse.mouse.x >= 500 &&  // Verificamos se ele está sobre a região do botao Exit
+						eventoMouse.mouse.x <= 500 + al_get_bitmap_width(botaoExit) &&
+						eventoMouse.mouse.y >= 400 &&
+						eventoMouse.mouse.y <= 400 + al_get_bitmap_height(botaoExit) ){
 
-						}        
-                }
-                
-            }
+					inMenu = 0;
+					
+					printf("Apertasse botão Exit\n");
 
-			al_draw_bitmap(menu, 0, 0, 0);
-			al_draw_bitmap(gameName, 200, 100, 0);
-			al_set_target_bitmap(botaoPlay);
-			if (!apertouBotaoPlay){
-            botaoPlay = al_load_bitmap("StartButton00.png");
-        	}
-        	else{
-            botaoPlay = al_load_bitmap("StartButton2.jpg");
-        	}
-			al_set_target_bitmap(al_get_backbuffer(janela));
-			al_draw_bitmap(botaoPlay, LARGURA_TELA / 2 - al_get_bitmap_width(botaoPlay) / 2,
-        			   		ALTURA_TELA / 2 - al_get_bitmap_height(botaoPlay) / 2, 0);
-					   
-			al_flip_display();
+				}
 
-		}
+				if(apertouBotaoPlay == 1){			//Logica do nosso jogo ficara aqui!
+
+
+
+				}
+
+				if(apertouBotaoHowtoPlay == 1){			//Tela How to play vai ficar aqui
+
+
+					
+				}
+			
+			}
+
+		al_draw_bitmap(menu, 0, 0, 0); //desenha imagem no display ativo em X:0 Y:0
+		al_draw_bitmap(gameName, 200, 20, 0);
+		al_draw_bitmap(botaoPlay, 500, 300, 0);
+		al_draw_bitmap(botaoHTP, 500, 350, 0);
+		al_draw_bitmap(botaoExit, 500, 400, 0);
+		al_flip_display();
 
 	}
 
