@@ -6,9 +6,10 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 
-// Atributos da tela
+//Atributos importantes
 #define LARGURA_TELA 940
 #define ALTURA_TELA 780
+#define FPS 60.0
 
 void ChecaPonteiro(void * ptr, char erro[50]){
 
@@ -24,9 +25,10 @@ int main(){
 	
 	ALLEGRO_DISPLAY *janela = NULL;
 	ALLEGRO_BITMAP *BackgroundMenu = NULL, *gameName = NULL, *gameIcon = NULL, *HTPwasd = NULL, *HTPJ = NULL, *HTPK = NULL, *HTPReturn = NULL, *botaoPlay = NULL, *botaoHTP = NULL, *botaoExit = NULL, *mapa = NULL;
-	ALLEGRO_EVENT_QUEUE *filaEventosMouse = NULL; //declara a fila de eventos
-	ALLEGRO_EVENT evento;	//declara variavel que recebe evento e timeout
+	ALLEGRO_EVENT_QUEUE *filaEventosMouse = NULL, *filaEventosTimer = NULL; 
+	ALLEGRO_EVENT evento;	
 	ALLEGRO_FONT *fonteHTP = NULL, *fonteHTPTitulo = NULL;
+	ALLEGRO_TIMER *timer = NULL;
 	int apertouBotaoPlay = 0, inMenu = 1, InGame = 0, apertouBotaoExit = 0, apertouBotaoHowtoPlay = 0;
 
 	al_init();
@@ -72,12 +74,19 @@ int main(){
 	ChecaPonteiro(fonteHTP, "Erro no fonteHTP");
 	ChecaPonteiro(fonteHTPTitulo, "Erro no fonteHTPTitulo");
 
-	filaEventosMouse = al_create_event_queue(); //cria fila de eventos
+	timer = al_create_timer(1.0 / FPS); 		//Criado o temporizador do time
+
+	ChecaPonteiro(timer, "Erro no timer");   							//Checa erro!
+
+	filaEventosMouse = al_create_event_queue(); //Cria as filas de eventos!
+	filaEventosTimer = al_create_event_queue(); //cria fila de eventos
 
 	ChecaPonteiro(filaEventosMouse, "Erro na fila de eventos Mouse"); 	//Checa erro!
+	ChecaPonteiro(filaEventosTimer, "Erro em filaEventosTimer"); 	//Checa erro!
 
 	al_register_event_source(filaEventosMouse, al_get_mouse_event_source());	//Fontes dos eventos!
 	al_register_event_source(filaEventosMouse, al_get_keyboard_event_source());
+	al_register_event_source(filaEventosTimer, al_get_timer_event_source(timer));
 
 	al_draw_bitmap(BackgroundMenu, 0, 0, 0); //Desenha as imagens
 	al_draw_bitmap(gameIcon, 450, 70, 0);
@@ -128,10 +137,17 @@ int main(){
 
 					while(InGame){
 
-						al_draw_bitmap(BackgroundMenu, 0, 0, 0);
-						al_draw_bitmap(mapa, 0, 0, 0);
-						al_flip_display();
+						al_start_timer(timer);
+        				al_wait_for_event(filaEventosTimer, &evento);
 
+						if(evento.type == ALLEGRO_EVENT_TIMER){  // a cada 1/60 s sera desenhado uma tela!
+
+							al_draw_bitmap(BackgroundMenu, 0, 0, 0);
+							al_draw_bitmap(mapa, 0, 0, 0);
+							al_flip_display();
+
+						}
+						
 						al_wait_for_event(filaEventosMouse, &evento);
 
 						if (evento.type == ALLEGRO_EVENT_KEY_DOWN){
@@ -144,6 +160,7 @@ int main(){
 							}
 
 						}
+
 					}
 				}
 
@@ -205,7 +222,19 @@ int main(){
 
 	//destroi janela e fila de eventos ao fim
 	al_destroy_display(janela);
+	al_destroy_bitmap(BackgroundMenu);
+	al_destroy_bitmap(gameName);
+	al_destroy_bitmap(gameIcon);
+	al_destroy_bitmap(botaoPlay);
+	al_destroy_bitmap(botaoHTP);
+	al_destroy_bitmap(botaoExit);
+	al_destroy_bitmap(HTPwasd);
+	al_destroy_bitmap(HTPJ);
+	al_destroy_bitmap(HTPK);
+	al_destroy_bitmap(HTPReturn);
+	al_destroy_bitmap(mapa);
+    al_destroy_timer(timer);
 	al_destroy_event_queue(filaEventosMouse);
-
+	al_destroy_event_queue(filaEventosTimer);
 	return 0;
 }
