@@ -151,8 +151,8 @@ int main(){
 
 					while(apertouBotaoHowtoPlay == 1){
 
-						al_draw_text(fonteHTPTitulo, al_map_rgb(0, 0, 255), 450, 450, ALLEGRO_ALIGN_LEFT, "How to play");
 						al_draw_bitmap(BackgroundMenu, 0, 0, 0); 	//Desenha as imagens
+						al_draw_text(fonteHTPTitulo, al_map_rgb(255, 0, 0), 380, 100, ALLEGRO_ALIGN_LEFT, "How to play");
 						al_draw_bitmap(HTPwasd, 200, 200, 0);
 						al_draw_text(fonteHTP, al_map_rgb(255, 255, 0), 450, 300, ALLEGRO_ALIGN_LEFT, "Movimentaçao do personagem");
 						al_draw_bitmap(HTPJ, 200, 310, 0);
