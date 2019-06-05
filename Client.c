@@ -31,6 +31,11 @@ int main(){
 	ALLEGRO_TIMER *timer = NULL;
 	int apertouBotaoPlay = 0, inMenu = 1, InGame = 0, apertouBotaoExit = 0, apertouBotaoHowtoPlay = 0;
 
+	ALLEGRO_BITMAP *charSprite = NULL;		//Variaveis do personagem!
+	float larguraSprite = 42, alturaSprite = 52.5 ;
+	int posXChar = 400, posYChar = 400;
+	int linhaSprite = 0, colunaSprite = 0;
+
 	al_init();
 	al_init_image_addon();
 	al_init_font_addon();
@@ -55,6 +60,7 @@ int main(){
 	HTPK = al_load_bitmap("HTPK.png");
 	HTPReturn = al_load_bitmap("HTPReturn.png");
 	mapa = al_load_bitmap("PreviewMap.png");
+	charSprite = al_load_bitmap("PreviewSprite.png");
 
 	ChecaPonteiro(BackgroundMenu, "Erro no BackgroundMenu"); 			//Checa erro!
 	ChecaPonteiro(gameName, "Erro no gamename"); 						//Checa erro!
@@ -67,6 +73,7 @@ int main(){
 	ChecaPonteiro(HTPK, "Erro no HTPK"); 								//Checa erro!
 	ChecaPonteiro(HTPReturn, "Erro no HTPReturn"); 						//Checa erro!
 	ChecaPonteiro(mapa, "Erro no mapa"); 								//Checa erro!
+	ChecaPonteiro(charSprite, "Erro no charSprite"); 					//Checa erro!
 
 	fonteHTP = al_load_font("Amita-Regular.ttf", 30, 0);
 	fonteHTPTitulo = al_load_font("Amita-Bold.ttf", 50, 0);
@@ -79,7 +86,7 @@ int main(){
 	ChecaPonteiro(timer, "Erro no timer");   							//Checa erro!
 
 	filaEventosMouse = al_create_event_queue(); //Cria as filas de eventos!
-	filaEventosTimer = al_create_event_queue(); //cria fila de eventos
+	filaEventosTimer = al_create_event_queue();
 
 	ChecaPonteiro(filaEventosMouse, "Erro na fila de eventos Mouse"); 	//Checa erro!
 	ChecaPonteiro(filaEventosTimer, "Erro em filaEventosTimer"); 	//Checa erro!
@@ -87,6 +94,8 @@ int main(){
 	al_register_event_source(filaEventosMouse, al_get_mouse_event_source());	//Fontes dos eventos!
 	al_register_event_source(filaEventosMouse, al_get_keyboard_event_source());
 	al_register_event_source(filaEventosTimer, al_get_timer_event_source(timer));
+
+	
 
 	al_draw_bitmap(BackgroundMenu, 0, 0, 0); //Desenha as imagens
 	al_draw_bitmap(gameIcon, 450, 70, 0);
@@ -135,29 +144,85 @@ int main(){
 
 				if(apertouBotaoPlay == 1){			//Logica do nosso jogo ficara aqui!
 
+					al_start_timer(timer);
+
 					while(InGame){
-
-						al_start_timer(timer);
+						
         				al_wait_for_event(filaEventosTimer, &evento);
+						
 
-						if(evento.type == ALLEGRO_EVENT_TIMER){  // a cada 1/60 s sera desenhado uma tela!
+						if(evento.type == ALLEGRO_EVENT_TIMER){  //Cada 1/60s sera desenhado um frame!
 
 							al_draw_bitmap(BackgroundMenu, 0, 0, 0);
-							al_draw_bitmap(mapa, 0, 0, 0);
+							al_draw_bitmap(mapa, 0, 0, 0);			
+						  	al_draw_bitmap_region(charSprite,colunaSprite*larguraSprite,linhaSprite*alturaSprite,larguraSprite,alturaSprite,posXChar,posYChar,0); //Desenha só uma regiao do sprite!
 							al_flip_display();
-
+		
 						}
 						
 						al_wait_for_event(filaEventosMouse, &evento);
 
-						if (evento.type == ALLEGRO_EVENT_KEY_DOWN){
+						if (evento.type == ALLEGRO_EVENT_KEY_DOWN){		//Movimentação do personagem!
 
-							if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+							switch (evento.keyboard.keycode){
+								
+								case ALLEGRO_KEY_ESCAPE: 	
+										InGame = 0;
+										printf("Apertasse botão ESC\n");
+										break;
 
-								InGame = 0;
-								printf("Apertasse botão ESC\n");
+								case ALLEGRO_KEY_W :
 
-							}
+										if(posYChar - 5 > 0){
+											linhaSprite = 1;
+											colunaSprite++;
+											if(colunaSprite == 4){
+												colunaSprite = 0;
+											}
+											posYChar -= 5 ;
+										}
+										break;
+
+								case ALLEGRO_KEY_S :
+
+										if(posYChar + 5 < 780 - 50){
+
+											linhaSprite = 0;
+											colunaSprite++;
+											if(colunaSprite == 4){
+												colunaSprite = 0;
+											}
+											posYChar += 5 ;
+										}
+										break;
+
+								case ALLEGRO_KEY_A :
+
+										if(posXChar - 5 > 0){
+
+											linhaSprite = 2;
+											colunaSprite++;
+											if(colunaSprite == 4){
+												colunaSprite = 0;
+											}
+											posXChar -= 5 ;
+										}
+										break;
+
+								case ALLEGRO_KEY_D :
+
+										if(posXChar + 5 < 940 - 40){
+
+											linhaSprite = 3;
+											colunaSprite++;
+											if(colunaSprite == 4){
+												colunaSprite = 0;
+											}
+											posXChar += 5 ;
+										}
+										break;
+								
+							} 
 
 						}
 
