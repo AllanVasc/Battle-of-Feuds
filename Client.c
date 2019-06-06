@@ -7,6 +7,7 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 
+//Includes utilizado nas funções do server
 #include <termios.h>
 #include <poll.h>
 #include <arpa/inet.h>
@@ -35,7 +36,6 @@
 #define MAX_LOG_SIZE 17
 #define IP_MAX_SIZE 100
 #define READ_CONN_TIMEOUT 6
-
 #define NO_KEY_PRESSED '\0'
 #define NO_MESSAGE -1
 #define SERVER_DISCONNECTED -2
@@ -63,6 +63,7 @@ typedef struct DADOS{
 
     char mensagem[100];
     int valor;
+
 }DADOS;
 
 //////////Variaveis globais!
@@ -177,6 +178,8 @@ int main(){
 	al_draw_bitmap(botaoHTP, 300, 420, 0);
 	al_draw_bitmap(botaoExit, 300, 480, 0);
 	al_flip_display(); 						//atualiza tela
+	
+	printf("Jogo iniciado com sucesso\n");
 
 	while (inMenu){
 
@@ -705,7 +708,7 @@ int sendMsgToServer(void *msg, int size) {
 }
 
 enum conn_ret_t connectToServer(const char *server_IP) {
-	
+
   // create a socket for the client
   network_socket = socket(AF_INET, SOCK_STREAM, 0);
   if (network_socket == -1) {
