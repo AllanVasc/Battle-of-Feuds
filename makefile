@@ -1,11 +1,11 @@
 # client code directory name
-CLIENTDIR := examples/graphicChat/client
+CLIENTDIR := examples/simpleChat/client
 
 # server code directory name
-SERVERDIR := examples/graphicChat/server
+SERVERDIR := examples/simpleChat/server
 
 # common code directory name
-COMMONDIR := examples/graphicChat/common
+COMMONDIR := examples/simpleChat/common
 
 # binary output directory name
 OUTPUTDIR := bin
