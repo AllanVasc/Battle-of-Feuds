@@ -1,17 +1,32 @@
 // Os arquivos de cabeçalho
 #include <stdio.h>
+#include <ctype.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 
+#include <termios.h>
+#include <poll.h>
+#include <arpa/inet.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <netinet/in.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <unistd.h>
+
 //Atributos importantes
 #define LARGURA_TELA 940
 #define ALTURA_TELA 780
 #define FPS 60.0
 
-//AtributosChat
+//Configurações do chat
 
 #define MSG_MAX_SIZE 350
 #define BUFFER_SIZE (MSG_MAX_SIZE + 100)
@@ -19,23 +34,59 @@
 #define HIST_MAX_SIZE 200
 #define MAX_LOG_SIZE 17
 #define IP_MAX_SIZE 100
+#define READ_CONN_TIMEOUT 6
 
-void ChecaPonteiro(void * ptr, char erro[50]){
+#define NO_KEY_PRESSED '\0'
+#define NO_MESSAGE -1
+#define SERVER_DISCONNECTED -2
+#define WAIT_FOR_IT 1
+#define DONT_WAIT 2
+#define PORT 9005
+#define SELECT_TIMEOUT 300
 
-	if(ptr == NULL){
+//Structs para o envio do servidor
+enum conn_msg_t {
+  SUCCESSFUL_CONNECTION,
+  TOO_MANY_CLIENTS,
+  CONNECTIONS_CLOSED
+};
 
-		printf("Deu merda em: [%s]\n", erro);
-		exit(0);
-	}
+enum conn_ret_t {
+  SERVER_UP,
+  SERVER_DOWN,
+  SERVER_FULL,
+  SERVER_CLOSED,
+  SERVER_TIMEOUT
+};
 
-}
+typedef struct DADOS{
 
-// Funções para controle da quantidade de frames por segundo
+    char mensagem[100];
+    int valor;
+}DADOS;
+
+//////////Variaveis globais!
+int network_socket;
+fd_set sock_fd_set;
+DADOS pacote;
+double startingTime;
+
+//////////DECLARAÇÕES PREVIAS DAS FUNÇÕES
 void startTimer();
 double getTimer();
 void FPSLimit();
-double startingTime;
 void readInput(ALLEGRO_EVENT event, char str[], int limit);
+void ChecaPonteiro(void * ptr, char erro[50]);
+void assertConnection(char IP[], char login[]);
+enum conn_ret_t tryConnect(char IP[]);
+int sendMsgToServer(void *msg, int size);
+enum conn_ret_t connectToServer(const char *server_IP);
+int recvMsgFromServer(void *msg, int option);
+void closeConnection();
+void printLoginScreen(char str[], ALLEGRO_BITMAP * BackgroundMenu, ALLEGRO_FONT * fonteHTPTitulo, ALLEGRO_FONT * fonteHTP );
+void printConnectScreen(char str[],ALLEGRO_BITMAP * BackgroundMenu, ALLEGRO_FONT * fonteHTPTitulo, ALLEGRO_FONT * fonteHTP);
+void printLobbyText(char str[], ALLEGRO_BITMAP * BackgroundMenu,ALLEGRO_FONT * fonteHTPTitulo, ALLEGRO_FONT * fonteHTP);
+void printChatLog( char chatLog[][MSG_MAX_SIZE], ALLEGRO_FONT * fonteHTP );
 
 int main(){
 	
@@ -45,7 +96,7 @@ int main(){
 	ALLEGRO_EVENT evento;	
 	ALLEGRO_FONT *fonteHTP = NULL, *fonteHTPTitulo = NULL;
 	ALLEGRO_TIMER *timer = NULL;
-	int apertouBotaoPlay = 0, inMenu = 1, inGame = 0, apertouBotaoExit = 0, apertouBotaoHowtoPlay = 0, delay = 0;
+	int apertouBotaoPlay = 0, inMenu = 1, inGame = 0, apertouBotaoExit = 0, apertouBotaoHowtoPlay = 0, delay = 0, i;
 
 	//Variaveis do chat! 
 	ALLEGRO_EVENT_QUEUE *filaEventosChat = NULL;
@@ -164,27 +215,24 @@ int main(){
 
 				}
 
-				if(apertouBotaoPlay == 1){			//Logica do nosso jogo ficara aqui!
+				if(apertouBotaoPlay == 1){	//Logica do nosso jogo ficara aqui!
 
-					//Esse sera o IP do Server!
-					char ServerIP[30]={"127.0.0.1"};
+					
+					char ServerIP[30]={"127.0.0.1"}; //Esse sera o IP do Server!
 					int qtdCharIP = 9;
-					//para guardar o log do chat
-					char chatLog[MAX_LOG_SIZE][MSG_MAX_SIZE] = {{0}};
-					//mensagem pra ser mandada no lobby
-					char lobbyMessage[110]={0}; 
-					//para guardar o login
-					char loginMsg[BUFFER_SIZE]={0};
+					char chatLog[MAX_LOG_SIZE][MSG_MAX_SIZE] = {{0}}; //para guardar o log do chat
+					char lobbyMessage[110]={0}; //mensagem pra ser mandada no lobby
+					char loginMsg[BUFFER_SIZE]={0}; //para guardar o login
 					int connectScreen = 1;
 					int loginScreen = 1;
 					int lobby = 1;
 
-					
-					connectScreen = 1;
 					inChat = 1;
+
 					filaEventosChat = al_create_event_queue();	//Reiniciando fila de Eventos!
 					al_register_event_source(filaEventosChat, al_get_mouse_event_source());	//Fontes dos eventos!
 					al_register_event_source(filaEventosChat, al_get_keyboard_event_source());
+					al_register_event_source(filaEventosChat, al_get_display_event_source(janela));
 
 					while(inChat){	//Iniciando codigos do nosso chat!
 
@@ -211,24 +259,13 @@ int main(){
 								}
 
 							}
-							
-							al_draw_bitmap(BackgroundMenu,0,0,0);	//Printar as informações na tela!
 
-    						al_draw_text(fonteHTPTitulo, al_map_rgb(255, 255, 255), LARGURA_TELA / 2, 30, ALLEGRO_ALIGN_CENTRE, "Digite o IP do server:");
-
-    						if (strlen(ServerIP) > 0){
-
-        						al_draw_text(fonteHTP, al_map_rgb(255, 255, 255), LARGURA_TELA / 2, (ALTURA_TELA - al_get_font_ascent(fonteHTP)) / 2, ALLEGRO_ALIGN_CENTRE, ServerIP);
-    						}else{
-
-        						al_draw_text(fonteHTP, al_map_rgb(255, 255, 255), LARGURA_TELA / 2, (ALTURA_TELA - al_get_font_ascent(fonteHTP)) / 2, ALLEGRO_ALIGN_CENTRE, "0.0.0.0");
-    						}	
-
+							printConnectScreen(ServerIP,BackgroundMenu,fonteHTPTitulo,fonteHTP);
 							al_flip_display();
 							FPSLimit();
 						}
 
-						while(loginScreen){ //Tela para printar o login!
+						while(loginScreen){ 	//Tela para ler a entrada do login
 
 							startTimer();
 
@@ -250,31 +287,70 @@ int main(){
 								}
 							}
 
-							al_draw_bitmap(BackgroundMenu,0,0,0);	//Printar as informações na tela!
-
-							al_draw_text(fonteHTPTitulo, al_map_rgb(255, 255, 255), LARGURA_TELA / 2, 30, ALLEGRO_ALIGN_CENTRE, "Digite o Login desejado: ");
-
-							if (strlen(loginMsg) > 0){
-
-								al_draw_text(fonteHTP, al_map_rgb(255, 255, 255), LARGURA_TELA / 2,
-											(ALTURA_TELA - al_get_font_ascent(fonteHTP)) / 2,
-											ALLEGRO_ALIGN_CENTRE, loginMsg);
-							}
-							
-							else{
-
-								al_draw_text(fonteHTP, al_map_rgb(255, 255, 255), LARGURA_TELA / 2,
-											(ALTURA_TELA - al_get_font_ascent(fonteHTP)) / 2,
-											ALLEGRO_ALIGN_CENTRE, "<login>");
-							}
-
-							//printLoginScreen(loginMsg);
+							printLoginScreen(loginMsg,BackgroundMenu,fonteHTPTitulo,fonteHTP);
 							al_flip_display();
 							al_clear_to_color(al_map_rgb(0, 0, 0));
 							FPSLimit();
 						}
 
-						connectScreen = 0;
+						//Função para realizar a conexão com o server
+    					assertConnection(ServerIP, loginMsg);
+
+						while(lobby){ //Momento das conversas!
+
+							startTimer();
+
+							int rec = recvMsgFromServer(&pacote, DONT_WAIT);
+
+							
+							if(rec != NO_MESSAGE){  //recebe as mensagens do servidor (jogador se conectou, avisos, etc)
+
+									//printf("RECEIVED: %s\n", pacote.mensagem);
+
+								for(i = 0; i < MAX_LOG_SIZE - 1; ++i)
+									strcpy(chatLog[i], chatLog[i+1]);
+									
+								strcpy(chatLog[MAX_LOG_SIZE - 1], pacote.mensagem);
+									
+								pacote.mensagem[0]='\0';
+
+							}
+
+							while(!al_is_event_queue_empty(filaEventosChat)){
+
+								ALLEGRO_EVENT lobbyEvent;
+								al_wait_for_event(filaEventosChat, &lobbyEvent);
+								readInput(lobbyEvent, lobbyMessage, MSG_MAX_SIZE);
+
+								if (lobbyEvent.type == ALLEGRO_EVENT_KEY_DOWN){
+
+									switch(lobbyEvent.keyboard.keycode){
+
+										case ALLEGRO_KEY_ENTER:
+											strcpy(pacote.mensagem, lobbyMessage);
+											sendMsgToServer(&pacote, sizeof(DADOS));
+											lobbyMessage[0]='\0';
+											break;
+									}
+								}
+
+								if(lobbyEvent.type == ALLEGRO_EVENT_KEY_DOWN){ //Se apertar LeftShifht começa o jogo
+
+									switch(lobbyEvent.keyboard.keycode){
+										case ALLEGRO_KEY_LCTRL:
+											printf("Jogo ira começar!\n");
+											lobby = 0;
+									}
+								}
+							}
+
+							printLobbyText(lobbyMessage,BackgroundMenu, fonteHTPTitulo, fonteHTP);
+							printChatLog(chatLog, fonteHTP);
+							al_flip_display();
+							al_clear_to_color(al_map_rgb(0, 0, 0));
+							FPSLimit();
+						}
+
 						inChat = 0;
 					}
 
@@ -462,6 +538,18 @@ int main(){
 	return 0;
 }
 
+//========================================================FUNCTIONS========================================================\\
+
+void ChecaPonteiro(void * ptr, char erro[50]){
+
+	if(ptr == NULL){
+
+		printf("Deu merda em: [%s]\n", erro);
+		exit(0);
+	}
+
+}
+
 void startTimer(){
     startingTime = al_get_time();
 }
@@ -476,7 +564,7 @@ void FPSLimit(){
     }
 }
 
-//FOR READING KEYBOARD INPUT WITH MAX SIZE = LIMIT AND SAVING AT STR[]
+//Função para ler as entradas do teclado de maneira otimizada
 void readInput(ALLEGRO_EVENT event, char str[], int limit){
 
     if (event.type == ALLEGRO_EVENT_KEY_CHAR)
@@ -512,127 +600,234 @@ void readInput(ALLEGRO_EVENT event, char str[], int limit){
     }
 }
 
+//Função responsavel para realizar a conexão com o servidor!
+void assertConnection(char IP[], char login[]) {
 
+  puts("Chat sendo inicializado...");
 
+  enum conn_ret_t ans = tryConnect(IP);
 
-/* se não pegar Read INPUT
+  while (ans != SERVER_UP){
 
-case ALLEGRO_KEY_0:
+    if (ans == SERVER_DOWN) {
+      puts("Server is down!");
+    } else if (ans == SERVER_FULL) {
+      puts("Server is full!");
+    } else if (ans == SERVER_CLOSED) {
+      puts("Server is closed for new connections!");
+    } else {
+      puts("Server didn't respond to connection!");
+    }
+    printf("Want to try again? [y/n] ");
+    int res;
+    while (res = tolower(getchar()), res != 'n' && res != 'y' && res != '\n'){
+      puts("Comando não compreendido!");
+    }
+    if (res == 'n') {
+      exit(EXIT_SUCCESS);
+    }
+    ans = tryConnect(IP);
+  }
 
-			if(qtdCharIP < 29){
-				ServerIP[qtdCharIP] = '0';
-				qtdCharIP++;
-				ServerIP[qtdCharIP]= '\0';
-				break;
+  int len = (int)strlen(login);
 
-			}
-			
-		case ALLEGRO_KEY_1:
+  sendMsgToServer(login, len + 1);
 
-			if(qtdCharIP < 29){
-				ServerIP[qtdCharIP]= '1';
-				qtdCharIP++;
-				ServerIP[qtdCharIP]= '\0';
-				break;
-				
-			}
-			
-		case ALLEGRO_KEY_2:
-			if(qtdCharIP < 29){
+}
 
-				ServerIP[qtdCharIP]= '2';
-				qtdCharIP++;
-				ServerIP[qtdCharIP]= '\0';
-				break;
-				
-			}
-			
-		case ALLEGRO_KEY_3:
-			if(qtdCharIP < 29){
+enum conn_ret_t tryConnect(char IP[]) {
 
-				ServerIP[qtdCharIP]= '3';
-				qtdCharIP++;
-				ServerIP[qtdCharIP]= '\0';
-				break;
-		
-			}
-			
-		case ALLEGRO_KEY_4:
-			if(qtdCharIP < 29){
-				ServerIP[qtdCharIP]= '4';
-				qtdCharIP++;
-				ServerIP[qtdCharIP]= '\0';
-				break;
+  char server_ip[30];
+  printf("Please enter the server IP: ");
+  return connectToServer(IP);
 
-			}
-			
-		case ALLEGRO_KEY_5:
-			if(qtdCharIP < 29){
+}
 
-				ServerIP[qtdCharIP]= '5';
-				qtdCharIP++;
-				ServerIP[qtdCharIP]= '\0';
-				break;
-				
-			}
-			
-		case ALLEGRO_KEY_6:
-			if(qtdCharIP < 29){
+int sendMsgToServer(void *msg, int size) {
+	
+  ssize_t size_ret = send(network_socket, &size, sizeof(int), MSG_NOSIGNAL);
 
-				ServerIP[qtdCharIP]= '6';
-				qtdCharIP++;
-				ServerIP[qtdCharIP]= '\0';
-				break;
-				
-			}
-			
-		case ALLEGRO_KEY_7:
-			if(qtdCharIP < 29){
-				ServerIP[qtdCharIP]= '7';
-				qtdCharIP++;
-				ServerIP[qtdCharIP]= '\0';
-				break;
-				
-			}
-			
-		case ALLEGRO_KEY_8:
-			if(qtdCharIP < 29){
+  if (size_ret <= 0) {
 
-				ServerIP[qtdCharIP]= '8';
-				qtdCharIP++;
-				ServerIP[qtdCharIP]= '\0';
-				break;
-				
-			}
-			
-		case ALLEGRO_KEY_9:
-			if(qtdCharIP < 29){
+    return SERVER_DISCONNECTED;
+  }
 
-				ServerIP[qtdCharIP] = '9';
-				qtdCharIP++;
-				ServerIP[qtdCharIP]= '\0';
-				break;
-			}
-			
-		case ALLEGRO_KEY_FULLSTOP:
-			if(qtdCharIP < 29){
+  ssize_t total_size = 0;
 
-				ServerIP[qtdCharIP] = '.';
-				qtdCharIP++;
-				ServerIP[qtdCharIP]= '\0';
-				break;
-				
-			}
+  while (total_size < (ssize_t) size) {
 
-		case ALLEGRO_KEY_BACKSPACE:
+    ssize_t msg_ret =
+        send(network_socket, msg + total_size, (size_t)size, MSG_NOSIGNAL);
+    if (msg_ret <= 0) {
+      return SERVER_DISCONNECTED;
+    }
+    total_size += msg_ret;
 
-			if(qtdCharIP != 0){
-				qtdCharIP--;
-				ServerIP[qtdCharIP]= '\0';
-			}
+  }
+  return (int)total_size;
+}
 
-			break;
-	}
-	}
+enum conn_ret_t connectToServer(const char *server_IP) {
 
-	*/
+  // create a socket for the client
+  network_socket = socket(AF_INET, SOCK_STREAM, 0);
+  if (network_socket == -1) {
+    perror("Could not create socket");
+    exit(EXIT_FAILURE);
+  }
+  // making struct for server adress
+  struct sockaddr_in server_address;
+  memset(&server_address, 0, sizeof(server_address));  // clear struct
+  server_address.sin_family = AF_INET;                 // set family
+  server_address.sin_port = htons(PORT);               // working port
+  if (server_IP == NULL) {  // if no IP sent, connect to localhost
+    server_address.sin_addr.s_addr = INADDR_ANY;
+  } else {
+    server_address.sin_addr.s_addr = inet_addr(server_IP);
+  }
+
+  // Connect to server now
+  int connection_status =
+      connect(network_socket, (struct sockaddr *)&server_address,
+              sizeof(server_address));
+  enum conn_msg_t server_response = SUCCESSFUL_CONNECTION;
+
+  FD_ZERO(&sock_fd_set);
+  FD_SET(network_socket, &sock_fd_set);
+  
+  if (connection_status == 0) {
+    // read server_response
+    ssize_t conn_ans = recvMsgFromServer(&server_response, DONT_WAIT);
+    unsigned int i = 0;
+    while (i < READ_CONN_TIMEOUT && conn_ans == NO_MESSAGE) {
+      i++;
+      sleep(i);
+      conn_ans = recvMsgFromServer(&server_response, DONT_WAIT);
+    }
+    if (conn_ans == SERVER_DISCONNECTED) {
+      closeConnection();
+      return SERVER_DOWN;
+    } else if (conn_ans == NO_MESSAGE) {
+      closeConnection();
+      return SERVER_TIMEOUT;
+    }
+  } else if (connection_status == -1) {
+    closeConnection();
+    return SERVER_DOWN;
+  }
+
+  if (server_response == TOO_MANY_CLIENTS) {
+    closeConnection();
+    return SERVER_FULL;
+  } else if (server_response == CONNECTIONS_CLOSED) {
+    closeConnection();
+    return SERVER_CLOSED;
+  }
+
+  FD_ZERO(&sock_fd_set);
+  FD_SET(network_socket, &sock_fd_set);
+  return SERVER_UP;
+}
+
+int recvMsgFromServer(void *msg, int option) {
+
+  if (option == DONT_WAIT) {
+
+    struct timeval timeout = {0, SELECT_TIMEOUT};
+    fd_set readfds = sock_fd_set;
+    int sel_ret = select(FD_SETSIZE, &readfds, NULL, NULL, &timeout);
+    if (sel_ret < 0) {
+      perror("select");
+      exit(EXIT_FAILURE);
+    }
+    if (sel_ret == 0 || !FD_ISSET(network_socket, &readfds)) {  // timeout
+      return NO_MESSAGE;
+    }
+  }
+  int size;
+  // get message size
+  ssize_t size_ret = read(network_socket, &size, sizeof(int));
+
+  if (size_ret <= 0) {
+    return SERVER_DISCONNECTED;
+  }
+
+  // get message content
+  ssize_t total_size = 0;
+  while (total_size < (ssize_t) size) {
+    ssize_t msg_ret = read(network_socket, msg + total_size, (size_t)size);
+    if (msg_ret <= 0) {
+      return SERVER_DISCONNECTED;
+    }
+    total_size += msg_ret;
+  }
+  return (int)total_size ;
+}
+
+void closeConnection() {
+  shutdown(network_socket, 3);
+  close(network_socket);
+}
+
+////////////Funções para printar o chat!
+
+void printConnectScreen(char str[], ALLEGRO_BITMAP * BackgroundMenu, ALLEGRO_FONT * fonteHTPTitulo, ALLEGRO_FONT * fonteHTP ){
+
+    al_draw_bitmap(BackgroundMenu,0,0,0);
+
+    al_draw_text(fonteHTPTitulo, al_map_rgb(255, 255, 255), LARGURA_TELA / 2, 30, ALLEGRO_ALIGN_CENTRE, "Digite o IP do server:");
+
+    if (strlen(str) > 0){
+
+        al_draw_text(fonteHTP, al_map_rgb(255, 255, 255), LARGURA_TELA / 2, (ALTURA_TELA - al_get_font_ascent(fonteHTP)) / 2, ALLEGRO_ALIGN_CENTRE, str);
+
+    }
+	else{
+
+        al_draw_text(fonteHTP, al_map_rgb(255, 255, 255), LARGURA_TELA / 2, (ALTURA_TELA - al_get_font_ascent(fonteHTP)) / 2, ALLEGRO_ALIGN_CENTRE, "0.0.0.0");
+    }
+}
+
+void printLoginScreen(char str[], ALLEGRO_BITMAP * BackgroundMenu, ALLEGRO_FONT * fonteHTPTitulo, ALLEGRO_FONT * fonteHTP ){
+
+    al_draw_bitmap(BackgroundMenu,0,0,0);
+
+    al_draw_text(fonteHTPTitulo, al_map_rgb(255, 255, 255), LARGURA_TELA / 2, 30, ALLEGRO_ALIGN_CENTRE, "Digite o Login desejado: ");
+
+    if (strlen(str) > 0){
+
+        al_draw_text(fonteHTP, al_map_rgb(255, 255, 255), LARGURA_TELA / 2, (ALTURA_TELA - al_get_font_ascent(fonteHTP)) / 2,ALLEGRO_ALIGN_CENTRE, str);
+    }
+    else
+    {
+        al_draw_text(fonteHTP, al_map_rgb(255, 255, 255), LARGURA_TELA / 2,(ALTURA_TELA - al_get_font_ascent(fonteHTP)) / 2, ALLEGRO_ALIGN_CENTRE, "<login>");
+    }
+}
+
+void printLobbyText(char str[], ALLEGRO_BITMAP * BackgroundMenu,ALLEGRO_FONT * fonteHTPTitulo, ALLEGRO_FONT * fonteHTP){
+
+    al_draw_bitmap(BackgroundMenu,0,0,0);
+
+    al_draw_text(fonteHTPTitulo, al_map_rgb(255, 255, 255), 20, 30, ALLEGRO_ALIGN_LEFT, "Preparing to battle... Left Ctrl to start...");
+
+    if (strlen(str) > 0){
+
+        al_draw_text(fonteHTP, al_map_rgb(255, 255, 255), 20, (ALTURA_TELA - al_get_font_ascent(fonteHTP)) - 20, ALLEGRO_ALIGN_LEFT, str);
+    }
+    else{
+
+        al_draw_text(fonteHTP, al_map_rgb(255, 255, 255), 20,(ALTURA_TELA - al_get_font_ascent(fonteHTP)) - 20, ALLEGRO_ALIGN_LEFT, "Type anything to chat...");
+    }
+}
+
+void printChatLog( char chatLog[][MSG_MAX_SIZE], ALLEGRO_FONT * fonteHTP ){
+
+    int i;
+    int initialY = 100;
+    int spacing = al_get_font_ascent(fonteHTP)+5;
+    
+    for(i = 0; i < MAX_LOG_SIZE; ++i){
+
+        al_draw_text(fonteHTP, al_map_rgb(255, 255, 255), 40, initialY + (i*spacing), ALLEGRO_ALIGN_LEFT, chatLog[i]);
+    }
+}
