@@ -77,7 +77,7 @@ double getTimer();
 void FPSLimit();
 void readInput(ALLEGRO_EVENT event, char str[], int limit);
 void ChecaPonteiro(void * ptr, char erro[50]);
-void assertConnection(char IP[], char login[]);
+void assertConnection(char IP[], char login[], ALLEGRO_DISPLAY *janela, ALLEGRO_EVENT_QUEUE *filaEventosChat,ALLEGRO_BITMAP *BackgroundMenu,ALLEGRO_FONT *fonteHTPTitulo,ALLEGRO_FONT *fonteHTP);
 enum conn_ret_t tryConnect(char IP[]);
 int sendMsgToServer(void *msg, int size);
 enum conn_ret_t connectToServer(const char *server_IP);
@@ -294,7 +294,7 @@ int main(){
 						}
 
 						//Função para realizar a conexão com o server
-    					assertConnection(ServerIP, loginMsg);
+    					assertConnection(ServerIP, loginMsg,janela, filaEventosChat,BackgroundMenu,fonteHTPTitulo,fonteHTP);
 
 						while(lobby){ //Momento das conversas!
 
@@ -601,32 +601,70 @@ void readInput(ALLEGRO_EVENT event, char str[], int limit){
 }
 
 //Função responsavel para realizar a conexão com o servidor!
-void assertConnection(char IP[], char login[]) {
+void assertConnection(char IP[], char login[], ALLEGRO_DISPLAY *janela, ALLEGRO_EVENT_QUEUE *filaEventosChat,ALLEGRO_BITMAP *BackgroundMenu,ALLEGRO_FONT *fonteHTPTitulo,ALLEGRO_FONT *fonteHTP) {
 
-  puts("Chat sendo inicializado...");
+ 	puts("Chat sendo inicializado...");
 
-  enum conn_ret_t ans = tryConnect(IP);
+  	enum conn_ret_t ans = tryConnect(IP);
+	int connectScreen = 1;
 
-  while (ans != SERVER_UP){
+  	while (ans != SERVER_UP){
 
-    if (ans == SERVER_DOWN) {
-      puts("Server is down!");
-    } else if (ans == SERVER_FULL) {
-      puts("Server is full!");
-    } else if (ans == SERVER_CLOSED) {
-      puts("Server is closed for new connections!");
-    } else {
-      puts("Server didn't respond to connection!");
-    }
-    printf("Want to try again? [y/n] ");
-    int res;
-    while (res = tolower(getchar()), res != 'n' && res != 'y' && res != '\n'){
-      puts("Comando não compreendido!");
-    }
-    if (res == 'n') {
-      exit(EXIT_SUCCESS);
-    }
+		if (ans == SERVER_DOWN) {
+
+			puts("Server is down!");
+			al_show_native_message_box(janela, "Battle Of Feuds", "O servidor esta inativo!", "Tente novamente", NULL, ALLEGRO_MESSAGEBOX_WARN);
+
+		} else if (ans == SERVER_FULL) {
+
+			puts("Server is full!");
+			al_show_native_message_box(janela, "Battle Of Feuds", "O servidor esta cheio!", "Tente novamente", NULL, ALLEGRO_MESSAGEBOX_WARN);
+
+		} else if (ans == SERVER_CLOSED) {
+
+			puts("Server is closed for new connections!");
+			al_show_native_message_box(janela, "Battle Of Feuds", "O servidor nao permite novas conexoes!", "Tente novamente", NULL, ALLEGRO_MESSAGEBOX_WARN);
+
+		} else {
+
+			puts("Server didn't respond to connection!");
+			al_show_native_message_box(janela, "Battle Of Feuds", "O servidor nao respondeu!", "Tente novamente", NULL, ALLEGRO_MESSAGEBOX_WARN);
+
+		}
+
+		while(connectScreen){ //Tela para digitar o IP novamente!
+
+			startTimer();
+
+			while(!al_is_event_queue_empty(filaEventosChat)){
+
+				ALLEGRO_EVENT connectEvent;
+				al_wait_for_event(filaEventosChat, &connectEvent);
+
+				readInput(connectEvent, IP, IP_MAX_SIZE);
+
+				if (connectEvent.type == ALLEGRO_EVENT_KEY_DOWN){
+
+					switch(connectEvent.keyboard.keycode){
+
+						case ALLEGRO_KEY_ENTER:
+							connectScreen = 0;
+							break;
+					}
+						
+				}
+
+			}
+
+			printConnectScreen(IP,BackgroundMenu,fonteHTPTitulo,fonteHTP);
+			al_flip_display();
+			FPSLimit();
+		}
+
+	printf("Tentando novamente a conexao!\n");
+  
     ans = tryConnect(IP);
+	connectScreen = 1;
   }
 
   int len = (int)strlen(login);
@@ -638,7 +676,6 @@ void assertConnection(char IP[], char login[]) {
 enum conn_ret_t tryConnect(char IP[]) {
 
   char server_ip[30];
-  printf("Please enter the server IP: ");
   return connectToServer(IP);
 
 }
@@ -668,7 +705,7 @@ int sendMsgToServer(void *msg, int size) {
 }
 
 enum conn_ret_t connectToServer(const char *server_IP) {
-
+	
   // create a socket for the client
   network_socket = socket(AF_INET, SOCK_STREAM, 0);
   if (network_socket == -1) {
