@@ -21,6 +21,12 @@ void ChecaPonteiro(void * ptr, char erro[50]){
 
 }
 
+// Funções para controle da quantidade de frames por segundo
+void startTimer();
+double getTimer();
+void FPSLimit();
+double startingTime;
+
 int main(){
 	
 	ALLEGRO_DISPLAY *janela = NULL;
@@ -29,7 +35,7 @@ int main(){
 	ALLEGRO_EVENT evento;	
 	ALLEGRO_FONT *fonteHTP = NULL, *fonteHTPTitulo = NULL;
 	ALLEGRO_TIMER *timer = NULL;
-	int apertouBotaoPlay = 0, inMenu = 1, InGame = 0, apertouBotaoExit = 0, apertouBotaoHowtoPlay = 0;
+	int apertouBotaoPlay = 0, inMenu = 1, inGame = 0, apertouBotaoExit = 0, apertouBotaoHowtoPlay = 0, delay = 0;
 
 	ALLEGRO_BITMAP *charSprite = NULL;		//Variaveis do personagem!
 	float larguraSprite = 42, alturaSprite = 52.5 ;
@@ -117,7 +123,7 @@ int main(){
 					evento.mouse.y <= 350 + al_get_bitmap_height(botaoPlay) ){
 
 					apertouBotaoPlay = 1;
-					InGame = 1;
+					inGame = 1;
 
 					printf("Apertasse botão Play\n");
 
@@ -145,88 +151,110 @@ int main(){
 				if(apertouBotaoPlay == 1){			//Logica do nosso jogo ficara aqui!
 
 					al_start_timer(timer);
+					al_destroy_event_queue(filaEventosMouse);
 
-					while(InGame){
-						
-        				al_wait_for_event(filaEventosTimer, &evento);
-						
+					while(inGame){
 
-						if(evento.type == ALLEGRO_EVENT_TIMER){  //Cada 1/60s sera desenhado um frame!
+						startTimer();			  
 
+						al_draw_bitmap(BackgroundMenu, 0, 0, 0);
+						al_draw_bitmap(mapa, 0, 0, 0);			
+						al_draw_bitmap_region(charSprite,colunaSprite*larguraSprite,linhaSprite*alturaSprite,larguraSprite,alturaSprite,posXChar,posYChar,0); //Desenha só uma regiao do sprite!
+						al_flip_display();
+
+						if(colunaSprite%2 != 0 && delay > 15){
+							colunaSprite++;
+							if(colunaSprite == 4){
+								colunaSprite = 0;
+							}
 							al_draw_bitmap(BackgroundMenu, 0, 0, 0);
 							al_draw_bitmap(mapa, 0, 0, 0);			
-						  	al_draw_bitmap_region(charSprite,colunaSprite*larguraSprite,linhaSprite*alturaSprite,larguraSprite,alturaSprite,posXChar,posYChar,0); //Desenha só uma regiao do sprite!
+							al_draw_bitmap_region(charSprite,colunaSprite*larguraSprite,linhaSprite*alturaSprite,larguraSprite,alturaSprite,posXChar,posYChar,0); //Desenha só uma regiao do sprite!
 							al_flip_display();
-		
-						}
-						
-						al_wait_for_event(filaEventosMouse, &evento);
 
-						if (evento.type == ALLEGRO_EVENT_KEY_DOWN){		//Movimentação do personagem!
-
-							switch (evento.keyboard.keycode){
-								
-								case ALLEGRO_KEY_ESCAPE: 	
-										InGame = 0;
-										printf("Apertasse botão ESC\n");
-										break;
-
-								case ALLEGRO_KEY_W :
-
-										if(posYChar - 5 > 0){
-											linhaSprite = 1;
-											colunaSprite++;
-											if(colunaSprite == 4){
-												colunaSprite = 0;
-											}
-											posYChar -= 5 ;
-										}
-										break;
-
-								case ALLEGRO_KEY_S :
-
-										if(posYChar + 5 < 780 - 50){
-
-											linhaSprite = 0;
-											colunaSprite++;
-											if(colunaSprite == 4){
-												colunaSprite = 0;
-											}
-											posYChar += 5 ;
-										}
-										break;
-
-								case ALLEGRO_KEY_A :
-
-										if(posXChar - 5 > 0){
-
-											linhaSprite = 2;
-											colunaSprite++;
-											if(colunaSprite == 4){
-												colunaSprite = 0;
-											}
-											posXChar -= 5 ;
-										}
-										break;
-
-								case ALLEGRO_KEY_D :
-
-										if(posXChar + 5 < 940 - 40){
-
-											linhaSprite = 3;
-											colunaSprite++;
-											if(colunaSprite == 4){
-												colunaSprite = 0;
-											}
-											posXChar += 5 ;
-										}
-										break;
-								
-							} 
 
 						}
 
-					}
+						// A verificação das teclas acontece sem o uso de eventos para reduzir o lag
+						ALLEGRO_KEYBOARD_STATE keyState;
+						al_get_keyboard_state(&keyState);
+
+						if ( al_key_down(&keyState, ALLEGRO_KEY_ESCAPE) && delay > 10 ){		
+
+							ALLEGRO_KEY_ESCAPE: 	
+							inGame = 0;
+							printf("Apertasse botão ESC\n");
+
+						} else if ( al_key_down(&keyState, ALLEGRO_KEY_W) && delay > 10 ){
+							
+							if(posYChar - 5 > 0){
+								linhaSprite = 1;
+								colunaSprite++;
+								if(colunaSprite == 4){
+									colunaSprite = 0;
+								}
+								posYChar -= 5;
+							}
+							delay = 0;
+
+						}else if ( al_key_down(&keyState, ALLEGRO_KEY_S) && delay > 10 ){	
+
+							if(posYChar + 5 < 780 - 50){
+
+								linhaSprite = 0;
+								colunaSprite++;
+								if(colunaSprite == 4){
+									colunaSprite = 0;
+								}
+								posYChar += 5 ;
+							}
+							delay = 0;
+
+						}else if ( al_key_down(&keyState, ALLEGRO_KEY_A) && delay > 10 ){	
+
+							if(posXChar - 5 > 0){
+
+								linhaSprite = 2;
+								colunaSprite++;
+								if(colunaSprite == 4){
+									colunaSprite = 0;
+								}
+								posXChar -= 5 ;
+							}
+							delay = 0;
+
+						}else if ( al_key_down(&keyState, ALLEGRO_KEY_D) && delay > 10 ){	
+
+							if(posXChar + 5 < 940 - 40){
+
+								linhaSprite = 3;
+								colunaSprite++;
+								if(colunaSprite == 4){
+									colunaSprite = 0;
+								}
+								posXChar += 5 ;
+							}
+							delay = 0;
+
+						}else if ( al_key_down(&keyState, ALLEGRO_KEY_J) && delay > 10 ){	
+							
+							printf("Ataque fraco!\n");
+							delay = 0;
+
+						}else if ( al_key_down(&keyState, ALLEGRO_KEY_K) && delay > 10 ){	
+							
+							printf("Ataque forte!\n");
+							delay = 0;
+						}
+
+					delay++;
+					FPSLimit();
+
+					} 
+
+					filaEventosMouse = al_create_event_queue();	//Reiniciando fila de Eventos!
+					al_register_event_source(filaEventosMouse, al_get_mouse_event_source());	
+					al_register_event_source(filaEventosMouse, al_get_keyboard_event_source());
 				}
 
 				if(apertouBotaoHowtoPlay == 1){			//Tela How to play vai ficar aqui
@@ -302,4 +330,18 @@ int main(){
 	al_destroy_event_queue(filaEventosMouse);
 	al_destroy_event_queue(filaEventosTimer);
 	return 0;
+}
+
+void startTimer(){
+    startingTime = al_get_time();
+}
+
+double getTimer(){
+    return al_get_time() - startingTime;
+}
+
+void FPSLimit(){
+	if (getTimer() < 1.0/FPS) {
+        al_rest((1.0 / FPS) - getTimer());
+    }
 }
