@@ -23,8 +23,8 @@
 #include <unistd.h>
 
 //Atributos importantes
-#define LARGURA_TELA 940
-#define ALTURA_TELA 780
+#define LARGURA_TELA 1024
+#define ALTURA_TELA 768
 #define FPS 60.0
 
 //Configurações do chat
@@ -193,7 +193,6 @@ int main(){
 					evento.mouse.y <= 350 + al_get_bitmap_height(botaoPlay) ){
 
 					apertouBotaoPlay = 1;
-					inGame = 1;
 
 					printf("Apertasse botão Play\n");
 
@@ -257,6 +256,13 @@ int main(){
 										case ALLEGRO_KEY_ENTER:
 											connectScreen = 0;
 											break;
+
+										case ALLEGRO_KEY_ESCAPE:
+											connectScreen = 0;
+											loginScreen = 0;
+											lobby = 0;
+											apertouBotaoPlay = 0;
+											break;
 									}
 										
 								}
@@ -266,6 +272,10 @@ int main(){
 							printConnectScreen(ServerIP,BackgroundMenu,fonteHTPTitulo,fonteHTP);
 							al_flip_display();
 							FPSLimit();
+						}
+
+						if(connectScreen == 0 && loginScreen == 0 && lobby == 0){
+							break;
 						}
 
 						while(loginScreen){ 	//Tela para ler a entrada do login
@@ -286,6 +296,13 @@ int main(){
 										case ALLEGRO_KEY_ENTER:
 											loginScreen = false;
 											break;
+
+										case ALLEGRO_KEY_ESCAPE:
+											connectScreen = 0;
+											loginScreen = 0;
+											lobby = 0;
+											apertouBotaoPlay = 0;
+											break;
 									}
 								}
 							}
@@ -296,8 +313,12 @@ int main(){
 							FPSLimit();
 						}
 
-						//Função para realizar a conexão com o server
-    					assertConnection(ServerIP, loginMsg,janela, filaEventosChat,BackgroundMenu,fonteHTPTitulo,fonteHTP);
+						if(lobby == 1){
+							
+							//Função para realizar a conexão com o server
+    						assertConnection(ServerIP, loginMsg,janela, filaEventosChat,BackgroundMenu,fonteHTPTitulo,fonteHTP);
+
+						}
 
 						while(lobby){ //Momento das conversas!
 
@@ -334,17 +355,17 @@ int main(){
 											sendMsgToServer(&pacote, sizeof(DADOS));
 											lobbyMessage[0]='\0';
 											break;
-									}
-								}
 
-								if(lobbyEvent.type == ALLEGRO_EVENT_KEY_DOWN){ //Se apertar LeftShifht começa o jogo
+										case ALLEGRO_KEY_LCTRL:				//Se apertar LeftShifht começa o jogo
 
-									switch(lobbyEvent.keyboard.keycode){
-										case ALLEGRO_KEY_LCTRL:
 											printf("Jogo ira começar!\n");
 											lobby = 0;
+											inChat = 0;
+											inGame = 1;
+											break;
 									}
 								}
+
 							}
 
 							printLobbyText(lobbyMessage,BackgroundMenu, fonteHTPTitulo, fonteHTP);
@@ -353,8 +374,6 @@ int main(){
 							al_clear_to_color(al_map_rgb(0, 0, 0));
 							FPSLimit();
 						}
-
-						inChat = 0;
 					}
 
 					al_start_timer(timer);
