@@ -317,7 +317,7 @@ int main(){
 							
 							//Função para realizar a conexão com o server
     						assertConnection(ServerIP, loginMsg,janela, filaEventosChat,BackgroundMenu,fonteHTPTitulo,fonteHTP);
-
+							printf("Tentando conexao!\n");
 						}
 
 						while(lobby){ //Momento das conversas!
