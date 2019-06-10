@@ -28,7 +28,7 @@
 #define WAIT_FOR_IT 1
 #define DONT_WAIT 2
 
-#define PORT 9004
+#define PORT 9005
 #define SELECT_TIMEOUT 300
 
 struct msg_ret_t {
