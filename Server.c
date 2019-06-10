@@ -102,20 +102,34 @@ int main() {
 
     if (msg_ret.status == MESSAGE_OK) {
 
-      sprintf(str_buffer, "%s-%d: %s", client_names[msg_ret.client_id], msg_ret.client_id, aux_buffer);
+      if( strcmp(str_buffer, "/start") != 0){
 
-      broadcast(str_buffer, (int)strlen(str_buffer) + 1);
+         sprintf(str_buffer, "%s-%d: %s", client_names[msg_ret.client_id], msg_ret.client_id, aux_buffer);
 
-    } else if (msg_ret.status == DISCONNECT_MSG) {
+         printf("Recibi: %s\n", str_buffer);
 
-      sprintf(str_buffer, "%s disconnected", client_names[msg_ret.client_id]);
+        broadcast(str_buffer, (int)strlen(str_buffer) + 1);
 
-      printf("%s disconnected, id = %d is free\n", client_names[msg_ret.client_id], msg_ret.client_id);
+        } 
+        
+      else if( strstr(str_buffer, "start") == 0){
 
-      broadcast(str_buffer, (int)strlen(str_buffer) + 1);
-      
+        printf("jogo ira começar!\n");
+
+
+      }
+
+
+        } else if (msg_ret.status == DISCONNECT_MSG) {
+
+        sprintf(str_buffer, "%s disconnected", client_names[msg_ret.client_id]);
+
+        printf("%s disconnected, id = %d is free\n", client_names[msg_ret.client_id], msg_ret.client_id);
+
+        broadcast(str_buffer, (int)strlen(str_buffer) + 1);
+        
+      }
     }
-  }
 }
 
 

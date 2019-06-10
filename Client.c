@@ -414,7 +414,7 @@ int main(){
 											lobbyMessage[0]='\0';
 											break;
 
-										case ALLEGRO_KEY_LCTRL:				//Se apertar LeftShifht começa o jogo
+										case ALLEGRO_KEY_LCTRL:				//Se apertar Left control começa o jogo
 
 											printf("Jogo ira começar!\n");
 											lobby = 0;
@@ -792,8 +792,8 @@ int sendMsgToServer(void *msg, int size) {
 
   while (total_size < (ssize_t) size) {
 
-    ssize_t msg_ret =
-        send(network_socket, msg + total_size, (size_t)size, MSG_NOSIGNAL);
+    ssize_t msg_ret = send(network_socket, msg + total_size, (size_t)size, MSG_NOSIGNAL);
+	
     if (msg_ret <= 0) {
       return SERVER_DISCONNECTED;
     }
