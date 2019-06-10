@@ -11,7 +11,7 @@ Inicializa variáveis internas importantes para o servidor, esta função dever 
 
 ##### **Parâmetros:** 
 
-- **max\_clients**: Um número positivo\.
+- **max\_clients**: Um número entre 1 e *MAX_CLIENTS* (definido na *server.h*)\.
 
 ### Resetando o servidor
 ```c

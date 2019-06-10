@@ -6,6 +6,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_native_dialog.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <math.h>
@@ -13,30 +14,46 @@
 #include <string.h>
 
 #define FPS 60
-#define WIDTH  640
-#define HEIGHT 480
+#define WIDTH  1024
+#define HEIGHT 768
 #define IP_MAX_SIZE 100
 
 double startingTime;
 
 ALLEGRO_DISPLAY *main_window;
-ALLEGRO_EVENT_QUEUE *eventsQueue;
+ALLEGRO_EVENT_QUEUE *eventsQueue;  
 
 //========================
 //FONT AND BITMAP POINTERS
+
 ALLEGRO_FONT *ubuntu;
 ALLEGRO_FONT *start;
+ALLEGRO_FONT *fonteHTP;
+ALLEGRO_FONT *fonteHTPTitulo;
 
-ALLEGRO_BITMAP *objects;
-ALLEGRO_BITMAP *menuScreen;
+ALLEGRO_BITMAP *BackgroundMenu;
+ALLEGRO_BITMAP *gameName;
+ALLEGRO_BITMAP *gameIcon;
+ALLEGRO_BITMAP *HTPwasd;
+ALLEGRO_BITMAP *HTPJ;
+ALLEGRO_BITMAP *HTPK;
+ALLEGRO_BITMAP *HTPReturn;
+ALLEGRO_BITMAP *botaoPlay;
+ALLEGRO_BITMAP *botaoHTP;
+ALLEGRO_BITMAP *botaoExit;
+ALLEGRO_BITMAP *texturaMapa;
+ALLEGRO_BITMAP *detalhesDoChao;
+ALLEGRO_BITMAP *charSprite;
+ALLEGRO_BITMAP *heart;
 //========================
 //========================
 
 //EXAMPLE STRUCT
-typedef struct DADOS
-{
+typedef struct DADOS{
+
     char mensagem[100];
     int valor;
+
 }DADOS;
 
 
