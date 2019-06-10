@@ -118,6 +118,12 @@ int main() {
   }
 }
 
+
+
+
+//========================================================FUNCTIONS========================================================\\
+
+
 struct msg_ret_t make_msg_ret(int status, int client_id, int size) {
   struct msg_ret_t ret = {status, client_id, size};
   return ret;

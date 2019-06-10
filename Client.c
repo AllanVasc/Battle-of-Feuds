@@ -66,14 +66,13 @@ typedef struct DADOS{
 
 }DADOS;
 
-typedef struct{
+typedef struct {
 
-	short int posX;
-	short int posY;
-	short int flag; 
+	int posX;
+	int posY;
+    int flag; 
+	int heart;
 	char login[LOGIN_MAX_SIZE];
-	ALLEGRO_BITMAP *charSprite;
-
 
 }Player;
 
@@ -104,7 +103,7 @@ void printaMapa(ALLEGRO_BITMAP *texturaMapa, ALLEGRO_BITMAP *detalhesDoChao);
 
 /////////Mapa
 
-short int mapa[24][32] = { 	{1 , 3 , 3 , 3 , 3 , 2 , 3 , 1 , 2 , 2 , 3 , 3 , 2 , 1 , 3 , 3 , 2 , 1 , 2 , -1, 2 , 2 , 1 , 3 , 3 , 3 , 1 , 2 , 3 , 3 , 3 , 2},
+int mapaJogo[24][32] = { 	{1 , 3 , 3 , 3 , 3 , 2 , 3 , 1 , 2 , 2 , 3 , 3 , 2 , 1 , 3 , 3 , 2 , 1 , 2 , -1, 2 , 2 , 1 , 3 , 3 , 3 , 1 , 2 , 3 , 3 , 3 , 2},
                         	{2 , 2 , -1, 3 , 2 , 1 , 2 , -2, 2 , 2 , -1, 3 , 3 , 3 , 2 , 1 , 2 , 3 , 3 , 2 , 2 , 3 , 2 , -3, 3 , 2 , -1, 3 , 2 , 3 , 2 , 3},
                             {3 , 2 , 3 , 2 , 1 , 4 , 5 , 5, 5 , 5 , 6 , 2 , 2 , -2, 3 , 2 , 3 , 2 , 3 , 3 , 3 , 3 , 2 , 1 , 2 , 2 , 3 , 2 , 2 , 2 , -2, 2},
                             {3 , 3 , 2 , 2 , 3 , 7 , 8 , 8 , 8 , 8 , 9 , 3 , 2 , -3, 3 , 2 , 2 , 2 , -2, 2 , 3 , 3 , 3 , 3 , 3 , 2 , 2 , 2 , 3 , 2 , -3, 1},
@@ -134,24 +133,13 @@ short int mapa[24][32] = { 	{1 , 3 , 3 , 3 , 3 , 2 , 3 , 1 , 2 , 2 , 3 , 3 , 2 ,
 int main(){
 	
 	ALLEGRO_DISPLAY *janela = NULL;
-	ALLEGRO_BITMAP *BackgroundMenu = NULL, *gameName = NULL, *gameIcon = NULL, *HTPwasd = NULL, *HTPJ = NULL, *HTPK = NULL, *HTPReturn = NULL, *botaoPlay = NULL, *botaoHTP = NULL, *botaoExit = NULL, *mapa = NULL;
+	ALLEGRO_BITMAP *BackgroundMenu = NULL, *gameName = NULL, *gameIcon = NULL, *HTPwasd = NULL, *HTPJ = NULL, *HTPK = NULL, *HTPReturn = NULL, *botaoPlay = NULL, *botaoHTP = NULL, *botaoExit = NULL, *heart = NULL;
 	ALLEGRO_BITMAP *texturaMapa = NULL, *detalhesDoChao = NULL;
 	ALLEGRO_EVENT_QUEUE *filaEventosMouse = NULL, *filaEventosTimer = NULL; 
 	ALLEGRO_EVENT evento;	
 	ALLEGRO_FONT *fonteHTP = NULL, *fonteHTPTitulo = NULL;
 	ALLEGRO_TIMER *timer = NULL;
 	int apertouBotaoPlay = 0, inMenu = 1, inGame = 0, apertouBotaoExit = 0, apertouBotaoHowtoPlay = 0, delay = 0, i;
-
-
-	//Configurando player!
-
-	Player clientLocal;
-	clientLocal.posX = 6;
-	clientLocal.posY = 8;
-	
-	//clientLocal.charSprite = NULL;  //Ta dando errado!
-	//clientLocal.charSprite = al_load_bitmap("PreviewSprite.png");  
-	//ChecaPonteiro(clientLocal.charSprite, "Erro no clientLocal.charSprite"); 
 
 	//Variaveis do chat! 
 	ALLEGRO_EVENT_QUEUE *filaEventosChat = NULL;
@@ -163,6 +151,15 @@ int main(){
 	int posXChar = 400, posYChar = 400;
 	int linhaSprite = 0, colunaSprite = 0;
 
+	//Configurando player!
+
+	Player clientLocal;
+	clientLocal.posX = 6;
+	clientLocal.posY = 8;
+	clientLocal.heart = 5;
+
+	int espacamentoHeart = 32;
+ 
 	al_init();
 	al_init_image_addon();
 	al_init_font_addon();
@@ -188,10 +185,11 @@ int main(){
 	HTPJ = al_load_bitmap("HTPJ.png");
 	HTPK = al_load_bitmap("HTPK.png");
 	HTPReturn = al_load_bitmap("HTPReturn.png");
-	mapa = al_load_bitmap("PreviewMap.png");
 	charSprite = al_load_bitmap("PreviewSprite.png");
 	texturaMapa = al_load_bitmap("imagemTexturas.png");
     detalhesDoChao = al_load_bitmap("detalhesDoChao.png");
+	heart = al_load_bitmap("FullHeart.png");
+	al_convert_mask_to_alpha(heart, al_map_rgb(255,255,255));
 
 	ChecaPonteiro(BackgroundMenu, "Erro no BackgroundMenu"); 			//Checa erro!
 	ChecaPonteiro(gameName, "Erro no gamename"); 						//Checa erro!
@@ -203,10 +201,10 @@ int main(){
 	ChecaPonteiro(HTPJ, "Erro no HTPJ"); 								//Checa erro!
 	ChecaPonteiro(HTPK, "Erro no HTPK"); 								//Checa erro!
 	ChecaPonteiro(HTPReturn, "Erro no HTPReturn"); 						//Checa erro!
-	ChecaPonteiro(mapa, "Erro no mapa"); 								//Checa erro!
 	ChecaPonteiro(charSprite, "Erro no charSprite"); 					//Checa erro!
-	ChecaPonteiro(texturaMapa, "Erro no imagem"); 								//Checa erro!
-	ChecaPonteiro(detalhesDoChao, "Erro no detalhesDoChao"); 					//Checa erro!
+	ChecaPonteiro(texturaMapa, "Erro no imagem"); 						//Checa erro!
+	ChecaPonteiro(detalhesDoChao, "Erro no detalhesDoChao"); 			//Checa erro!
+	ChecaPonteiro(heart, "Erro no heart"); 			//Checa erro!
 
 	fonteHTP = al_load_font("Amita-Regular.ttf", 30, 0);
 	fonteHTPTitulo = al_load_font("Amita-Bold.ttf", 50, 0);
@@ -444,16 +442,30 @@ int main(){
 
 						startTimer();			  
 						printaMapa(texturaMapa,detalhesDoChao);		
-						al_draw_bitmap_region(charSprite,colunaSprite*larguraSprite,linhaSprite*alturaSprite,larguraSprite,alturaSprite,posXChar,posYChar,0); //Desenha só uma regiao do sprite!
+						al_draw_bitmap_region(charSprite,colunaSprite*larguraSprite,linhaSprite*alturaSprite,larguraSprite,alturaSprite,clientLocal.posX*32,clientLocal.posY*32,0); //Desenha só uma regiao do sprite!
+
+						for(i = 0; i < clientLocal.heart; i++){		//Desenhando os corações na tela!
+
+							al_draw_bitmap(heart,i*espacamentoHeart, 0 , 0);
+
+						}
+
 						al_flip_display();
 
-						if(colunaSprite%2 != 0 && delay > 15){
+						if(colunaSprite%2 != 0 && delay > 15){	//Continuar a animação dele andando!
 							colunaSprite++;
+
 							if(colunaSprite == 4){
 								colunaSprite = 0;
-							}
+						}
+
+						for(i = 0; i < clientLocal.heart; i++){		//Desenhando os corações na tela!
+
+							al_draw_bitmap(heart,i*espacamentoHeart, 0 , 0);
+
+						}
 							printaMapa(texturaMapa,detalhesDoChao);			
-							al_draw_bitmap_region(charSprite,colunaSprite*larguraSprite,linhaSprite*alturaSprite,larguraSprite,alturaSprite,posXChar,posYChar,0); //Desenha só uma regiao do sprite!
+							al_draw_bitmap_region(charSprite,colunaSprite*larguraSprite,linhaSprite*alturaSprite,larguraSprite,alturaSprite,clientLocal.posX*32,clientLocal.posY*32,0); //Desenha só uma regiao do sprite!
 							al_flip_display();
 						}
 
@@ -466,68 +478,78 @@ int main(){
 							ALLEGRO_KEY_ESCAPE: 	
 							inGame = 0;
 							apertouBotaoPlay = 0;
-							printf("Apertasse botão ESC\n");
+							printf("Saindo do jogo...\n");
 
 						} else if ( al_key_down(&keyState, ALLEGRO_KEY_W) && delay > 10 ){
 							
-							if(posYChar - 5 > 0){
-								linhaSprite = 1;
+							if( clientLocal.posY > 0 && mapaJogo[ clientLocal.posY - 1][clientLocal.posX] >= 0 ){
+
+								(clientLocal.posY)--;
+
 								colunaSprite++;
+
 								if(colunaSprite == 4){
 									colunaSprite = 0;
 								}
-								posYChar -= 5;
+								linhaSprite = 1; 
 							}
+
 							delay = 0;
 
 						}else if ( al_key_down(&keyState, ALLEGRO_KEY_S) && delay > 10 ){	
 
-							if(posYChar + 5 < 780 - 50){
+							if(clientLocal.posY < 23 && mapaJogo[ clientLocal.posY + 1][clientLocal.posX] >= 0){
 
-								linhaSprite = 0;
+								(clientLocal.posY)++;
 								colunaSprite++;
+
 								if(colunaSprite == 4){
 									colunaSprite = 0;
 								}
-								posYChar += 5 ;
+
+								linhaSprite = 0;
 							}
+
 							delay = 0;
 
 						}else if ( al_key_down(&keyState, ALLEGRO_KEY_A) && delay > 10 ){	
 
-							if(posXChar - 5 > 0){
+							if(clientLocal.posX > 0 && mapaJogo[ clientLocal.posY][clientLocal.posX - 1] >= 0){
 
-								linhaSprite = 2;
+
+								(clientLocal.posX)--;
+
 								colunaSprite++;
+
 								if(colunaSprite == 4){
 									colunaSprite = 0;
 								}
-								posXChar -= 5 ;
+								linhaSprite = 2;
 							}
+
 							delay = 0;
 
 						}else if ( al_key_down(&keyState, ALLEGRO_KEY_D) && delay > 10 ){	
 
-							if(posXChar + 5 < 940 - 40){
+							if(clientLocal.posX < 31 && mapaJogo[ clientLocal.posY][clientLocal.posX + 1] >= 0){
 
-								linhaSprite = 3;
+								(clientLocal.posX) ++;
+
 								colunaSprite++;
+
 								if(colunaSprite == 4){
 									colunaSprite = 0;
 								}
-								posXChar += 5 ;
-							}
-							delay = 0;
+								linhaSprite = 3;
 
-						}else if ( al_key_down(&keyState, ALLEGRO_KEY_J) && delay > 10 ){	
-							
-							printf("Ataque fraco!\n");
+							}
 							delay = 0;
 
 						}else if ( al_key_down(&keyState, ALLEGRO_KEY_K) && delay > 10 ){	
 							
-							printf("Ataque forte!\n");
+							printf("Atacando!\n");
 							delay = 0;
+
 						}
 
 					delay++;
@@ -608,7 +630,7 @@ int main(){
 	al_destroy_bitmap(HTPJ);
 	al_destroy_bitmap(HTPK);
 	al_destroy_bitmap(HTPReturn);
-	al_destroy_bitmap(mapa);
+	al_destroy_bitmap(heart);
     al_destroy_timer(timer);
 	al_destroy_event_queue(filaEventosMouse);
 	al_destroy_event_queue(filaEventosTimer);
@@ -956,94 +978,82 @@ void printaMapa(ALLEGRO_BITMAP *texturaMapa, ALLEGRO_BITMAP *detalhesDoChao){
 
 			for(k = 0; k < 32; k++){
 		       
-		     	if(mapa[i][k] == 1){
+		     	if(mapaJogo[i][k] == 1){
 
 		           	 al_draw_bitmap_region(detalhesDoChao, 3*32, 5*32, 32, 32, k*32, i*32, 0); // fundo padrao com buraco&esquerda
 				}
 
-				if(mapa[i][k] == 2){
+				if(mapaJogo[i][k] == 2){
 
 							al_draw_bitmap_region(detalhesDoChao, 4*32, 5*32, 32, 32, k*32, i*32, 0); // fundo padrao meio
 				}
 				
-				if(mapa[i][k] == 3){
+				if(mapaJogo[i][k] == 3){
 
 						al_draw_bitmap_region(detalhesDoChao, 5*32, 5*32, 32, 32, k*32, i*32, 0); // fundo padrao direita
 				}
 
-				if(mapa[i][k] == 4){
+				if(mapaJogo[i][k] == 4){
 
                             al_draw_bitmap_region(detalhesDoChao, 4*32, 5*32, 32, 32, k*32, i*32, 0); // fundo padrao meio
 							al_draw_bitmap_region(detalhesDoChao, 6*32, 2*32, 32, 32, k*32, i*32, 0); // zona combate 1 ,1
 				}
 
-				if(mapa[i][k] == 5){
+				if(mapaJogo[i][k] == 5){
 
                             al_draw_bitmap_region(detalhesDoChao, 4*32, 5*32, 32, 32, k*32, i*32, 0); // fundo padrao meio
 							al_draw_bitmap_region(detalhesDoChao, 7*32, 2*32, 32, 32, k*32, i*32, 0); // zona combate 1 ,2
 				}
-                if(mapa[i][k] == 6){
+                if(mapaJogo[i][k] == 6){
 
                             al_draw_bitmap_region(detalhesDoChao, 4*32, 5*32, 32, 32, k*32, i*32, 0); // fundo padrao meio
 							al_draw_bitmap_region(detalhesDoChao, 8*32, 2*32, 32, 32, k*32, i*32, 0); // zona combate 1 ,3
 				}
-                if(mapa[i][k] == 7){
+                if(mapaJogo[i][k] == 7){
 
 							al_draw_bitmap_region(detalhesDoChao, 4*32, 5*32, 32, 32, k*32, i*32, 0); // fundo padrao meio
                             al_draw_bitmap_region(detalhesDoChao, 6*32, 3*32, 32, 32, k*32, i*32, 0); // zona combate 2 ,1
 
 				}
-                if(mapa[i][k] == 8){
+                if(mapaJogo[i][k] == 8){
 
 							al_draw_bitmap_region(detalhesDoChao, 7*32, 3*32, 32, 32, k*32, i*32, 0); // zona combate 2 ,2
 				}
-                 if(mapa[i][k] == 9){
+                 if(mapaJogo[i][k] == 9){
 
 							al_draw_bitmap_region(detalhesDoChao, 4*32, 5*32, 32, 32, k*32, i*32, 0); // fundo padrao meio
                             al_draw_bitmap_region(detalhesDoChao, 8*32, 3*32, 32, 32, k*32, i*32, 0); // zona combate 2 ,3
 
 				}
-                if(mapa[i][k] == 10){
+                if(mapaJogo[i][k] == 10){
 
 							al_draw_bitmap_region(detalhesDoChao, 4*32, 5*32, 32, 32, k*32, i*32, 0); // fundo padrao meio
                             al_draw_bitmap_region(detalhesDoChao, 6*32, 4*32, 32, 32, k*32, i*32, 0); // zona combate 3 ,1
 
 				}
-                 if(mapa[i][k] == 11){
+                 if(mapaJogo[i][k] == 11){
 
                           al_draw_bitmap_region(detalhesDoChao, 4*32, 5*32, 32, 32, k*32, i*32, 0); // fundo padrao meio
                           al_draw_bitmap_region(detalhesDoChao, 7*32, 4*32, 32, 32, k*32, i*32, 0); // zona combate 3 ,2
 
 				}
-                 if(mapa[i][k] == 12){
+                 if(mapaJogo[i][k] == 12){
 
                            al_draw_bitmap_region(detalhesDoChao, 4*32, 5*32, 32, 32, k*32, i*32, 0); // fundo padrao meio
                            al_draw_bitmap_region(detalhesDoChao, 8*32, 4*32, 32, 32, k*32, i*32, 0); // zona combate 3 ,3
 
 				}
-                /*
-                if(mapa[i][k] == 15){
-
-                            al_draw_bitmap_region(detalhesDoChao, 5*32, 5*32, 32, 32, k*32, i*32, 0); // printar piso com fundo padrao direita
-							al_draw_bitmap_region(texturaMapa, 9*32, 29*32, 32, 32, k*32, i*32, 0); // printar plantaçao terra
-				}
-                if(mapa[i][k] == 16){
-
-                            al_draw_bitmap_region(detalhesDoChao, 5*32, 5*32, 32, 32, k*32, i*32, 0); // printar piso com fundo padrao direita
-							al_draw_bitmap_region(texturaMapa, 9*32, 30*32, 32, 32, k*32, i*32, 0); // printar plantaçao nascendo
-				}
-                */
-                if(mapa[i][k] == -1){ //negativo pq n pode andar em cima da planta grande
+                if(mapaJogo[i][k] == -1){ //negativo pq n pode andar em cima da planta grande
 
                             al_draw_bitmap_region(detalhesDoChao, 5*32, 5*32, 32, 32, k*32, i*32, 0); // printar piso com fundo padrao direita
 							al_draw_bitmap_region(texturaMapa, 13*32, 25*32, 32, 32, k*32, i*32, 0); // printar plantaçao grande
 				}
-                 if(mapa[i][k] == -2){
+                 if(mapaJogo[i][k] == -2){
 
                             al_draw_bitmap_region(detalhesDoChao, 5*32, 5*32, 32, 32, k*32, i*32, 0); //printar piso com fundo padrao direita
 							al_draw_bitmap_region(detalhesDoChao, 6*32, 0*32, 32, 32, k*32, i*32, 0); //printar montinho de areia parte de cima
 				}
-                 if(mapa[i][k] == -3){
+                 if(mapaJogo[i][k] == -3){
 
                             al_draw_bitmap_region(detalhesDoChao, 5*32, 5*32, 32, 32, k*32, i*32, 0); // printar piso com fundo padrao direita
 							al_draw_bitmap_region(detalhesDoChao, 6*32, 1*32, 32, 32, k*32, i*32, 0); // printar montinho de areia parte de baixo
