@@ -102,7 +102,7 @@ int main() {
 
     if (msg_ret.status == MESSAGE_OK) {
 
-      if( strcmp(str_buffer, "/start") != 0){
+      if( strstr(str_buffer, "ALLEGRO_KEY_LCTRL") != 0){
 
          sprintf(str_buffer, "%s-%d: %s", client_names[msg_ret.client_id], msg_ret.client_id, aux_buffer);
 
@@ -110,9 +110,9 @@ int main() {
 
         broadcast(str_buffer, (int)strlen(str_buffer) + 1);
 
-        } 
+      } 
         
-      else if( strstr(str_buffer, "start") == 0){
+      else if( strstr(str_buffer, "ALLEGRO_KEY_LCTRL") != NULL ){
 
         printf("jogo ira começar!\n");
 
