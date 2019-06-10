@@ -47,10 +47,6 @@ struct server_view_client {
   int sockid;
 };
 
-
-fd_set server_fd_set, active_fd_set;
-int server_sock;  // server socket id
-
 typedef struct server_view_client server_view_client;
 
 int actual_max_clients;  // user chosen max_clients

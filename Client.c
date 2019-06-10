@@ -66,6 +66,17 @@ typedef struct DADOS{
 
 }DADOS;
 
+typedef struct{
+
+	short int posX;
+	short int posY;
+	short int flag; 
+	char login[LOGIN_MAX_SIZE];
+	ALLEGRO_BITMAP *charSprite;
+
+
+}Player;
+
 //////////Variaveis globais!
 int network_socket;
 fd_set sock_fd_set;
@@ -88,22 +99,66 @@ void printLoginScreen(char str[], ALLEGRO_BITMAP * BackgroundMenu, ALLEGRO_FONT 
 void printConnectScreen(char str[],ALLEGRO_BITMAP * BackgroundMenu, ALLEGRO_FONT * fonteHTPTitulo, ALLEGRO_FONT * fonteHTP);
 void printLobbyText(char str[], ALLEGRO_BITMAP * BackgroundMenu,ALLEGRO_FONT * fonteHTPTitulo, ALLEGRO_FONT * fonteHTP);
 void printChatLog( char chatLog[][MSG_MAX_SIZE], ALLEGRO_FONT * fonteHTP );
+void printaMapa(ALLEGRO_BITMAP *texturaMapa, ALLEGRO_BITMAP *detalhesDoChao);
+
+
+/////////Mapa
+
+short int mapa[24][32] = { 	{1 , 3 , 3 , 3 , 3 , 2 , 3 , 1 , 2 , 2 , 3 , 3 , 2 , 1 , 3 , 3 , 2 , 1 , 2 , -1, 2 , 2 , 1 , 3 , 3 , 3 , 1 , 2 , 3 , 3 , 3 , 2},
+                        	{2 , 2 , -1, 3 , 2 , 1 , 2 , -2, 2 , 2 , -1, 3 , 3 , 3 , 2 , 1 , 2 , 3 , 3 , 2 , 2 , 3 , 2 , -3, 3 , 2 , -1, 3 , 2 , 3 , 2 , 3},
+                            {3 , 2 , 3 , 2 , 1 , 4 , 5 , 5, 5 , 5 , 6 , 2 , 2 , -2, 3 , 2 , 3 , 2 , 3 , 3 , 3 , 3 , 2 , 1 , 2 , 2 , 3 , 2 , 2 , 2 , -2, 2},
+                            {3 , 3 , 2 , 2 , 3 , 7 , 8 , 8 , 8 , 8 , 9 , 3 , 2 , -3, 3 , 2 , 2 , 2 , -2, 2 , 3 , 3 , 3 , 3 , 3 , 2 , 2 , 2 , 3 , 2 , -3, 1},
+                            {2 , 1 , 2 , 3 , -1, 7 , 8 , 8 , 8 , 8 , 9 , 2 , 3 , 2 , 3 , 3 , -1, 3 , 3 , 3 , 2 , -1, 2 , 2 , 2 , 3 , 2 , -3, 2 , 3 , 3 , 3},
+                            {-2, 3 , 3 , 3 , 3 , 7 , 8 , 8 , 8 , 8 , 9 , 2 , 1 , 2 , 3 , 3 , 3 , 2 , 2 , 2 , 3 , 3 , 3 , 2 , 3 , 1 , 2 , 2 , 2 , -1, 2 , 3},
+                            {-3, 3 , 2 , 2 , 2 , 7 , 8 , 8 , 8 , 8 , 9 , 3 , 2 , 3 , 3 , 2 , 2 , 2 , -1, 2 , 2 , 1 , 2 , 3 , -1, 3 , 3 , 1 , 2 , 3 , 3 , 3},
+                            {3 , 2 , 2 , 2 , 1 , 10, 11, 11, 11, 11, 12, 3 , 3 , 2 , -1, 2 , 1 , 3 , 2 , 3 , 3 , 4 , 5 , 5 , 5 , 5 , 6 , -2, 3 , 3 , 1 , 2}, 
+                            {2 , 3 , 3 , 3 , 3 , 2 , 3 , 2 , 2 , 2 , 3 , 3 , 2 , 3 , 3 , 3 , -3, 2 , 2 , 2 , 2 , 7 , 8 , 8 , 8 , 8 , 9 , -3, 3 , 3 , 3 , 2},
+                            {2 , 2 , 2 , 3 , 2 , 3 , 2 , 1 , 2 , 2 , -1, 3 , 2 , 3 , 2 , 2 , 2 , 3 , 3 , 3 , 1 , 7 , 8 , 8 , 8 , 8 , 9 , 3 , 3 , 3 , 2 , 3},
+                            {3 , -1, 3 , 2 , -2, 2 , 3 , 2 , -1, 3 , 2 , 2 , 3 , 2 , 3 , 3 , 3 , 2 , 3 , 2 , 3 , 7 , 8 , 8 , 8 , 8 , 9 , 1 , 2 , 2 , 3 , -2},
+                            {3 , 3 , 2 , 2 , -3, 3 , 3 , 3 , 2 , 2 , 3 , -3, 2 , 1 , 3 , 2 , 2 , 2 , 1 , 2 , 3 , 7 , 8 , 8 , 8 , 8 , 9 , 2 , 3 , 2 , 2 , -3},
+                            {2 , 2 , 2 , 3 , 2 , 2 , 2 , 2 , 3 , 2 , 2 , 2 , 3 , -1, 2 , 3 , 1 , 3 , 3 , 3 , 2 , 10, 11, 11, 11, 11, 12, 3 , 2 , 3 , 3 , 3},
+                            {2 , 3 , 3 , 3 , 1 , 3 , 3 , -1, 2 , 2 , 3 , 2 , 2 , 2 , 3 , 3 , 3 , -1, 2 , 2 , 3 , -1, 3 , 2 , 3 , 1 , 2 , 2 , 2 , 1 , 2 , 3},
+                            {1 , 3 , 2 , -1, 2 , 2 , 2 , 2 , 3 , 3 , 2 , 1 , 2 , 3 , 3 , 2 , 2 , 2 , 3 , 2 , 2 , 3 , 2 , 2 , 3 , 3 , 2 , 3 , 2 , 3 , 3 , 3},
+                            {3 , 2 , 2 , 2 , 3 , 3 , 3 , 3 , 2 , 3 , 3 , 4 , 5 , 5 , 5 , 5 , 6 , 3 , 2 , 3 , 3 , 2 , 3 , 2 , 2 , 2 , 2 , 2 , 3 , 3 , 1 , 2}, 
+                            {3 , 3 , 3 , 3 , 3 , 2 , 3 , 2 , 2 , -3, 3 , 7 , 8 , 8 , 8 , 8 , 9 , 1 , 2 , -1, 2 , 2 , 1 , 3 , 3 , 3 , -1, 2 , 3 , -1, 3 , 2},
+                            {2 , 2 , 2 , 3 , 2 , -2, 2 , 1 , 3 , 2 , -1, 7 , 8 , 8 , 8 , 8 , 9 , 3 , 3 , 2 , 2 , 3 , 2 , -3, 3 , 2 , 3 , 3 , 3 , 3 , 2 , 3},
+                            {3 , -1, 3 , 3, 3 , -3, 2 , 3 , 2 , 3 , 3 , 7 , 8 , 8 , 8 , 8 , 9 , 2 , 3 , 2 , 3 , 3 , 2 , 1 , 2 , 2 , 3 , 3 , 2 , 2 , 3 , 2},
+                            {3 , 3 , 2 , 2 , 1 , 3 , 2 , 3 , 2 , 3 , 3 , 7 , 8 , 8 , 8 , 8 , 9 , -1, 2 , 2 , 3 , -1, 3 , 3 , 3 , 2 , 3 , 2 , 3 , 2 , 2 , 1},
+                            {2 , 2 , 2 , -1, 2 , 2 , 3 , 2 , 3 , 3 , 2 , 10, 11, 11, 11, 11, 12, 3 , 3 , 3 , 3 , 3 , 2 , 3 , 2 , 3 , 2 , 3 , -3, 3 , 3 , -2},
+                            {2 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 2 , 2 , 3 , 2 , 1 , 2 , -1, 3 , 3 , 2 , 2 , 2 , 3 , 2 , 3 , 2 , 3 , -1, 2 , 2 , 2 , 1 , 2 , -3},
+                            {1 , 3 , 2 , 2 , 2 , 2 , 2 , 2 , -1, 2 , 2 , 3 , 2 , 3 , 3 , 2 , 2 , 2 , 1 , 2 , -2, 3 , 2 , 2 , 3 , 3 , 2 , 2 , 2 , 3 , 3 , 3},
+                            {3 , 2 , 2 , 2 , -3, 3 , 3 , 1 , 2 , 2 , 3 , 3 , 3 , 2 , 3 , 2 , 1 , 3 , 2 , 3 , -3, 2 , 1 , 2 , -1, 2 , 2 , 1 , 3 , 3 , 1 , 2}, 
+
+                         };
 
 int main(){
 	
 	ALLEGRO_DISPLAY *janela = NULL;
 	ALLEGRO_BITMAP *BackgroundMenu = NULL, *gameName = NULL, *gameIcon = NULL, *HTPwasd = NULL, *HTPJ = NULL, *HTPK = NULL, *HTPReturn = NULL, *botaoPlay = NULL, *botaoHTP = NULL, *botaoExit = NULL, *mapa = NULL;
+	ALLEGRO_BITMAP *texturaMapa = NULL, *detalhesDoChao = NULL;
 	ALLEGRO_EVENT_QUEUE *filaEventosMouse = NULL, *filaEventosTimer = NULL; 
 	ALLEGRO_EVENT evento;	
 	ALLEGRO_FONT *fonteHTP = NULL, *fonteHTPTitulo = NULL;
 	ALLEGRO_TIMER *timer = NULL;
 	int apertouBotaoPlay = 0, inMenu = 1, inGame = 0, apertouBotaoExit = 0, apertouBotaoHowtoPlay = 0, delay = 0, i;
 
+
+	//Configurando player!
+
+	Player clientLocal;
+	clientLocal.posX = 6;
+	clientLocal.posY = 8;
+	
+	//clientLocal.charSprite = NULL;  //Ta dando errado!
+	//clientLocal.charSprite = al_load_bitmap("PreviewSprite.png");  
+	//ChecaPonteiro(clientLocal.charSprite, "Erro no clientLocal.charSprite"); 
+
 	//Variaveis do chat! 
 	ALLEGRO_EVENT_QUEUE *filaEventosChat = NULL;
 	int inChat = 0;
 
-	ALLEGRO_BITMAP *charSprite = NULL;		//Variaveis do personagem!
+	//Variaveis do personagem!
+	ALLEGRO_BITMAP *charSprite = NULL;		
 	float larguraSprite = 42, alturaSprite = 52.5 ;
 	int posXChar = 400, posYChar = 400;
 	int linhaSprite = 0, colunaSprite = 0;
@@ -121,7 +176,9 @@ int main(){
 
 	ChecaPonteiro(janela, "Erro na janela"); 	//Checa erro!
 
-	BackgroundMenu = al_load_bitmap("BackgroundMenu.png"); 	//carrega imagem
+	//carrega as imagens 
+
+	BackgroundMenu = al_load_bitmap("BackgroundMenu.png"); 	
 	gameName = al_load_bitmap("BattleOfFeudsName.png");
 	gameIcon = al_load_bitmap("BattleOfFeudsIcon.png");
 	botaoPlay = al_load_bitmap("StartGameButton01.png");
@@ -133,6 +190,8 @@ int main(){
 	HTPReturn = al_load_bitmap("HTPReturn.png");
 	mapa = al_load_bitmap("PreviewMap.png");
 	charSprite = al_load_bitmap("PreviewSprite.png");
+	texturaMapa = al_load_bitmap("imagemTexturas.png");
+    detalhesDoChao = al_load_bitmap("detalhesDoChao.png");
 
 	ChecaPonteiro(BackgroundMenu, "Erro no BackgroundMenu"); 			//Checa erro!
 	ChecaPonteiro(gameName, "Erro no gamename"); 						//Checa erro!
@@ -146,6 +205,8 @@ int main(){
 	ChecaPonteiro(HTPReturn, "Erro no HTPReturn"); 						//Checa erro!
 	ChecaPonteiro(mapa, "Erro no mapa"); 								//Checa erro!
 	ChecaPonteiro(charSprite, "Erro no charSprite"); 					//Checa erro!
+	ChecaPonteiro(texturaMapa, "Erro no imagem"); 								//Checa erro!
+	ChecaPonteiro(detalhesDoChao, "Erro no detalhesDoChao"); 					//Checa erro!
 
 	fonteHTP = al_load_font("Amita-Regular.ttf", 30, 0);
 	fonteHTPTitulo = al_load_font("Amita-Bold.ttf", 50, 0);
@@ -317,7 +378,6 @@ int main(){
 							
 							//Função para realizar a conexão com o server
     						assertConnection(ServerIP, loginMsg,janela, filaEventosChat,BackgroundMenu,fonteHTPTitulo,fonteHTP);
-							printf("Tentando conexao!\n");
 						}
 
 						while(lobby){ //Momento das conversas!
@@ -380,12 +440,10 @@ int main(){
 					al_destroy_event_queue(filaEventosMouse); 
 					al_destroy_event_queue(filaEventosChat);
 
-					while(inGame){
+					while(inGame){  //Momento do jogo!
 
 						startTimer();			  
-
-						al_draw_bitmap(BackgroundMenu, 0, 0, 0);
-						al_draw_bitmap(mapa, 0, 0, 0);			
+						printaMapa(texturaMapa,detalhesDoChao);		
 						al_draw_bitmap_region(charSprite,colunaSprite*larguraSprite,linhaSprite*alturaSprite,larguraSprite,alturaSprite,posXChar,posYChar,0); //Desenha só uma regiao do sprite!
 						al_flip_display();
 
@@ -394,12 +452,9 @@ int main(){
 							if(colunaSprite == 4){
 								colunaSprite = 0;
 							}
-							al_draw_bitmap(BackgroundMenu, 0, 0, 0);
-							al_draw_bitmap(mapa, 0, 0, 0);			
+							printaMapa(texturaMapa,detalhesDoChao);			
 							al_draw_bitmap_region(charSprite,colunaSprite*larguraSprite,linhaSprite*alturaSprite,larguraSprite,alturaSprite,posXChar,posYChar,0); //Desenha só uma regiao do sprite!
 							al_flip_display();
-
-
 						}
 
 						// A verificação das teclas acontece sem o uso de eventos para reduzir o lag
@@ -889,4 +944,112 @@ void printChatLog( char chatLog[][MSG_MAX_SIZE], ALLEGRO_FONT * fonteHTP ){
 
         al_draw_text(fonteHTP, al_map_rgb(255, 255, 255), 40, initialY + (i*spacing), ALLEGRO_ALIGN_LEFT, chatLog[i]);
     }
+}
+
+
+//////Funções para printar o mapa
+
+void printaMapa(ALLEGRO_BITMAP *texturaMapa, ALLEGRO_BITMAP *detalhesDoChao){
+	int i,k;
+
+		for(i = 0; i < 24; i++){
+
+			for(k = 0; k < 32; k++){
+		       
+		     	if(mapa[i][k] == 1){
+
+		           	 al_draw_bitmap_region(detalhesDoChao, 3*32, 5*32, 32, 32, k*32, i*32, 0); // fundo padrao com buraco&esquerda
+				}
+
+				if(mapa[i][k] == 2){
+
+							al_draw_bitmap_region(detalhesDoChao, 4*32, 5*32, 32, 32, k*32, i*32, 0); // fundo padrao meio
+				}
+				
+				if(mapa[i][k] == 3){
+
+						al_draw_bitmap_region(detalhesDoChao, 5*32, 5*32, 32, 32, k*32, i*32, 0); // fundo padrao direita
+				}
+
+				if(mapa[i][k] == 4){
+
+                            al_draw_bitmap_region(detalhesDoChao, 4*32, 5*32, 32, 32, k*32, i*32, 0); // fundo padrao meio
+							al_draw_bitmap_region(detalhesDoChao, 6*32, 2*32, 32, 32, k*32, i*32, 0); // zona combate 1 ,1
+				}
+
+				if(mapa[i][k] == 5){
+
+                            al_draw_bitmap_region(detalhesDoChao, 4*32, 5*32, 32, 32, k*32, i*32, 0); // fundo padrao meio
+							al_draw_bitmap_region(detalhesDoChao, 7*32, 2*32, 32, 32, k*32, i*32, 0); // zona combate 1 ,2
+				}
+                if(mapa[i][k] == 6){
+
+                            al_draw_bitmap_region(detalhesDoChao, 4*32, 5*32, 32, 32, k*32, i*32, 0); // fundo padrao meio
+							al_draw_bitmap_region(detalhesDoChao, 8*32, 2*32, 32, 32, k*32, i*32, 0); // zona combate 1 ,3
+				}
+                if(mapa[i][k] == 7){
+
+							al_draw_bitmap_region(detalhesDoChao, 4*32, 5*32, 32, 32, k*32, i*32, 0); // fundo padrao meio
+                            al_draw_bitmap_region(detalhesDoChao, 6*32, 3*32, 32, 32, k*32, i*32, 0); // zona combate 2 ,1
+
+				}
+                if(mapa[i][k] == 8){
+
+							al_draw_bitmap_region(detalhesDoChao, 7*32, 3*32, 32, 32, k*32, i*32, 0); // zona combate 2 ,2
+				}
+                 if(mapa[i][k] == 9){
+
+							al_draw_bitmap_region(detalhesDoChao, 4*32, 5*32, 32, 32, k*32, i*32, 0); // fundo padrao meio
+                            al_draw_bitmap_region(detalhesDoChao, 8*32, 3*32, 32, 32, k*32, i*32, 0); // zona combate 2 ,3
+
+				}
+                if(mapa[i][k] == 10){
+
+							al_draw_bitmap_region(detalhesDoChao, 4*32, 5*32, 32, 32, k*32, i*32, 0); // fundo padrao meio
+                            al_draw_bitmap_region(detalhesDoChao, 6*32, 4*32, 32, 32, k*32, i*32, 0); // zona combate 3 ,1
+
+				}
+                 if(mapa[i][k] == 11){
+
+                          al_draw_bitmap_region(detalhesDoChao, 4*32, 5*32, 32, 32, k*32, i*32, 0); // fundo padrao meio
+                          al_draw_bitmap_region(detalhesDoChao, 7*32, 4*32, 32, 32, k*32, i*32, 0); // zona combate 3 ,2
+
+				}
+                 if(mapa[i][k] == 12){
+
+                           al_draw_bitmap_region(detalhesDoChao, 4*32, 5*32, 32, 32, k*32, i*32, 0); // fundo padrao meio
+                           al_draw_bitmap_region(detalhesDoChao, 8*32, 4*32, 32, 32, k*32, i*32, 0); // zona combate 3 ,3
+
+				}
+                /*
+                if(mapa[i][k] == 15){
+
+                            al_draw_bitmap_region(detalhesDoChao, 5*32, 5*32, 32, 32, k*32, i*32, 0); // printar piso com fundo padrao direita
+							al_draw_bitmap_region(texturaMapa, 9*32, 29*32, 32, 32, k*32, i*32, 0); // printar plantaçao terra
+				}
+                if(mapa[i][k] == 16){
+
+                            al_draw_bitmap_region(detalhesDoChao, 5*32, 5*32, 32, 32, k*32, i*32, 0); // printar piso com fundo padrao direita
+							al_draw_bitmap_region(texturaMapa, 9*32, 30*32, 32, 32, k*32, i*32, 0); // printar plantaçao nascendo
+				}
+                */
+                if(mapa[i][k] == -1){ //negativo pq n pode andar em cima da planta grande
+
+                            al_draw_bitmap_region(detalhesDoChao, 5*32, 5*32, 32, 32, k*32, i*32, 0); // printar piso com fundo padrao direita
+							al_draw_bitmap_region(texturaMapa, 13*32, 25*32, 32, 32, k*32, i*32, 0); // printar plantaçao grande
+				}
+                 if(mapa[i][k] == -2){
+
+                            al_draw_bitmap_region(detalhesDoChao, 5*32, 5*32, 32, 32, k*32, i*32, 0); //printar piso com fundo padrao direita
+							al_draw_bitmap_region(detalhesDoChao, 6*32, 0*32, 32, 32, k*32, i*32, 0); //printar montinho de areia parte de cima
+				}
+                 if(mapa[i][k] == -3){
+
+                            al_draw_bitmap_region(detalhesDoChao, 5*32, 5*32, 32, 32, k*32, i*32, 0); // printar piso com fundo padrao direita
+							al_draw_bitmap_region(detalhesDoChao, 6*32, 1*32, 32, 32, k*32, i*32, 0); // printar montinho de areia parte de baixo
+				}
+               
+
+		}
+	}
 }
