@@ -17,6 +17,7 @@
 #define WIDTH  1024
 #define HEIGHT 768
 #define IP_MAX_SIZE 100
+#define MAX_CHAT_CLIENTS 6
 
 double startingTime;
 
@@ -52,21 +53,46 @@ ALLEGRO_BITMAP *pedra;
 ALLEGRO_BITMAP *cerca;
 ALLEGRO_BITMAP *obstaculos;
 ALLEGRO_BITMAP *objetos;
-
-
-
-//========================
 //========================
 
 
-//EXAMPLE STRUCT
+
+//Structs
+//========================
+
 typedef struct DADOS{
 
     char mensagem[100];
     int valor;
 
-}DADOS;
+} DADOS;
 
+typedef struct {
+
+  int posX;
+  int posY;
+
+} Posicao;
+
+typedef struct{
+
+  Posicao pos;
+  int qualPers;
+  int vida;
+  char direcao;
+
+} Personagem;
+
+typedef struct {
+
+  Personagem jogador[MAX_CHAT_CLIENTS];
+  int players;
+
+} Inicio;
+
+
+
+//========================
 
 //MAIN ALLEGRO FUNCTIONS
 bool coreInit();
