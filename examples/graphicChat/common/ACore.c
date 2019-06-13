@@ -322,5 +322,54 @@ bool loadGraphics(){    //Carregando todos os graficos!
 
     }
 
+    // Carrega a imagem
+    
+    grama = al_load_bitmap("examples/graphicChat/Resources/Tilesets/detalhesDoChao.png");
+
+    if (!grama){
+
+        fprintf(stderr, "Falha carregando detalhesDoChao.png");
+        return false;
+
+    }
+
+    pedra = al_load_bitmap("examples/graphicChat/Resources/Tilesets/pedraChao.png");
+
+    if (!pedra){
+
+        fprintf(stderr, "Falha carregando pedraChao.png");
+        return false;
+
+    }
+
+    cerca = al_load_bitmap("examples/graphicChat/Resources/Tilesets/cerca.png");
+
+    if (!cerca){
+
+        fprintf(stderr, "Falha carregando cerca.png");
+        return false;
+
+    }
+
+    //obstaculo;
+    obstaculos = al_load_bitmap("examples/graphicChat/Resources/Tilesets/obstaculos.png");
+
+    if (!obstaculos){
+
+        fprintf(stderr, "Falha carregando obstaculos.png");
+        return false;
+
+    }
+
+    objetos = al_load_bitmap("examples/graphicChat/Resources/Tilesets/objetos.png"); 
+
+    if (!objetos){
+
+        fprintf(stderr, "Falha carregando objetos.png");
+        return false;
+
+    }
+
+
     return true;
 }

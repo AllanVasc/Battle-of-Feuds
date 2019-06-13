@@ -45,8 +45,19 @@ ALLEGRO_BITMAP *texturaMapa;
 ALLEGRO_BITMAP *detalhesDoChao;
 ALLEGRO_BITMAP *charSprite;
 ALLEGRO_BITMAP *heart;
+
+
+ALLEGRO_BITMAP *grama;   //Variaveis do mapa!
+ALLEGRO_BITMAP *pedra;
+ALLEGRO_BITMAP *cerca;
+ALLEGRO_BITMAP *obstaculos;
+ALLEGRO_BITMAP *objetos;
+
+
+
 //========================
 //========================
+
 
 //EXAMPLE STRUCT
 typedef struct DADOS{
