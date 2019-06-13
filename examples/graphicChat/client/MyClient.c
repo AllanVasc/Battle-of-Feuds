@@ -239,7 +239,7 @@ int main() {
 
                         
 
-                        if(pacote.valor == 1){  //Recebi uma mensagem e vamos printar 
+                        if(pacote.valor == -1){  //Recebi uma mensagem e vamos printar 
 
                             for(i = 0; i < MAX_LOG_SIZE - 1; ++i)
                                 strcpy(chatLog[i], chatLog[i+1]);
@@ -250,7 +250,7 @@ int main() {
 
                         }
 
-                        if(pacote.valor == 2){  //Recebi que alguem começou!
+                        if(pacote.valor == -3){  //Recebi que alguem começou!
 
                             lobby = 0;
                             inChat = 0;
@@ -264,9 +264,10 @@ int main() {
                     while(!al_is_event_queue_empty(eventsQueue)){
 
                         rec = recvMsgFromServer(&pacote, DONT_WAIT);
+
                         if(rec != NO_MESSAGE){  //recebe as mensagens do servidor (jogador se conectou, avisos, etc)
 
-                            if(pacote.valor == 1){
+                            if(pacote.valor == -1){
 
                                 for(i = 0; i < MAX_LOG_SIZE - 1; ++i)
                                     strcpy(chatLog[i], chatLog[i+1]);
@@ -277,7 +278,7 @@ int main() {
 
                             }
 
-                            if(pacote.valor == 2){ //Alguem apertou para começar e ira começar
+                            if(pacote.valor == -3){ //Alguem apertou para começar e ira começar
 
                                 lobby = 0;
                                 inChat = 0;
@@ -298,7 +299,7 @@ int main() {
 
                                 case ALLEGRO_KEY_ENTER:
 
-                                    pacote.valor = 1;
+                                    pacote.valor = -1;
                                     strcpy(pacote.mensagem, lobbyMessage);
                                     sendMsgToServer(&pacote, sizeof(DADOS));
                                     lobbyMessage[0] = '\0';
@@ -306,7 +307,7 @@ int main() {
 
                                 case ALLEGRO_KEY_LCTRL:				//Se apertar Left control começa o jogo
 
-                                    pacote.valor = 0;
+                                    pacote.valor = -2;
                                     sendMsgToServer(&pacote, sizeof(DADOS));
                                     printf("Jogo ira começar!\n");
                                     break;

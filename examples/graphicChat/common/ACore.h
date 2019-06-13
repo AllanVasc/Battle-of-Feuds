@@ -100,8 +100,6 @@ typedef struct {
 
 } DadosInGame;
 
-
-
 //========================
 
 //MAIN ALLEGRO FUNCTIONS

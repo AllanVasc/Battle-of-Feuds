@@ -69,8 +69,9 @@ int main() {
         sendMsgToClient(&aux2, sizeof(DADOS), id);
         printf("mandei o id: [%d]\n", aux2.valor);
 
-        recvMsgFromClient(client_names[id], id, WAIT_FOR_IT);
+        recvMsgFromClient(client_names[id], id, WAIT_FOR_IT);     //Enviando a mensagem de conexão!
         sprintf(aux2.mensagem, "%s-%d: connected to chat", client_names[id],id);
+        aux2.valor = -1;
         broadcast(&aux2, sizeof(DADOS));
         printf("%s connected id = %d\n", client_names[id], id);
         aux2.mensagem[0]='\0';
@@ -88,18 +89,18 @@ int main() {
 
       if (msg_ret.status == MESSAGE_OK) {
 
-        if(aux.valor == 1){
+        if(aux.valor == -1){
 
           sprintf(aux2.mensagem, "%s-%d: %s", client_names[msg_ret.client_id],msg_ret.client_id, aux.mensagem);
-          aux2.valor = 1;
+          aux2.valor = -1;
           broadcast(&aux2, sizeof(DADOS));
           aux2.mensagem[0]='\0';
 
         }
 
-        else if(aux.valor == 0){
+        else if(aux.valor == -2){
 
-          aux.valor = 2;
+          aux.valor = -3;
           broadcast(&aux, sizeof(DADOS));
           comecar = 0;
           InGame = 1;
@@ -237,6 +238,7 @@ int main() {
 
           comecar = 1;
           InGame = 0;
+          printf("Servidor reiniciando...\n");
       }
 
     }
