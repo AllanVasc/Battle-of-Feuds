@@ -168,9 +168,9 @@ int main() {
                                 case ALLEGRO_KEY_ESCAPE:
                                     connectScreen = 0;
                                     loginScreen = 0;
+                                    inChooseChar = 0;
                                     lobby = 0;
                                     apertouBotaoPlay = 0;
-                                    inChooseChar = 0;
                                     break;
                             }
                                 
@@ -212,9 +212,9 @@ int main() {
                                 case ALLEGRO_KEY_ESCAPE:
                                     connectScreen = 0;
                                     loginScreen = 0;
+                                    inChooseChar = 0;
                                     lobby = 0;
                                     apertouBotaoPlay = 0;
-                                    inChooseChar = 0;
                                     break;
                             }
                         }
@@ -250,9 +250,23 @@ int main() {
 
                                     meuChar = 0;
                                     inChooseChar = false;
+                                    lobby = 1;
 
                             }
-        
+                        }
+
+                        if (chooseCharEvent.type == ALLEGRO_EVENT_KEY_DOWN){
+
+                            switch(chooseCharEvent.keyboard.keycode){
+
+                                case ALLEGRO_KEY_ESCAPE:
+                                    connectScreen = 0;
+                                    loginScreen = 0;
+                                    inChooseChar = 0;
+                                    lobby = 0;
+                                    apertouBotaoPlay = 0;
+                                    break;
+                            }
                         }
                     }
 
@@ -365,9 +379,13 @@ int main() {
                 }
             }
 
-            recvMsgFromServer(&playersInGame, WAIT_FOR_IT);    //Recebendo os dados de todos os personagens para iniciar o jogo!
-            printf("Dados de todos os jogadores recebidos!\n");
-            printf("Quantidade de jogadores: [%d]\n", playersInGame.qtdPlayers);
+            if(inGame){
+                
+                recvMsgFromServer(&playersInGame, WAIT_FOR_IT);    //Recebendo os dados de todos os personagens para iniciar o jogo!
+                printf("Dados de todos os jogadores recebidos!\n");
+                printf("Quantidade de jogadores: [%d]\n", playersInGame.qtdPlayers);
+
+            }
 
             while(inGame){  //Momento do jogo!
 
