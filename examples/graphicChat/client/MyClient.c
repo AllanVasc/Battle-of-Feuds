@@ -58,6 +58,7 @@ void printConnectScreen(char str[]);
 void printChatLog( char chatLog[][MSG_MAX_SIZE]);
 void printLobbyText(char str[]);
 void printLoginScreen(char str[]);
+void printChooseChar();
 void printMap();
 enum conn_ret_t tryConnect(char IP[]);
 void assertConnection(char IP[], char login[]);
@@ -66,7 +67,7 @@ void printHeart();
 
 int main() {
 
-    int apertouBotaoPlay = 0, inMenu = 1, inGame = 0, apertouBotaoExit = 0, apertouBotaoHowtoPlay = 0, delay = 0, inChat = 0;
+    int apertouBotaoPlay = 0, inMenu = 1, inGame = 0, apertouBotaoExit = 0, apertouBotaoHowtoPlay = 0, delay = 0, inChat = 0, inChooseChar, meuChar;
     int i,k;
     
     if (!coreInit()) //Inicializando os modulos centrais
@@ -169,6 +170,7 @@ int main() {
                                     loginScreen = 0;
                                     lobby = 0;
                                     apertouBotaoPlay = 0;
+                                    inChooseChar = 0;
                                     break;
                             }
                                 
@@ -181,8 +183,10 @@ int main() {
                     FPSLimit();
                 }
 
-                if(connectScreen == 0 && loginScreen == 0 && lobby == 0){
+                if(connectScreen == 0 && loginScreen == 0 && lobby == 0 && loginScreen == 0 && inChooseChar == 0){
+
                     break;
+
                 }
 
                 while(loginScreen){ 	//Tela para ler a entrada do login
@@ -202,6 +206,7 @@ int main() {
 
                                 case ALLEGRO_KEY_ENTER:
                                     loginScreen = false;
+                                    inChooseChar = true;
                                     break;
 
                                 case ALLEGRO_KEY_ESCAPE:
@@ -209,12 +214,49 @@ int main() {
                                     loginScreen = 0;
                                     lobby = 0;
                                     apertouBotaoPlay = 0;
+                                    inChooseChar = 0;
                                     break;
                             }
                         }
                     }
 
                     printLoginScreen(loginMsg);
+                    al_flip_display();
+                    al_clear_to_color(al_map_rgb(0, 0, 0));
+                    FPSLimit();
+                }
+
+                if(connectScreen == 0 && loginScreen == 0 && lobby == 0 && loginScreen == 0 && inChooseChar == 0){
+
+                    break;
+
+                }
+
+                while(inChooseChar){ 	//Tela para escolher o personagem!
+
+                    startTimer();
+
+                    while(!al_is_event_queue_empty(eventsQueue)){
+
+                        ALLEGRO_EVENT chooseCharEvent;
+                        al_wait_for_event(eventsQueue, &chooseCharEvent);
+
+                        if (chooseCharEvent.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
+
+                            if (chooseCharEvent.mouse.x >= 300 &&                               //Verificamos se o mouse esta em cima do personagem!
+                                chooseCharEvent.mouse.x <= 300 + al_get_bitmap_width(botaoPlay) &&
+                                chooseCharEvent.mouse.y >= 350 &&
+                                chooseCharEvent.mouse.y <= 350 + al_get_bitmap_height(botaoPlay) ) {
+
+                                    meuChar = 0;
+                                    inChooseChar = false;
+
+                            }
+        
+                        }
+                    }
+
+                    printChooseChar();
                     al_flip_display();
                     al_clear_to_color(al_map_rgb(0, 0, 0));
                     FPSLimit();
@@ -230,7 +272,7 @@ int main() {
 
                 }
 
-                while(lobby){ //Momento das conversas!
+                while(lobby){   //Lobby de conversas!
 
                     startTimer();
                     int rec = recvMsgFromServer(&pacote, DONT_WAIT);
@@ -413,6 +455,7 @@ int main() {
                 printMap();
                 printSprite();
                 printHeart();
+                al_flip_display();
                 FPSLimit();	
                 //inGame = 0; //Ira ficar preso, ajeitar quando botar a vida!	  
             } 
@@ -475,7 +518,7 @@ int main() {
   return 0;
 }
 
-//========================================================FUNCTIONS========================================================
+//======================================================================================FUNCTIONS============================================================================================
 
 enum conn_ret_t tryConnect(char IP[]) {
 
@@ -575,6 +618,14 @@ void printConnectScreen(char str[]){
                      (HEIGHT - al_get_font_ascent(fonteHTPTitulo)) / 2,
                      ALLEGRO_ALIGN_CENTRE, "0.0.0.0");
     }
+}
+
+void printChooseChar(){
+
+    al_draw_bitmap(BackgroundMenu,0,0,0);
+
+    al_draw_text(fonteHTPTitulo, al_map_rgb(255, 255, 255), WIDTH / 2, 30, ALLEGRO_ALIGN_CENTRE, "Escolha seu personagem");
+
 }
 
 
@@ -1163,13 +1214,12 @@ void printSprite(){
         al_draw_bitmap_region(charSprite, 0 , 0 ,larguraSprite, alturaSprite , x*32 , y*32 , 0);
     }
 
-    al_flip_display();
-
 }
 
 void printHeart(){
 
     int i, espacamentoHeart = 32;
+    al_convert_mask_to_alpha(heart, al_map_rgb(255, 255, 255));
 
     for(i = 0; i < playersInGame.jogador[meuID].vida; i++){
 
@@ -1178,19 +1228,3 @@ void printHeart(){
     }
 
 }
-
-
-
-
-/*
-
-for(i = 0 ; i < playersInGame.qtdPlayers ; i++){
-
-    int x = playersInGame.jogador[i].pos.posX;
-    int y = playersInGame.jogador[i].pos.posY;
-    posicoes[i] = playersInGame.jogador[i];
-    map[y][x] = playersInGame.jogador[i].qualPers; //Atribuindo o id do jogador nessa posição!
-
-}
-
-*/
