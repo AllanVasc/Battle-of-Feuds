@@ -90,6 +90,16 @@ typedef struct {
 
 } Inicio;
 
+typedef struct {
+
+    int posX;
+    int posY;
+    int idClient;
+    int vida;
+    int flag;
+
+} DadosInGame;
+
 
 
 //========================

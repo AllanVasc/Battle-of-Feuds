@@ -18,8 +18,13 @@
 
 //Variaveis globais
 
-Inicio pacoteInGame;
+Inicio playersInGame;
 Personagem posicoes[MAX_CHAT_CLIENTS];
+Personagem pacotePersonagem;
+DadosInGame pacoteInGame;
+DADOS pacote;
+DADOS auxID;
+int meuID;
 
 int map[24][32] = {      {17, 20, 19, 20, 18, 20, 18, 20, 18, 20, 18, 20, 20, 20, 18, 20, 20, -5, 20, 20, 17, 20, 20, 18, 20, 20, 20, 18, 20, 20, 18,18},
                          {20, 19, 20, 17, 19, 20, 17, 19, -5, 20, 18, 20, 6 , 6 , 6 , 6 , 6 , -1, -2, -6, 20, 20, 18, 20, 20, 18, 20, 20,-55,-56, 20, 20},
@@ -57,13 +62,12 @@ void printMap();
 enum conn_ret_t tryConnect(char IP[]);
 void assertConnection(char IP[], char login[]);
 void printSprite();
+void printHeart();
 
 int main() {
 
     int apertouBotaoPlay = 0, inMenu = 1, inGame = 0, apertouBotaoExit = 0, apertouBotaoHowtoPlay = 0, delay = 0, inChat = 0;
     int i,k;
-
-	int espacamentoHeart = 32;
     
     if (!coreInit()) //Inicializando os modulos centrais
         return -1;
@@ -81,9 +85,6 @@ int main() {
 
     if(!loadGraphics()) //E por fim todas as imagens que vamos utilizar no programa.
         return -1;
- 
-    //Criamos uma nova estrutura que será enviada e recebida do servidor.
-    DADOS pacote;
 
     while (inMenu){
 
@@ -223,6 +224,9 @@ int main() {
                     
                     //Função para realizar a conexão com o server
                     assertConnection(ServerIP, loginMsg);
+                    recvMsgFromServer(&auxID, WAIT_FOR_IT);
+                    meuID = auxID.valor;
+                    printf("Meu ID eh: [%d]\n", meuID);
 
                 }
 
@@ -232,6 +236,8 @@ int main() {
                     int rec = recvMsgFromServer(&pacote, DONT_WAIT);
 
                     if(rec != NO_MESSAGE){  //recebe as mensagens do servidor (jogador se conectou, avisos, etc)
+
+                        
 
                         if(pacote.valor == 1){  //Recebi uma mensagem e vamos printar 
 
@@ -316,80 +322,98 @@ int main() {
                 }
             }
 
-            recvMsgFromServer(&pacoteInGame, WAIT_FOR_IT);    //Recebendo os dados de todos os personagens para iniciar o jogo!
+            recvMsgFromServer(&playersInGame, WAIT_FOR_IT);    //Recebendo os dados de todos os personagens para iniciar o jogo!
             printf("Dados de todos os jogadores recebidos!\n");
-            printf("Quantidade de jogadores: [%d]\n", pacoteInGame.qtdPlayers);
+            printf("Quantidade de jogadores: [%d]\n", playersInGame.qtdPlayers);
+
             while(inGame){  //Momento do jogo!
 
-                /*
                 startTimer();
-                int rec = recvMsgFromServer(&pacote, DONT_WAIT);
+                int rec = recvMsgFromServer(&pacoteInGame, DONT_WAIT);
 
-                if(rec != NO_MESSAGE){
+                if(rec != NO_MESSAGE){  //Atualizando a posição dos jogadores!
 
-                    for(i=0;i<pacoteInGame.qtdPlayers;i++){
+                    playersInGame.jogador[pacoteInGame.idClient].pos.posX = pacoteInGame.posX;
+                    playersInGame.jogador[pacoteInGame.idClient].pos.posY = pacoteInGame.posY;
 
-                        int x = pacoteInGame.jogador[i].pos.posX;
-                        int y = pacoteInGame.jogador[i].pos.posY;
-                        posicoes[i] = pacoteInGame.jogador[i];
-                        // map[y][x] = id do personagem -> pacoteInGame.jogador[i].qualPers
-                    }
-                        printMap();
                 }
 
                 while(!al_is_event_queue_empty(eventsQueue)){
 
-                    rec = recvMsgFromServer(&pacote, DONT_WAIT);
+                    rec = recvMsgFromServer(&pacoteInGame, DONT_WAIT);
 
-                        if(rec != NO_MESSAGE){
+                    if(rec != NO_MESSAGE){  //Atualizando a posição dos jogadores!
 
-                            for(i=0;i<pacoteInGame.qtdPlayers;i++){
+                        playersInGame.jogador[pacoteInGame.idClient].pos.posX = pacoteInGame.posX;
+                        playersInGame.jogador[pacoteInGame.idClient].pos.posY = pacoteInGame.posY;
 
-                                int x = pacoteInGame.jogador[i].pos.posX;
-                                int y = pacoteInGame.jogador[i].pos.posY;
-                                posicoes[i] = pacoteInGame.jogador[i];
-                                //map[y][x] = id do personagem -> pacoteInGame.jogador[i].qualPers
-                            }
+                    }
 
-                            printMap();
-                        }
+                    ALLEGRO_EVENT inGameEvent;
+                    al_wait_for_event(eventsQueue, &inGameEvent);
 
-                        ALLEGRO_EVENT inGameEvent;
-                        al_wait_for_event(eventsQueue, &inGameEvent);
+                    if (inGameEvent.type == ALLEGRO_EVENT_KEY_DOWN){
 
-                        if (inGameEvent.type == ALLEGRO_EVENT_KEY_DOWN){
+                        char mov;
 
-                            char mov;
+                        switch(inGameEvent.keyboard.keycode){
 
-                            switch(inGameEvent.keyboard.keycode){
+                            case ALLEGRO_KEY_W:
 
-                                case ALLEGRO_KEY_W:
+                                if(map[(playersInGame.jogador[meuID].pos.posY) - 1][playersInGame.jogador[meuID].pos.posX] > 0 && (playersInGame.jogador[meuID].pos.posY) - 1 >= 0){
+
                                     mov = 'w';
-                                    //mudar a posicao do que ela saiu
-                                   //map[posicoes]
-                                   sendMsgToServer(&mov, sizeof(char));
-                                    break;
+                                    //Falta mudar as sprites!
+                                    sendMsgToServer(&mov, sizeof(char));
+                                    printf("Mandei comando: [%c]\n", mov);
+                                }
 
-                                case ALLEGRO_KEY_S:
+                                break;
 
-                                    break;
+                            case ALLEGRO_KEY_S:
 
-                                case ALLEGRO_KEY_A:
-                                   
-                                    break;
-                                case ALLEGRO_KEY_D:
-                                   
-                                    break;
-                            }
+                                if(map[(playersInGame.jogador[meuID].pos.posY) + 1][playersInGame.jogador[meuID].pos.posX] > 0 && (playersInGame.jogador[meuID].pos.posY) + 1 < 32 ){
+
+                                    mov = 's';  
+                                    //Falta mudar as sprites!
+                                    sendMsgToServer(&mov, sizeof(char));
+                                    printf("Mandei comando: [%c]\n", mov);
+                                }                              
+
+                                break;
+
+                            case ALLEGRO_KEY_A:
+
+                                if(map[playersInGame.jogador[meuID].pos.posY][playersInGame.jogador[meuID].pos.posX -1] > 0 && (playersInGame.jogador[meuID].pos.posX) - 1 >= 0){
+
+                                    mov = 'a';  
+                                    //Falta mudar as sprites!
+                                    sendMsgToServer(&mov, sizeof(char));
+                                    printf("Mandei comando: [%c]\n", mov);
+                                }
+                                
+                                break;
+
+                            case ALLEGRO_KEY_D:
+
+                                if(map[playersInGame.jogador[meuID].pos.posY][playersInGame.jogador[meuID].pos.posX + 1] > 0 && (playersInGame.jogador[meuID].pos.posX) + 1 < 32){
+
+                                    mov = 'd';  
+                                    //Falta mudar as sprites!
+                                    sendMsgToServer(&mov, sizeof(char));
+                                    printf("Mandei comando: [%c]\n", mov);
+                                }
+                                
+                                break;
                         }
                     }
-                    */	
+                }
 
                 printMap();
                 printSprite();
-                al_rest(40);
+                printHeart();
                 FPSLimit();	
-                inGame = 0;	  
+                //inGame = 0; //Ira ficar preso, ajeitar quando botar a vida!	  
             } 
         }
 
@@ -1130,10 +1154,10 @@ void printSprite(){
 
     charSprite = al_load_bitmap("examples/graphicChat/Resources/Tilesets/PreviewSprite.png");
 
-    for(i = 0 ; i < pacoteInGame.qtdPlayers ; i++){
+    for(i = 0 ; i < playersInGame.qtdPlayers ; i++){
 
-        int x = pacoteInGame.jogador[i].pos.posX;
-        int y = pacoteInGame.jogador[i].pos.posY;
+        int x = playersInGame.jogador[i].pos.posX;
+        int y = playersInGame.jogador[i].pos.posY;
 
         al_draw_bitmap_region(charSprite, 0 , 0 ,larguraSprite, alturaSprite , x*32 , y*32 , 0);
     }
@@ -1142,17 +1166,29 @@ void printSprite(){
 
 }
 
+void printHeart(){
+
+    int i, espacamentoHeart = 32;
+
+    for(i = 0; i < playersInGame.jogador[meuID].vida; i++){
+
+        al_draw_bitmap(heart, i*espacamentoHeart, 0 , 0);
+
+    }
+
+}
+
 
 
 
 /*
 
-for(i = 0 ; i < pacoteInGame.qtdPlayers ; i++){
+for(i = 0 ; i < playersInGame.qtdPlayers ; i++){
 
-    int x = pacoteInGame.jogador[i].pos.posX;
-    int y = pacoteInGame.jogador[i].pos.posY;
-    posicoes[i] = pacoteInGame.jogador[i];
-    map[y][x] = pacoteInGame.jogador[i].qualPers; //Atribuindo o id do jogador nessa posição!
+    int x = playersInGame.jogador[i].pos.posX;
+    int y = playersInGame.jogador[i].pos.posY;
+    posicoes[i] = playersInGame.jogador[i];
+    map[y][x] = playersInGame.jogador[i].qualPers; //Atribuindo o id do jogador nessa posição!
 
 }
 
