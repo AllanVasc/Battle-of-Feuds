@@ -13,6 +13,7 @@
 int qtdJogadores = 0;
 char movimento;
 DADOS aux;
+DADOS aux2;
 Inicio pacote;
 
 
@@ -32,17 +33,17 @@ int main() {
 
   while(1){
 
-    while (comecar) {   //Momento do chat e da configuração dos personagens!
+    while (comecar){   //Momento do chat e da configuração dos personagens!
 
       int id = acceptConnection();
 
       if (id != NO_CONNECTION){
 
         recvMsgFromClient(client_names[id], id, WAIT_FOR_IT);
-        strcpy(str_buffer, client_names[id]);
-        strcat(str_buffer, " connected to chat");
-        broadcast(str_buffer, (int)strlen(str_buffer) + 1);
+        sprintf(aux2.mensagem, "%s-%d: connected to chat", client_names[id],id);
+        broadcast(&aux2, sizeof(DADOS));
         printf("%s connected id = %d\n", client_names[id], id);
+        aux2.mensagem[0]='\0';
 
         qtdJogadores++;                     //Configurando o personagem!  
         pacote.jogador[id].qualPers = id;
@@ -59,8 +60,10 @@ int main() {
 
         if(aux.valor == 1){
 
-          sprintf(aux.mensagem, "%s-%d: %s", client_names[msg_ret.client_id],msg_ret.client_id, aux);
-          broadcast(&aux, sizeof(DADOS));
+          sprintf(aux2.mensagem, "%s-%d: %s", client_names[msg_ret.client_id],msg_ret.client_id, aux.mensagem);
+          aux2.valor = 1;
+          broadcast(&aux2, sizeof(DADOS));
+          aux2.mensagem[0]='\0';
 
         }
 
@@ -84,7 +87,7 @@ int main() {
     }
 
 
-    pacote.players = qtdJogadores;      //Envio de todos os jogadores para todos os clients!
+    pacote.qtdPlayers = qtdJogadores;      //Envio de todos os jogadores para todos os clients!
     broadcast(&pacote, sizeof(Inicio));
     printf("Dados de todos os personagens enviados...Jogo ira começar...\n");
     printf("Jogo ira começar...\n");

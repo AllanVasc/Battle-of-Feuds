@@ -233,15 +233,13 @@ int main() {
 
                     if(rec != NO_MESSAGE){  //recebe as mensagens do servidor (jogador se conectou, avisos, etc)
 
-                        //printf("RECEIVED: %s\n", pacote.mensagem);
-
                         if(pacote.valor == 1){  //Recebi uma mensagem e vamos printar 
 
                             for(i = 0; i < MAX_LOG_SIZE - 1; ++i)
                                 strcpy(chatLog[i], chatLog[i+1]);
                             
                             strcpy(chatLog[MAX_LOG_SIZE - 1], pacote.mensagem);
-                            
+                                           
                             pacote.mensagem[0]='\0';
 
                         }
@@ -255,13 +253,12 @@ int main() {
                             break;
                         }
 
-                    }
+                    } 
 
                     while(!al_is_event_queue_empty(eventsQueue)){
 
+                        rec = recvMsgFromServer(&pacote, DONT_WAIT);
                         if(rec != NO_MESSAGE){  //recebe as mensagens do servidor (jogador se conectou, avisos, etc)
-
-                            //printf("RECEIVED: %s\n", pacote.mensagem);
 
                             if(pacote.valor == 1){
 
@@ -321,26 +318,16 @@ int main() {
 
             recvMsgFromServer(&pacoteInGame, WAIT_FOR_IT);    //Recebendo os dados de todos os personagens para iniciar o jogo!
             printf("Dados de todos os jogadores recebidos!\n");
-
-            //Debugando!
-
-            for(i = 0; i < 24 ; i++){       //Printar o map com as ids
-
-                for(k = 0 ; k < 32 ; k++){
-
-                    printf("%d ", map[i][k]);
-                }
-                printf("\n");
-            }
-
+            printf("Quantidade de jogadores: [%d]\n", pacoteInGame.qtdPlayers);
             while(inGame){  //Momento do jogo!
+
                 /*
                 startTimer();
                 int rec = recvMsgFromServer(&pacote, DONT_WAIT);
 
                 if(rec != NO_MESSAGE){
 
-                    for(i=0;i<pacoteInGame.players;i++){
+                    for(i=0;i<pacoteInGame.qtdPlayers;i++){
 
                         int x = pacoteInGame.jogador[i].pos.posX;
                         int y = pacoteInGame.jogador[i].pos.posY;
@@ -356,7 +343,7 @@ int main() {
 
                         if(rec != NO_MESSAGE){
 
-                            for(i=0;i<pacoteInGame.players;i++){
+                            for(i=0;i<pacoteInGame.qtdPlayers;i++){
 
                                 int x = pacoteInGame.jogador[i].pos.posX;
                                 int y = pacoteInGame.jogador[i].pos.posY;
@@ -400,7 +387,7 @@ int main() {
 
                 printMap();
                 printSprite();
-                al_rest(10);
+                al_rest(40);
                 FPSLimit();	
                 inGame = 0;	  
             } 
@@ -1143,16 +1130,16 @@ void printSprite(){
 
     charSprite = al_load_bitmap("examples/graphicChat/Resources/Tilesets/PreviewSprite.png");
 
-    for(i = 0 ; i < pacoteInGame.players ; i++){
+    for(i = 0 ; i < pacoteInGame.qtdPlayers ; i++){
 
         int x = pacoteInGame.jogador[i].pos.posX;
         int y = pacoteInGame.jogador[i].pos.posY;
 
-        al_draw_bitmap_region(charSprite,0 , 0,larguraSprite,alturaSprite , x , y , 0);
+        al_draw_bitmap_region(charSprite, 0 , 0 ,larguraSprite, alturaSprite , x*32 , y*32 , 0);
     }
 
     al_flip_display();
-    
+
 }
 
 
@@ -1160,7 +1147,7 @@ void printSprite(){
 
 /*
 
-for(i = 0 ; i < pacoteInGame.players ; i++){
+for(i = 0 ; i < pacoteInGame.qtdPlayers ; i++){
 
     int x = pacoteInGame.jogador[i].pos.posX;
     int y = pacoteInGame.jogador[i].pos.posY;

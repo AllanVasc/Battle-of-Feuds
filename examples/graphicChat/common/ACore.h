@@ -86,7 +86,7 @@ typedef struct{
 typedef struct {
 
   Personagem jogador[MAX_CHAT_CLIENTS];
-  int players;
+  int qtdPlayers;
 
 } Inicio;
 

@@ -102,36 +102,33 @@ bool inputInit(){ //Inicializando as entradas do teclado!
 
 
 
-void readInput(ALLEGRO_EVENT event, char str[], int limit){     //Lendo as entradas!
+void readInput(ALLEGRO_EVENT event, char str[], int limit){ //Lendo as entradas pelo teclado no chat!
 
-    if (event.type == ALLEGRO_EVENT_KEY_CHAR)
-    {
-        if (strlen(str) <= limit)
-        {
+    if (event.type == ALLEGRO_EVENT_KEY_CHAR){
+
+        if (strlen(str) <= limit){
+
             char temp[] = {event.keyboard.unichar, '\0'};
-            if (event.keyboard.unichar == ' ')
-            {
+            if (event.keyboard.unichar == ' '){
+
                 strcat(str, temp);
             }
-            else if (event.keyboard.unichar >= '!' &&
-                     event.keyboard.unichar <= '?')
-            {
+            else if (event.keyboard.unichar >= '!' && event.keyboard.unichar <= '?'){
+
                 strcat(str, temp);
             }
-            else if (event.keyboard.unichar >= 'A' &&
-                     event.keyboard.unichar <= 'Z')
-            {
+            else if (event.keyboard.unichar >= 'A' && event.keyboard.unichar <= 'Z'){
+
                 strcat(str, temp);
             }
-            else if (event.keyboard.unichar >= 'a' &&
-                     event.keyboard.unichar <= 'z')
-            {
+            else if (event.keyboard.unichar >= 'a' && event.keyboard.unichar <= 'z'){
+
                 strcat(str, temp);
             }
         }
 
-        if (event.keyboard.keycode == ALLEGRO_KEY_BACKSPACE && strlen(str) != 0)
-        {
+        if (event.keyboard.keycode == ALLEGRO_KEY_BACKSPACE && strlen(str) != 0){
+
             str[strlen(str) - 1] = '\0';
         }
     }
