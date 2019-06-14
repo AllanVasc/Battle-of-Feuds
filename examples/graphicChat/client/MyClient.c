@@ -67,6 +67,7 @@ void assertConnection(char IP[], char login[]);
 void printSprite();
 void printHeart();
 void configuraSprite();
+void Playsound();
 
 int main() {
 
@@ -91,6 +92,8 @@ int main() {
         return -1;
 
     while (inMenu){
+
+        Playsound();    
 
         while(!al_is_event_queue_empty(eventsQueue)){
             
@@ -246,8 +249,8 @@ int main() {
 
                         if (chooseCharEvent.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
 
-                            if (chooseCharEvent.mouse.x >= 100 &&                               //Verificamos se o mouse esta em cima do personagem!
-                                chooseCharEvent.mouse.x <= 100 + al_get_bitmap_width(skeletonButton) &&
+                            if (chooseCharEvent.mouse.x >= (LARGURA/10)*1 &&                               //Verificamos se o mouse esta em cima do personagem Skeleton!
+                                chooseCharEvent.mouse.x <= (LARGURA/10)*1 + al_get_bitmap_width(skeletonButton) &&
                                 chooseCharEvent.mouse.y >= 220 &&
                                 chooseCharEvent.mouse.y <= 220 + al_get_bitmap_height(skeletonButton) ) {
 
@@ -258,8 +261,8 @@ int main() {
                             }
 
 
-                            if (chooseCharEvent.mouse.x >= 300 &&                               //Verificamos se o mouse esta em cima do personagem!
-                                chooseCharEvent.mouse.x <= 300 + al_get_bitmap_width(ripperButton) &&
+                            if (chooseCharEvent.mouse.x >= (LARGURA/10)*3 &&                               //Verificamos se o mouse esta em cima do personagem Ripper!
+                                chooseCharEvent.mouse.x <= (LARGURA/10)*3 + al_get_bitmap_width(ripperButton) &&
                                 chooseCharEvent.mouse.y >= 220 &&
                                 chooseCharEvent.mouse.y <= 220 + al_get_bitmap_height(ripperButton) ) {
 
@@ -269,12 +272,34 @@ int main() {
 
                             }
 
-                            if (chooseCharEvent.mouse.x >= 500 &&                               //Verificamos se o mouse esta em cima do personagem!
-                                chooseCharEvent.mouse.x <= 500 + al_get_bitmap_width(ripperButton) &&
+                            if (chooseCharEvent.mouse.x >= (LARGURA/10)*5 &&                               //Verificamos se o mouse esta em cima do personagem DeathKnight!
+                                chooseCharEvent.mouse.x <= (LARGURA/10)*5 + al_get_bitmap_width(ripperButton) &&
                                 chooseCharEvent.mouse.y >= 220 &&
                                 chooseCharEvent.mouse.y <= 220 + al_get_bitmap_height(ripperButton) ) {
 
                                     meuChar = 2;
+                                    inChooseChar = false;
+                                    lobby = 1;
+
+                            }
+
+                            if (chooseCharEvent.mouse.x >= (LARGURA/10)*7 &&                               //Verificamos se o mouse esta em cima do personagem Ogre!
+                                chooseCharEvent.mouse.x <= (LARGURA/10)*7 + al_get_bitmap_width(ripperButton) &&
+                                chooseCharEvent.mouse.y >= 220 &&
+                                chooseCharEvent.mouse.y <= 220 + al_get_bitmap_height(ripperButton) ) {
+
+                                    meuChar = 3;
+                                    inChooseChar = false;
+                                    lobby = 1;
+
+                            }
+
+                            if (chooseCharEvent.mouse.x >= (LARGURA/10)*3 &&                               //Verificamos se o mouse esta em cima do personagem Goblin!
+                                chooseCharEvent.mouse.x <= (LARGURA/10)*3 + al_get_bitmap_width(ripperButton) &&
+                                chooseCharEvent.mouse.y >= 400 &&
+                                chooseCharEvent.mouse.y <= 400 + al_get_bitmap_height(ripperButton) ) {
+
+                                    meuChar = 4;
                                     inChooseChar = false;
                                     lobby = 1;
 
@@ -413,10 +438,11 @@ int main() {
                 recvMsgFromServer(&playersInGame, WAIT_FOR_IT);    //Recebendo os dados de todos os personagens para iniciar o jogo!
                 printf("Dados de todos os jogadores recebidos!\n");
                 printf("Quantidade de jogadores: [%d]\n", playersInGame.qtdPlayers);
+                al_destroy_audio_stream(menuGameSong);
 
             }
 
-            configuraSprite();
+            configuraSprite(); 
 
             while(inGame){  //Momento do jogo!
 
@@ -756,8 +782,12 @@ void printChooseChar(){
 
     al_draw_bitmap(BackgroundMenu,0,0,0);
 
-    al_draw_bitmap(skeletonButton, 100, 220, 0);
-    al_draw_bitmap(ripperButton, 300, 220, 0);
+    al_draw_bitmap(skeletonButton, (LARGURA/10) *1, 220, 0);
+    al_draw_bitmap(ripperButton, (LARGURA/10) *3, 220, 0);
+    al_draw_bitmap(ripperButton, (LARGURA/10) *5, 220, 0);
+    al_draw_bitmap(ripperButton, (LARGURA/10) *7, 220, 0);
+    al_draw_bitmap(ripperButton, (LARGURA/10) *3, 400, 0);
+
     
 
     al_draw_text(fonteHTPTitulo, al_map_rgb(255, 255, 255), WIDTH / 2, 30, ALLEGRO_ALIGN_CENTRE, "Escolha seu personagem");
@@ -1383,13 +1413,13 @@ void printSprite(){
 
             if(playersInGame.jogador[i].direcao == 'a'){
 
-                al_draw_bitmap_region(Sprite_Ripper01, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) , playersInGame.jogador[i].spriteJogador.linhaA * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , ALLEGRO_FLIP_HORIZONTAL);
+                al_draw_bitmap_region(Sprite_Ripper01, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento), playersInGame.jogador[i].spriteJogador.linhaA * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , ALLEGRO_FLIP_HORIZONTAL);
 
             }
 
             if(playersInGame.jogador[i].direcao == 'd'){
 
-                al_draw_bitmap_region(Sprite_Ripper01, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) , playersInGame.jogador[i].spriteJogador.linhaD * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
+                al_draw_bitmap_region(Sprite_Ripper01, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento), playersInGame.jogador[i].spriteJogador.linhaD * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
 
             }
         }
@@ -1398,25 +1428,79 @@ void printSprite(){
 
             if(playersInGame.jogador[i].direcao == 'w'){
 
-            al_draw_bitmap_region(Sprite_DeathKnight02, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento ) , playersInGame.jogador[i].spriteJogador.linhaW * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
+                al_draw_bitmap_region(Sprite_DeathKnight02, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento ) , playersInGame.jogador[i].spriteJogador.linhaW * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
 
             }
 
             if(playersInGame.jogador[i].direcao == 's'){
 
-                al_draw_bitmap_region(Sprite_DeathKnight02, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) , playersInGame.jogador[i].spriteJogador.linhaS * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
+                al_draw_bitmap_region(Sprite_DeathKnight02, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento), playersInGame.jogador[i].spriteJogador.linhaS * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
 
             }
 
             if(playersInGame.jogador[i].direcao == 'a'){
 
-                al_draw_bitmap_region(Sprite_DeathKnight02, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) , playersInGame.jogador[i].spriteJogador.linhaA * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , ALLEGRO_FLIP_HORIZONTAL);
+                al_draw_bitmap_region(Sprite_DeathKnight02, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento), playersInGame.jogador[i].spriteJogador.linhaA * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , ALLEGRO_FLIP_HORIZONTAL);
 
             }
 
             if(playersInGame.jogador[i].direcao == 'd'){
 
-                al_draw_bitmap_region(Sprite_DeathKnight02, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) , playersInGame.jogador[i].spriteJogador.linhaD * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
+                al_draw_bitmap_region(Sprite_DeathKnight02, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento), playersInGame.jogador[i].spriteJogador.linhaD * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
+
+            }
+        }
+
+        if(playersInGame.jogador[i].qualPers == 3){     //Minha sprite é Ogre
+
+            if(playersInGame.jogador[i].direcao == 'w'){
+
+            al_draw_bitmap_region(Sprite_Ogre03, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) +6, playersInGame.jogador[i].spriteJogador.linhaW * playersInGame.jogador[i].spriteJogador.espacamento +8,32, 32 , x*32 , y*32 , 0);
+
+            }
+
+            if(playersInGame.jogador[i].direcao == 's'){
+
+                al_draw_bitmap_region(Sprite_Ogre03, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) +6, playersInGame.jogador[i].spriteJogador.linhaS * playersInGame.jogador[i].spriteJogador.espacamento +8,32, 32 , x*32 , y*32 , 0);
+
+            }
+
+            if(playersInGame.jogador[i].direcao == 'a'){
+
+                al_draw_bitmap_region(Sprite_Ogre03, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) +6, playersInGame.jogador[i].spriteJogador.linhaA * playersInGame.jogador[i].spriteJogador.espacamento +8,32, 32 , x*32 , y*32 , ALLEGRO_FLIP_HORIZONTAL);
+
+            }
+
+            if(playersInGame.jogador[i].direcao == 'd'){
+
+                al_draw_bitmap_region(Sprite_Ogre03, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) +6, playersInGame.jogador[i].spriteJogador.linhaD * playersInGame.jogador[i].spriteJogador.espacamento +8,32, 32 , x*32 , y*32 , 0);
+
+            }
+        }
+
+        if(playersInGame.jogador[i].qualPers == 4){     //Minha sprite é Goblin
+
+            if(playersInGame.jogador[i].direcao == 'w'){
+
+            al_draw_bitmap_region(Sprite_Goblin04, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) , playersInGame.jogador[i].spriteJogador.linhaW * playersInGame.jogador[i].spriteJogador.espacamento ,28, 28 , x*32 , y*32 , 0);
+
+            }
+
+            if(playersInGame.jogador[i].direcao == 's'){
+
+                al_draw_bitmap_region(Sprite_Goblin04, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) , playersInGame.jogador[i].spriteJogador.linhaS * playersInGame.jogador[i].spriteJogador.espacamento ,28, 28 , x*32 , y*32 , 0);
+
+            }
+
+            if(playersInGame.jogador[i].direcao == 'a'){
+
+                al_draw_bitmap_region(Sprite_Goblin04, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) , playersInGame.jogador[i].spriteJogador.linhaA * playersInGame.jogador[i].spriteJogador.espacamento ,28, 28 , x*32 , y*32 , ALLEGRO_FLIP_HORIZONTAL);
+
+            }
+
+            if(playersInGame.jogador[i].direcao == 'd'){
+
+                al_draw_bitmap_region(Sprite_Goblin04, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) , playersInGame.jogador[i].spriteJogador.linhaD * playersInGame.jogador[i].spriteJogador.espacamento ,28, 28 , x*32 , y*32 , 0);
 
             }
         }
@@ -1464,9 +1548,7 @@ void configuraSprite(){
             spriteConfigurada.espacamento = 48;
             playersInGame.jogador[i].spriteJogador = spriteConfigurada;
 
-        }
-
-        if(playersInGame.jogador[i].qualPers == 1){ //Configurando dados da sprite Ripper
+        } else if(playersInGame.jogador[i].qualPers == 1){ //Configurando dados da sprite Ripper
 
             spriteConfigurada.linhaW = 4;
             spriteConfigurada.linhaS = 7;
@@ -1486,9 +1568,8 @@ void configuraSprite(){
             spriteConfigurada.limiteAtaqueA = 8;
             spriteConfigurada.limiteAtaqueD = 8;
             playersInGame.jogador[i].spriteJogador = spriteConfigurada;
-        }
 
-        if(playersInGame.jogador[i].qualPers == 1){ //Configurando dados da sprite DeathKnight
+        } else if(playersInGame.jogador[i].qualPers == 2){ //Configurando dados da sprite DeathKnight
 
             spriteConfigurada.linhaW = 4;
             spriteConfigurada.linhaS = 7;
@@ -1508,6 +1589,61 @@ void configuraSprite(){
             spriteConfigurada.limiteAtaqueA = 5;
             spriteConfigurada.limiteAtaqueD = 5;
             playersInGame.jogador[i].spriteJogador = spriteConfigurada;
+
+        } else if(playersInGame.jogador[i].qualPers == 3){ //Configurando dados da sprite Ogre
+
+            spriteConfigurada.linhaW = 4;
+            spriteConfigurada.linhaS = 7;
+            spriteConfigurada.linhaA = 1;
+            spriteConfigurada.linhaD = 1;
+            spriteConfigurada.limiteMovimentacaoW = 5;
+            spriteConfigurada.limiteMovimentacaoS = 6;
+            spriteConfigurada.limiteMovimentacaoA = 6;
+            spriteConfigurada.limiteMovimentacaoD = 6; //O limite muda para os lados!
+            spriteConfigurada.linhaAtaqueW = 3;
+            spriteConfigurada.linhaAtaqueS = 6;
+            spriteConfigurada.linhaAtaqueA = 0;
+            spriteConfigurada.linhaAtaqueD = 0;
+            spriteConfigurada.espacamento = 48;
+            spriteConfigurada.limiteAtaqueW = 3;
+            spriteConfigurada.limiteAtaqueS = 3;
+            spriteConfigurada.limiteAtaqueA = 3;
+            spriteConfigurada.limiteAtaqueD = 3;
+            playersInGame.jogador[i].spriteJogador = spriteConfigurada;
         }
+         if(playersInGame.jogador[i].qualPers == 4){ //Configurando dados da sprite Goblin
+
+            spriteConfigurada.linhaW = 4;
+            spriteConfigurada.linhaS = 7;
+            spriteConfigurada.linhaA = 1;
+            spriteConfigurada.linhaD = 1;
+            spriteConfigurada.limiteMovimentacaoW = 4;
+            spriteConfigurada.limiteMovimentacaoS = 4;
+            spriteConfigurada.limiteMovimentacaoA = 3;
+            spriteConfigurada.limiteMovimentacaoD = 3; //O limite muda para os lados!
+            spriteConfigurada.linhaAtaqueW = 3;
+            spriteConfigurada.linhaAtaqueS = 6;
+            spriteConfigurada.linhaAtaqueA = 0;
+            spriteConfigurada.linhaAtaqueD = 0;
+            spriteConfigurada.espacamento = 26;
+            spriteConfigurada.limiteAtaqueW = 3;
+            spriteConfigurada.limiteAtaqueS = 3;
+            spriteConfigurada.limiteAtaqueA = 3;
+            spriteConfigurada.limiteAtaqueD = 3;
+            playersInGame.jogador[i].spriteJogador = spriteConfigurada;
+        }                                     
     }
+}
+
+void Playsound(){
+       
+     al_reserve_samples(1);
+
+    //liga o stream no mixer
+    al_attach_audio_stream_to_mixer(menuGameSong, al_get_default_mixer());
+
+    //defina que o stream vai tocar no modo repeat 
+    al_set_audio_stream_playmode(menuGameSong, ALLEGRO_PLAYMODE_LOOP);
+   
+    
 }

@@ -34,6 +34,20 @@ bool coreInit(){  //Inicializando os modulos basicos!
         return false;
     }
 
+    if(!al_install_audio()){
+
+      fprintf(stderr, "Falha ao inicializar add-on al_install_audio.\n");
+      return -1;
+
+   }
+
+   if(!al_init_acodec_addon()) {
+
+   fprintf(stderr, "failed to initialize audio codecs!\n");
+   return -1;
+
+    }
+
     eventsQueue = al_create_event_queue();
 
     if (!eventsQueue) {
@@ -367,6 +381,8 @@ bool loadGraphics(){    //Carregando todos os graficos!
 
     }
 
+    // Botões Sprites
+
     skeletonButton = al_load_bitmap("examples/graphicChat/Resources/Tilesets/SkeletonButton.png");
 
     if (!skeletonButton){
@@ -380,6 +396,30 @@ bool loadGraphics(){    //Carregando todos os graficos!
     if (!ripperButton){
 
         fprintf(stderr, "Falha carregando ripperButton.png\n");
+        return false;
+    }
+
+    deathKnightButton = al_load_bitmap("examples/graphicChat/Resources/Tilesets/RipperButton.png");
+    
+    if (!ripperButton){
+
+        fprintf(stderr, "Falha carregando ripperButton.png\n");
+        return false;
+    }
+
+    ogreButton = al_load_bitmap("examples/graphicChat/Resources/Tilesets/RipperButton.png");
+    
+    if (!ripperButton){
+
+        fprintf(stderr, "Falha carregando ogre.png\n");
+        return false;
+    }
+
+    goblinButton = al_load_bitmap("examples/graphicChat/Resources/Tilesets/RipperButton.png");
+    
+    if (!ripperButton){
+
+        fprintf(stderr, "Falha carregando goblinButton.png\n");
         return false;
     }
 
@@ -408,6 +448,35 @@ bool loadGraphics(){    //Carregando todos os graficos!
     if (!Sprite_DeathKnight02){
 
         fprintf(stderr, "Falha carregando Sprite_DeathKnight02.png");
+        return false;
+
+    }
+
+    Sprite_Ogre03 = al_load_bitmap("examples/graphicChat/Resources/Tilesets/Sprite_Ogre03.png");
+
+    if (!Sprite_Ogre03){
+
+        fprintf(stderr, "Falha carregando Sprite_ogre03.png");
+        return false;
+
+    }
+
+    Sprite_Goblin04 = al_load_bitmap("examples/graphicChat/Resources/Tilesets/Sprite_Goblin04.png");
+
+    if (!Sprite_Goblin04){
+
+        fprintf(stderr, "Falha carregando Sprite_Goblin04.png");
+        return false;
+
+    }
+
+    //Carregando os sons
+
+    menuGameSong = al_load_audio_stream("examples/graphicChat/Resources/Tilesets/menuSong.ogg", 4, 1024);
+
+    if (!menuGameSong){
+
+        fprintf(stderr, "Falha carregando menuGameSong.ogg");
         return false;
 
     }

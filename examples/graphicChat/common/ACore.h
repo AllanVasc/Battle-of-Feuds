@@ -7,6 +7,8 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_native_dialog.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <math.h>
@@ -48,6 +50,9 @@ ALLEGRO_BITMAP *charSprite;
 ALLEGRO_BITMAP *heart;
 ALLEGRO_BITMAP *skeletonButton;
 ALLEGRO_BITMAP *ripperButton;
+ALLEGRO_BITMAP *deathKnightButton;
+ALLEGRO_BITMAP *ogreButton;
+ALLEGRO_BITMAP *goblinButton;
 
 ALLEGRO_BITMAP *grama;   //Variaveis do mapa!
 ALLEGRO_BITMAP *pedra;
@@ -63,10 +68,20 @@ ALLEGRO_BITMAP *objetos;
 ALLEGRO_BITMAP *Sprite_Skeleton0;
 ALLEGRO_BITMAP *Sprite_Ripper01;
 ALLEGRO_BITMAP *Sprite_DeathKnight02;
+ALLEGRO_BITMAP *Sprite_Ogre03;
+ALLEGRO_BITMAP *Sprite_Goblin04;
 
 //========================
 
 
+//========================
+// SOUNDS 
+
+ALLEGRO_AUDIO_STREAM *menuGameSong;
+
+
+
+//========================
 
 
 //========================

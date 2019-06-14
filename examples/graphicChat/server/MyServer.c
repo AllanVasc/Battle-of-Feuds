@@ -16,6 +16,7 @@ DADOS aux;
 DADOS aux2;
 Inicio pacote;
 DadosInGame pacoteInGame;
+int idPlayerHittado;
 
 int map[24][32] = {      {17, 20, 19, 20, 18, 20, 18, 20, 18, 20, 18, 20, 20, 20, 18, 20, 20, -5, 20, 20, 17, 20, 20, 18, 20, 20, 20, 18, 20, 20, 18,18},
                          {20, 19, 20, 17, 19, 20, 17, 19, -5, 20, 18, 20, 6 , 6 , 6 , 6 , 6 , -1, -2, -6, 20, 20, 18, 20, 20, 18, 20, 20,-55,-56, 20, 20},
@@ -146,9 +147,10 @@ int main() {
 
             if( canMove( movimento , id ) ){  //Realiza o movimento     
 
-              (pacote.jogador[id].pos.posY) --;
+              (pacote.jogador[id].pos.posY) --; //Atualiza o backup de players do server!
+              pacote.jogador[id].direcao = 'w';
 
-              pacoteInGame.posY = (pacote.jogador[id].pos.posY);
+              pacoteInGame.posY = (pacote.jogador[id].pos.posY); //Configurando o pacote para envio
               pacoteInGame.posX = (pacote.jogador[id].pos.posX);
               pacoteInGame.idClient = id;
               pacoteInGame.vida = (pacote.jogador[id].vida);
@@ -160,14 +162,16 @@ int main() {
 
             else {            // Se encontrou um obstáculo, ele precisa rotacionar a sprite sem tirar do lugar!
 
-              pacoteInGame.posY = (pacote.jogador[id].pos.posY);
+              pacote.jogador[id].direcao = 'w'; //Atualiza o backup de players do server!
+
+              pacoteInGame.posY = (pacote.jogador[id].pos.posY); //Configurando o pacote para envio
               pacoteInGame.posX = (pacote.jogador[id].pos.posX);
               pacoteInGame.idClient = id;
               pacoteInGame.vida = (pacote.jogador[id].vida);
               pacoteInGame.flag = 0;
               pacoteInGame.direcao = 'w';
               broadcast(&pacoteInGame, sizeof(DadosInGame));
-              
+
             }
 
           break;
@@ -176,9 +180,10 @@ int main() {
 
             if( canMove( movimento , id ) ){ //Realiza o movimento   
 
-              (pacote.jogador[id].pos.posY) ++;
+              (pacote.jogador[id].pos.posY) ++; //Atualiza o backup de players do server!
+              pacote.jogador[id].direcao = 's';
 
-              pacoteInGame.posY = (pacote.jogador[id].pos.posY);
+              pacoteInGame.posY = (pacote.jogador[id].pos.posY); //Configurando o pacote para envio
               pacoteInGame.posX = (pacote.jogador[id].pos.posX);
               pacoteInGame.idClient = id;
               pacoteInGame.vida = (pacote.jogador[id].vida);
@@ -190,7 +195,9 @@ int main() {
 
             else { // Se encontrou um obstáculo, ele precisa rotacionar a sprite sem tirar do lugar!
 
-              pacoteInGame.posY = (pacote.jogador[id].pos.posY);
+              pacote.jogador[id].direcao = 's'; //Atualiza o backup de players do server!
+
+              pacoteInGame.posY = (pacote.jogador[id].pos.posY); //Configurando o pacote para envio
               pacoteInGame.posX = (pacote.jogador[id].pos.posX);
               pacoteInGame.idClient = id;
               pacoteInGame.vida = (pacote.jogador[id].vida);
@@ -206,9 +213,10 @@ int main() {
 
             if( canMove( movimento , id ) ){     //Realiza o movimento
 
-              (pacote.jogador[id].pos.posX) --;
+              (pacote.jogador[id].pos.posX) --; //Atualiza o backup de players do server!
+              pacote.jogador[id].direcao = 'a';
 
-              pacoteInGame.posY = (pacote.jogador[id].pos.posY);
+              pacoteInGame.posY = (pacote.jogador[id].pos.posY); //Configurando o pacote para envio
               pacoteInGame.posX = (pacote.jogador[id].pos.posX);
               pacoteInGame.idClient = id;
               pacoteInGame.vida = (pacote.jogador[id].vida);
@@ -220,7 +228,9 @@ int main() {
 
             else { // Se encontrou um obstáculo, ele precisa rotacionar a sprite sem tirar do lugar!
 
-              pacoteInGame.posY = (pacote.jogador[id].pos.posY);
+              pacote.jogador[id].direcao = 'a'; //Atualiza o backup de players do server!
+
+              pacoteInGame.posY = (pacote.jogador[id].pos.posY); //Configurando o pacote para envio
               pacoteInGame.posX = (pacote.jogador[id].pos.posX);
               pacoteInGame.idClient = id;
               pacoteInGame.vida = (pacote.jogador[id].vida);
@@ -237,9 +247,10 @@ int main() {
             if( canMove( movimento , id ) ){     //Realiza o movimento
 
               
-              (pacote.jogador[id].pos.posX) ++;
+              (pacote.jogador[id].pos.posX) ++; //Atualiza o backup de players do server!
+              pacote.jogador[id].direcao = 'd';
 
-              pacoteInGame.posY = (pacote.jogador[id].pos.posY);
+              pacoteInGame.posY = (pacote.jogador[id].pos.posY); //Configurando o pacote para envio
               pacoteInGame.posX = (pacote.jogador[id].pos.posX);
               pacoteInGame.idClient = id;
               pacoteInGame.vida = (pacote.jogador[id].vida);
@@ -251,7 +262,9 @@ int main() {
 
             else { // Se encontrou um obstáculo, ele precisa rotacionar a sprite sem tirar do lugar!
 
-              pacoteInGame.posY = (pacote.jogador[id].pos.posY);
+              pacote.jogador[id].direcao = 'd'; //Atualiza o backup de players do server!
+
+              pacoteInGame.posY = (pacote.jogador[id].pos.posY); //Configurando o pacote para envio
               pacoteInGame.posX = (pacote.jogador[id].pos.posX);
               pacoteInGame.idClient = id;
               pacoteInGame.vida = (pacote.jogador[id].vida);
@@ -269,7 +282,7 @@ int main() {
 
             if(canHit(id)){
 
-
+              printf("O ataque pegou!\n");
 
             }
 
@@ -443,15 +456,77 @@ int canHit(int id){
     posicoesJogadores[1][i] = posY; 
 
   }
-  for(i = 0; i < pacote.qtdPlayers; i++){
 
-    if(pacote.jogador[id].pos.posX + 1 == posicoesJogadores[0][i]){
+  for(i = 0; i < pacote.qtdPlayers; i++){   //Procurar se existe algum jogador para ser atacado!
 
+    if(i != id){
 
+      if(pacote.jogador[id].direcao == 'w'){
+
+        if(pacote.jogador[id].pos.posX == posicoesJogadores[0][i] && pacote.jogador[id].pos.posY - 1 == posicoesJogadores[1][i]){
+          
+          idPlayerHittado = i;
+          free(posicoesJogadores[0]);
+          free(posicoesJogadores[1]);
+          free(posicoesJogadores);
+          printf("Player [%d] ira sofrer o ataque de [%d]\n", idPlayerHittado, id);
+
+          return 1;
+
+        }
+
+      } else if(pacote.jogador[id].direcao == 's'){
+
+        if(pacote.jogador[id].pos.posX == posicoesJogadores[0][i] && pacote.jogador[id].pos.posY + 1 == posicoesJogadores[1][i]){
+
+          idPlayerHittado = i;
+          free(posicoesJogadores[0]);
+          free(posicoesJogadores[1]);
+          free(posicoesJogadores);
+          printf("Player [%d] ira sofrer o ataque de [%d]\n", idPlayerHittado, id);
+
+          return 1;
+
+        }
+
+      } else if(pacote.jogador[id].direcao == 'a'){
+
+        if(pacote.jogador[id].pos.posX - 1 == posicoesJogadores[0][i] && pacote.jogador[id].pos.posY == posicoesJogadores[1][i]){
+
+          idPlayerHittado = i;
+          free(posicoesJogadores[0]);
+          free(posicoesJogadores[1]);
+          free(posicoesJogadores);
+          printf("Player [%d] ira sofrer o ataque de [%d]\n", idPlayerHittado, id);
+
+          return 1;
+
+        }
+
+      } else if(pacote.jogador[id].direcao == 'd'){
+
+        if(pacote.jogador[id].pos.posX + 1 == posicoesJogadores[0][i] && pacote.jogador[id].pos.posY == posicoesJogadores[1][i]){
+
+          idPlayerHittado = i;
+          free(posicoesJogadores[0]);
+          free(posicoesJogadores[1]);
+          free(posicoesJogadores);
+          printf("Player [%d] ira sofrer o ataque de [%d]\n", idPlayerHittado, id);
+
+          return 1;
+
+        }
+
+      }
 
     }
 
-
   }
+
+  free(posicoesJogadores[0]);
+  free(posicoesJogadores[1]);
+  free(posicoesJogadores);
+
+  return 0;
   
 }
