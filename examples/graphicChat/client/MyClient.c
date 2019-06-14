@@ -246,12 +246,24 @@ int main() {
 
                         if (chooseCharEvent.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
 
-                            if (chooseCharEvent.mouse.x >= 300 &&                               //Verificamos se o mouse esta em cima do personagem!
-                                chooseCharEvent.mouse.x <= 300 + al_get_bitmap_width(Sprite_Skeleton0) &&
-                                chooseCharEvent.mouse.y >= 350 &&
-                                chooseCharEvent.mouse.y <= 350 + al_get_bitmap_height(Sprite_Skeleton0) ) {
+                            if (chooseCharEvent.mouse.x >= 100 &&                               //Verificamos se o mouse esta em cima do personagem!
+                                chooseCharEvent.mouse.x <= 100 + al_get_bitmap_width(skeletonButton) &&
+                                chooseCharEvent.mouse.y >= 220 &&
+                                chooseCharEvent.mouse.y <= 220 + al_get_bitmap_height(skeletonButton) ) {
 
                                     meuChar = 0;
+                                    inChooseChar = false;
+                                    lobby = 1;
+
+                            }
+
+
+                            if (chooseCharEvent.mouse.x >= 300 &&                               //Verificamos se o mouse esta em cima do personagem!
+                                chooseCharEvent.mouse.x <= 300 + al_get_bitmap_width(ripperButton) &&
+                                chooseCharEvent.mouse.y >= 220 &&
+                                chooseCharEvent.mouse.y <= 220 + al_get_bitmap_height(ripperButton) ) {
+
+                                    meuChar = 1;
                                     inChooseChar = false;
                                     lobby = 1;
 
@@ -406,12 +418,36 @@ int main() {
 
                         playersInGame.jogador[pacoteInGame.idClient].colunaSprite ++;
 
-                        if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > 3){
+                        if(playersInGame.jogador[pacoteInGame.idClient].direcao == 'w'){
+                            
+                            if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoW - 1){
 
                             playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
 
-                        }
+                            }
+                        } else if(playersInGame.jogador[pacoteInGame.idClient].direcao == 's'){
+                            
+                            if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoS - 1){
 
+                            playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                            }
+                        } else if(playersInGame.jogador[pacoteInGame.idClient].direcao == 'a'){
+                            
+                            if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoA - 1){
+
+                            playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                            }
+                        } else if(playersInGame.jogador[pacoteInGame.idClient].direcao == 'd'){
+                            
+                            if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoD - 1){
+
+                            playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                            }
+                        } 
+                        
                     } else if (pacoteInGame.direcao != playersInGame.jogador[pacoteInGame.idClient].direcao){
 
                         playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
@@ -433,22 +469,46 @@ int main() {
 
                             playersInGame.jogador[pacoteInGame.idClient].colunaSprite ++;
 
-                            if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > 3){
+                            if(playersInGame.jogador[pacoteInGame.idClient].direcao == 'w'){
+                                
+                                if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoW - 1){
 
                                 playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
 
-                            }
+                                }
+                            } else if(playersInGame.jogador[pacoteInGame.idClient].direcao == 's'){
+                                
+                                if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoS - 1){
+
+                                playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                                }
+                            } else if(playersInGame.jogador[pacoteInGame.idClient].direcao == 'a'){
+                                
+                                if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoA - 1){
+
+                                playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                                }
+                            } else if(playersInGame.jogador[pacoteInGame.idClient].direcao == 'd'){
+                                
+                                if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoD - 1){
+
+                                playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                                }
+                            } 
                             
+
                         } else if (pacoteInGame.direcao != playersInGame.jogador[pacoteInGame.idClient].direcao){
 
                             playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
 
                         }
 
-                    playersInGame.jogador[pacoteInGame.idClient].pos.posX = pacoteInGame.posX;
-                    playersInGame.jogador[pacoteInGame.idClient].pos.posY = pacoteInGame.posY;
-                    playersInGame.jogador[pacoteInGame.idClient].direcao = pacoteInGame.direcao;
-
+                        playersInGame.jogador[pacoteInGame.idClient].pos.posX = pacoteInGame.posX;
+                        playersInGame.jogador[pacoteInGame.idClient].pos.posY = pacoteInGame.posY;
+                        playersInGame.jogador[pacoteInGame.idClient].direcao = pacoteInGame.direcao;
                     }
 
                     ALLEGRO_EVENT inGameEvent;
@@ -687,8 +747,10 @@ void printChooseChar(){
 
     al_draw_bitmap(BackgroundMenu,0,0,0);
 
+    al_draw_bitmap(skeletonButton, 100, 220, 0);
+    al_draw_bitmap(ripperButton, 300, 220, 0);
+
     al_draw_text(fonteHTPTitulo, al_map_rgb(255, 255, 255), WIDTH / 2, 30, ALLEGRO_ALIGN_CENTRE, "Escolha seu personagem");
-    al_draw_bitmap(botaoPlay, 300, 350, 0);
 
 }
 
@@ -1295,6 +1357,33 @@ void printSprite(){
             }
         }
 
+        if(playersInGame.jogador[i].qualPers == 1){     //Minha sprite é Ripper
+
+            if(playersInGame.jogador[i].direcao == 'w'){
+
+            al_draw_bitmap_region(Sprite_Ripper01, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento ), playersInGame.jogador[i].spriteJogador.linhaW * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
+
+            }
+
+            if(playersInGame.jogador[i].direcao == 's'){
+
+                al_draw_bitmap_region(Sprite_Ripper01, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento), playersInGame.jogador[i].spriteJogador.linhaS * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
+
+            }
+
+            if(playersInGame.jogador[i].direcao == 'a'){
+
+                al_draw_bitmap_region(Sprite_Ripper01, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) , playersInGame.jogador[i].spriteJogador.linhaA * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , ALLEGRO_FLIP_HORIZONTAL);
+
+            }
+
+            if(playersInGame.jogador[i].direcao == 'd'){
+
+                al_draw_bitmap_region(Sprite_Ripper01, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) , playersInGame.jogador[i].spriteJogador.linhaD * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
+
+            }
+        }
+
     }
 }
 
@@ -1323,15 +1412,43 @@ void configuraSprite(){
             spriteConfigurada.linhaS = 7;
             spriteConfigurada.linhaA = 1;
             spriteConfigurada.linhaD = 1;
-            spriteConfigurada.limiteMovimentacao = 4;
+            spriteConfigurada.limiteMovimentacaoW = 4;
+            spriteConfigurada.limiteMovimentacaoS = 4;
+            spriteConfigurada.limiteMovimentacaoA = 4;
+            spriteConfigurada.limiteMovimentacaoD = 4;
             spriteConfigurada.linhaAtaqueW = 3;
             spriteConfigurada.linhaAtaqueS = 6;
             spriteConfigurada.linhaAtaqueA = 0;
             spriteConfigurada.linhaAtaqueD = 0;
+            spriteConfigurada.limiteAtaqueW = 3;
+            spriteConfigurada.limiteAtaqueS = 3;
+            spriteConfigurada.limiteAtaqueA = 3;
+            spriteConfigurada.limiteAtaqueD = 3;
             spriteConfigurada.espacamento = 48;
-            spriteConfigurada.limiteAtaque = 3;
             playersInGame.jogador[i].spriteJogador = spriteConfigurada;
 
+        }
+
+        if(playersInGame.jogador[i].qualPers == 1){ //Configurando dados da sprite Ripper
+
+            spriteConfigurada.linhaW = 4;
+            spriteConfigurada.linhaS = 7;
+            spriteConfigurada.linhaA = 1;
+            spriteConfigurada.linhaD = 1;
+            spriteConfigurada.limiteMovimentacaoW = 8;
+            spriteConfigurada.limiteMovimentacaoS = 4;
+            spriteConfigurada.limiteMovimentacaoA = 4;
+            spriteConfigurada.limiteMovimentacaoD = 4; //O limite muda para os lados!
+            spriteConfigurada.linhaAtaqueW = 3;
+            spriteConfigurada.linhaAtaqueS = 6;
+            spriteConfigurada.linhaAtaqueA = 0;
+            spriteConfigurada.linhaAtaqueD = 0;
+            spriteConfigurada.espacamento = 34;
+            spriteConfigurada.limiteAtaqueW = 6;
+            spriteConfigurada.limiteAtaqueS = 6;
+            spriteConfigurada.limiteAtaqueA = 8;
+            spriteConfigurada.limiteAtaqueD = 8;
+            playersInGame.jogador[i].spriteJogador = spriteConfigurada;
         }
     }
 }

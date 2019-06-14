@@ -367,6 +367,22 @@ bool loadGraphics(){    //Carregando todos os graficos!
 
     }
 
+    skeletonButton = al_load_bitmap("examples/graphicChat/Resources/Tilesets/SkeletonButton.png");
+
+    if (!skeletonButton){
+
+        fprintf(stderr, "Falha carregando skeletonButton.png\n");
+        return false;
+    }
+
+    ripperButton = al_load_bitmap("examples/graphicChat/Resources/Tilesets/RipperButton.png");
+    
+    if (!ripperButton){
+
+        fprintf(stderr, "Falha carregando ripperButton.png\n");
+        return false;
+    }
+
     //Carregando as sprites
 
     Sprite_Skeleton0 = al_load_bitmap("examples/graphicChat/Resources/Tilesets/Sprite_Skeleton0.png"); 
@@ -374,6 +390,15 @@ bool loadGraphics(){    //Carregando todos os graficos!
     if (!Sprite_Skeleton0){
 
         fprintf(stderr, "Falha carregando Sprite_Skeleton0.png");
+        return false;
+
+    }
+
+    Sprite_Ripper01 = al_load_bitmap("examples/graphicChat/Resources/Tilesets/Sprite_Ripper01.png");
+
+    if (!Sprite_Ripper01){
+
+        fprintf(stderr, "Falha carregando Sprite_Ripper01.png");
         return false;
 
     }

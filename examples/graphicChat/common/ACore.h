@@ -46,7 +46,8 @@ ALLEGRO_BITMAP *texturaMapa;
 ALLEGRO_BITMAP *detalhesDoChao;
 ALLEGRO_BITMAP *charSprite;
 ALLEGRO_BITMAP *heart;
-
+ALLEGRO_BITMAP *skeletonButton;
+ALLEGRO_BITMAP *ripperButton;
 
 ALLEGRO_BITMAP *grama;   //Variaveis do mapa!
 ALLEGRO_BITMAP *pedra;
@@ -60,6 +61,7 @@ ALLEGRO_BITMAP *objetos;
 //SPRITES
 
 ALLEGRO_BITMAP *Sprite_Skeleton0;
+ALLEGRO_BITMAP *Sprite_Ripper01;
 
 //========================
 
@@ -90,12 +92,18 @@ typedef struct{ //Struct com os dados da sprite selecionada
     int linhaS;
     int linhaA;
     int linhaD;
-    int limiteMovimentacao;
+    int limiteMovimentacaoW;
+    int limiteMovimentacaoS;
+    int limiteMovimentacaoA;
+    int limiteMovimentacaoD;
     int linhaAtaqueW;
     int linhaAtaqueS;
     int linhaAtaqueA;
     int linhaAtaqueD;
-    int limiteAtaque;
+    int limiteAtaqueW;
+    int limiteAtaqueS;
+    int limiteAtaqueA;
+    int limiteAtaqueD;
     int espacamento;
     int inicio;
 
