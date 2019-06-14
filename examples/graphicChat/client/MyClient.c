@@ -465,7 +465,6 @@ int main() {
                                 if(map[(playersInGame.jogador[meuID].pos.posY) - 1][playersInGame.jogador[meuID].pos.posX] > 0 && (playersInGame.jogador[meuID].pos.posY) - 1 >= 0){
 
                                     mov = 'w';
-                                    //Falta mudar as sprites!
                                     sendMsgToServer(&mov, sizeof(char));
                                     printf("Mandei comando: [%c]\n", mov);
                                 }
@@ -474,10 +473,9 @@ int main() {
 
                             case ALLEGRO_KEY_S:
 
-                                if(map[(playersInGame.jogador[meuID].pos.posY) + 1][playersInGame.jogador[meuID].pos.posX] > 0 && (playersInGame.jogador[meuID].pos.posY) + 1 < 32 ){
+                                if(map[(playersInGame.jogador[meuID].pos.posY) + 1][playersInGame.jogador[meuID].pos.posX] > 0 && (playersInGame.jogador[meuID].pos.posY) + 1 < 24 ){
 
                                     mov = 's';  
-                                    //Falta mudar as sprites!
                                     sendMsgToServer(&mov, sizeof(char));
                                     printf("Mandei comando: [%c]\n", mov);
                                 }                              
@@ -488,8 +486,7 @@ int main() {
 
                                 if(map[playersInGame.jogador[meuID].pos.posY][playersInGame.jogador[meuID].pos.posX -1] > 0 && (playersInGame.jogador[meuID].pos.posX) - 1 >= 0){
 
-                                    mov = 'a';  
-                                    //Falta mudar as sprites!
+                                    mov = 'a';   
                                     sendMsgToServer(&mov, sizeof(char));
                                     printf("Mandei comando: [%c]\n", mov);
                                 }
@@ -501,11 +498,20 @@ int main() {
                                 if(map[playersInGame.jogador[meuID].pos.posY][playersInGame.jogador[meuID].pos.posX + 1] > 0 && (playersInGame.jogador[meuID].pos.posX) + 1 < 32){
 
                                     mov = 'd';  
-                                    //Falta mudar as sprites!
                                     sendMsgToServer(&mov, sizeof(char));
                                     printf("Mandei comando: [%c]\n", mov);
                                 }
                                 
+                                break;
+                            case ALLEGRO_KEY_K: //Ataque
+                                /*
+                                if(map[playersInGame.jogador[meuID].pos.posY][playersInGame.jogador[meuID].pos.posX + 1] > 0 && (playersInGame.jogador[meuID].pos.posX) + 1 < 32){
+
+                                    mov = 'd';  
+                                    sendMsgToServer(&mov, sizeof(char));
+                                    printf("Mandei comando: [%c]\n", mov);
+                                }
+                                */
                                 break;
                         }
                     }
@@ -747,7 +753,7 @@ void printMap(){
     
     for(i = 0; i < 24; i++){ // Essa parte agora printa o map.
 
-        for(int k = 0; k < 32; k++){
+        for(k = 0; k < 32; k++){
 
             if(map[i][k] == 6){
                             al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
