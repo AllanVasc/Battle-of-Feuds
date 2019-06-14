@@ -564,14 +564,12 @@ int main() {
                                 
                                 break;
                             case ALLEGRO_KEY_K: //Ataque
-                                /*
-                                if(map[playersInGame.jogador[meuID].pos.posY][playersInGame.jogador[meuID].pos.posX + 1] > 0 && (playersInGame.jogador[meuID].pos.posX) + 1 < 32){
-
-                                    mov = 'd';  
-                                    sendMsgToServer(&mov, sizeof(char));
-                                    printf("Mandei comando: [%c]\n", mov);
-                                }
-                                */
+                                
+                                mov = 'k';  
+                                sendMsgToServer(&mov, sizeof(char));
+                                printf("Mandei comando: [%c]\n", mov);
+                                
+                                
                                 break;
                         }
                     }

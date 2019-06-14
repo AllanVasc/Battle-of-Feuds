@@ -126,7 +126,6 @@ int main() {
       }
     }
 
-
     pacote.qtdPlayers = qtdJogadores;      //Envio de todos os jogadores para todos os clients!
     broadcast(&pacote, sizeof(Inicio));
     printf("Dados de todos os personagens enviados...\n");
@@ -174,11 +173,8 @@ int main() {
           break;
 
           case 's':
-            printf("To no switch case S\n");
 
             if( canMove( movimento , id ) ){ //Realiza o movimento   
-
-              printf("posso me mover\n");
 
               (pacote.jogador[id].pos.posY) ++;
 
