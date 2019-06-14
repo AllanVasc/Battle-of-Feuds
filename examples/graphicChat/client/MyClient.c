@@ -25,6 +25,9 @@ DadosInGame pacoteInGame;
 DADOS pacote;
 DADOS auxID;
 int meuID;
+int meuChar;
+MoveSprite spriteConfigurada;
+
 
 int map[24][32] = {      {17, 20, 19, 20, 18, 20, 18, 20, 18, 20, 18, 20, 20, 20, 18, 20, 20, -5, 20, 20, 17, 20, 20, 18, 20, 20, 20, 18, 20, 20, 18,18},
                          {20, 19, 20, 17, 19, 20, 17, 19, -5, 20, 18, 20, 6 , 6 , 6 , 6 , 6 , -1, -2, -6, 20, 20, 18, 20, 20, 18, 20, 20,-55,-56, 20, 20},
@@ -51,7 +54,6 @@ int map[24][32] = {      {17, 20, 19, 20, 18, 20, 18, 20, 18, 20, 18, 20, 20, 20
                          {18, 20, 10, 11, 11, 11, 12, -2, -2, -2, -6, 11, 11, 16, 16, 16, 16, 16, 12, 20, 18, -5, 17, 20, 19,-50, 20, 20,-48, 19, 17,-50},
                          {20, 18, 20, 20, 20, 20, 18, 20, 20, 18, -1, -2, -2, 8 , 16, 16, 16, 16, 9 , -2, -2, -3, 20, 20, 18, 20, 20, 20, 17, 20, 20, 20}  };
 
-
 ///////////Declarações de funções
 
 void printConnectScreen(char str[]);
@@ -64,12 +66,13 @@ enum conn_ret_t tryConnect(char IP[]);
 void assertConnection(char IP[], char login[]);
 void printSprite();
 void printHeart();
+void configuraSprite();
 
 int main() {
 
-    int apertouBotaoPlay = 0, inMenu = 1, inGame = 0, apertouBotaoExit = 0, apertouBotaoHowtoPlay = 0, delay = 0, inChat = 0, inChooseChar, meuChar;
+    int apertouBotaoPlay = 0, inMenu = 1, inGame = 0, apertouBotaoExit = 0, apertouBotaoHowtoPlay = 0, delay = 0, inChat = 0, inChooseChar;
     int i,k;
-    
+
     if (!coreInit()) //Inicializando os modulos centrais
         return -1;
 
@@ -244,9 +247,9 @@ int main() {
                         if (chooseCharEvent.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
 
                             if (chooseCharEvent.mouse.x >= 300 &&                               //Verificamos se o mouse esta em cima do personagem!
-                                chooseCharEvent.mouse.x <= 300 + al_get_bitmap_width(botaoPlay) &&
+                                chooseCharEvent.mouse.x <= 300 + al_get_bitmap_width(Sprite_Skeleton0) &&
                                 chooseCharEvent.mouse.y >= 350 &&
-                                chooseCharEvent.mouse.y <= 350 + al_get_bitmap_height(botaoPlay) ) {
+                                chooseCharEvent.mouse.y <= 350 + al_get_bitmap_height(Sprite_Skeleton0) ) {
 
                                     meuChar = 0;
                                     inChooseChar = false;
@@ -283,6 +286,9 @@ int main() {
                     recvMsgFromServer(&auxID, WAIT_FOR_IT);
                     meuID = auxID.valor;
                     printf("Meu ID eh: [%d]\n", meuID);
+                    pacote.valor = -4;      // Flag para o servidor configurar a sprite
+                    pacote.Sprite = meuChar;
+                    sendMsgToServer(&pacote, sizeof(DADOS));
 
                 }
 
@@ -387,16 +393,34 @@ int main() {
 
             }
 
+            configuraSprite();
+
             while(inGame){  //Momento do jogo!
 
                 startTimer();
                 int rec = recvMsgFromServer(&pacoteInGame, DONT_WAIT);
 
                 if(rec != NO_MESSAGE){  //Atualizando a posição dos jogadores!
+                    
+                    if(pacoteInGame.direcao == playersInGame.jogador[pacoteInGame.idClient].direcao){
+
+                        playersInGame.jogador[pacoteInGame.idClient].colunaSprite ++;
+
+                        if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > 3){
+
+                            playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                        }
+
+                    } else if (pacoteInGame.direcao != playersInGame.jogador[pacoteInGame.idClient].direcao){
+
+                        playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                    }
 
                     playersInGame.jogador[pacoteInGame.idClient].pos.posX = pacoteInGame.posX;
                     playersInGame.jogador[pacoteInGame.idClient].pos.posY = pacoteInGame.posY;
-
+                    playersInGame.jogador[pacoteInGame.idClient].direcao = pacoteInGame.direcao;
                 }
 
                 while(!al_is_event_queue_empty(eventsQueue)){
@@ -405,8 +429,25 @@ int main() {
 
                     if(rec != NO_MESSAGE){  //Atualizando a posição dos jogadores!
 
-                        playersInGame.jogador[pacoteInGame.idClient].pos.posX = pacoteInGame.posX;
-                        playersInGame.jogador[pacoteInGame.idClient].pos.posY = pacoteInGame.posY;
+                       if(pacoteInGame.direcao == playersInGame.jogador[pacoteInGame.idClient].direcao){
+
+                            playersInGame.jogador[pacoteInGame.idClient].colunaSprite ++;
+
+                            if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > 3){
+
+                                playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                            }
+                            
+                        } else if (pacoteInGame.direcao != playersInGame.jogador[pacoteInGame.idClient].direcao){
+
+                            playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                        }
+
+                    playersInGame.jogador[pacoteInGame.idClient].pos.posX = pacoteInGame.posX;
+                    playersInGame.jogador[pacoteInGame.idClient].pos.posY = pacoteInGame.posY;
+                    playersInGame.jogador[pacoteInGame.idClient].direcao = pacoteInGame.direcao;
 
                     }
 
@@ -487,10 +528,8 @@ int main() {
                 al_draw_text(fonteHTPTitulo, al_map_rgb(255, 0, 0), 380, 100, ALLEGRO_ALIGN_LEFT, "How to play");
                 al_draw_bitmap(HTPwasd, 200, 200, 0);
                 al_draw_text(fonteHTP, al_map_rgb(255, 255, 0), 450, 300, ALLEGRO_ALIGN_LEFT, "Movimentaçao do personagem");
-                al_draw_bitmap(HTPJ, 200, 310, 0);
-                al_draw_text(fonteHTP, al_map_rgb(255, 255, 0), 450, 360, ALLEGRO_ALIGN_LEFT, "Ataque fraco");
                 al_draw_bitmap(HTPK, 200, 370, 0);
-                al_draw_text(fonteHTP, al_map_rgb(255, 255, 0), 450, 420, ALLEGRO_ALIGN_LEFT, "Ataque forte");
+                al_draw_text(fonteHTP, al_map_rgb(255, 255, 0), 450, 420, ALLEGRO_ALIGN_LEFT, "Ataque");
                 al_draw_bitmap(HTPReturn, 300, 550, 0);
                 al_flip_display(); //atualiza tela
                 
@@ -643,6 +682,7 @@ void printChooseChar(){
     al_draw_bitmap(BackgroundMenu,0,0,0);
 
     al_draw_text(fonteHTPTitulo, al_map_rgb(255, 255, 255), WIDTH / 2, 30, ALLEGRO_ALIGN_CENTRE, "Escolha seu personagem");
+    al_draw_bitmap(botaoPlay, 300, 350, 0);
 
 }
 
@@ -1215,23 +1255,41 @@ void printMap(){
 
 void printSprite(){
 
-    int i,k;
-    //Variaveis do personagem!
-	ALLEGRO_BITMAP *charSprite = NULL;		
-	float larguraSprite = 42, alturaSprite = 52.5 ;
-	int posXChar = 400, posYChar = 400;
-	int linhaSprite = 0, colunaSprite = 0;
-
-    charSprite = al_load_bitmap("examples/graphicChat/Resources/Tilesets/PreviewSprite.png");
+    int i;
 
     for(i = 0 ; i < playersInGame.qtdPlayers ; i++){
 
-        int x = playersInGame.jogador[i].pos.posX;
-        int y = playersInGame.jogador[i].pos.posY;
+    int x = playersInGame.jogador[i].pos.posX;
+    int y = playersInGame.jogador[i].pos.posY;
 
-        al_draw_bitmap_region(charSprite, 0 , 0 ,larguraSprite, alturaSprite , x*32 , y*32 , 0);
+        if(playersInGame.jogador[i].qualPers == 0){     //Minha sprite é Skeleton
+
+            if(playersInGame.jogador[i].direcao == 'w'){
+
+            al_draw_bitmap_region(Sprite_Skeleton0, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento ) + 8 , playersInGame.jogador[i].spriteJogador.linhaW * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
+
+            }
+
+            if(playersInGame.jogador[i].direcao == 's'){
+
+                al_draw_bitmap_region(Sprite_Skeleton0, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) + 8 , playersInGame.jogador[i].spriteJogador.linhaS * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
+
+            }
+
+            if(playersInGame.jogador[i].direcao == 'a'){
+
+                al_draw_bitmap_region(Sprite_Skeleton0, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) + 8 , playersInGame.jogador[i].spriteJogador.linhaA * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , ALLEGRO_FLIP_HORIZONTAL);
+
+            }
+
+            if(playersInGame.jogador[i].direcao == 'd'){
+
+                al_draw_bitmap_region(Sprite_Skeleton0, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) + 8 , playersInGame.jogador[i].spriteJogador.linhaD * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
+
+            }
+        }
+
     }
-
 }
 
 void printHeart(){
@@ -1245,4 +1303,29 @@ void printHeart(){
 
     }
 
+}
+
+void configuraSprite(){
+
+    int i;
+
+    for(i = 0; i < playersInGame.qtdPlayers ; i++){
+
+        if(playersInGame.jogador[i].qualPers == 0){ //Configurando dados da sprite Skeleton
+
+            spriteConfigurada.linhaW = 4;
+            spriteConfigurada.linhaS = 7;
+            spriteConfigurada.linhaA = 1;
+            spriteConfigurada.linhaD = 1;
+            spriteConfigurada.limiteMovimentacao = 4;
+            spriteConfigurada.linhaAtaqueW = 3;
+            spriteConfigurada.linhaAtaqueS = 6;
+            spriteConfigurada.linhaAtaqueA = 0;
+            spriteConfigurada.linhaAtaqueD = 0;
+            spriteConfigurada.espacamento = 48;
+            spriteConfigurada.limiteAtaque = 3;
+            playersInGame.jogador[i].spriteJogador = spriteConfigurada;
+
+        }
+    }
 }

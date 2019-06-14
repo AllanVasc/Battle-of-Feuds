@@ -367,6 +367,16 @@ bool loadGraphics(){    //Carregando todos os graficos!
 
     }
 
+    //Carregando as sprites
+
+    Sprite_Skeleton0 = al_load_bitmap("examples/graphicChat/Resources/Tilesets/Sprite_Skeleton0.png"); 
+    
+    if (!Sprite_Skeleton0){
+
+        fprintf(stderr, "Falha carregando Sprite_Skeleton0.png");
+        return false;
+
+    }
 
     return true;
 }

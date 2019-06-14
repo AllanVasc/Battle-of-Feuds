@@ -56,14 +56,24 @@ ALLEGRO_BITMAP *objetos;
 //========================
 
 
-
-//Structs
 //========================
+//SPRITES
+
+ALLEGRO_BITMAP *Sprite_Skeleton0;
+
+//========================
+
+
+
+
+//========================
+//Structs
 
 typedef struct DADOS{
 
     char mensagem[100];
     int valor;
+    int Sprite;
 
 } DADOS;
 
@@ -74,12 +84,31 @@ typedef struct {
 
 } Posicao;
 
+typedef struct{ //Struct com os dados da sprite selecionada
+   
+    int linhaW;         
+    int linhaS;
+    int linhaA;
+    int linhaD;
+    int limiteMovimentacao;
+    int linhaAtaqueW;
+    int linhaAtaqueS;
+    int linhaAtaqueA;
+    int linhaAtaqueD;
+    int limiteAtaque;
+    int espacamento;
+    int inicio;
+
+} MoveSprite;
+
 typedef struct{
 
   Posicao pos;
   int qualPers;
   int vida;
   char direcao;
+  int colunaSprite;
+  MoveSprite spriteJogador;
 
 } Personagem;
 
@@ -97,6 +126,7 @@ typedef struct {
     int idClient;
     int vida;
     int flag;
+    char direcao;
 
 } DadosInGame;
 

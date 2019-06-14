@@ -82,6 +82,7 @@ int main() {
         pacote.jogador[id].vida = 5;
         pacote.jogador[id].pos.posX = 0 + id;
         pacote.jogador[id].pos.posY = 0 + id;
+        pacote.jogador[id].colunaSprite = 0;
 
       }
 
@@ -105,6 +106,13 @@ int main() {
           comecar = 0;
           InGame = 1;
           break;
+
+        }
+
+        else if(aux.valor == -4){
+
+          pacote.jogador[msg_ret.client_id].qualPers = aux.Sprite;
+          printf("Jogador: [%d] escolheu a sprite: [%d]\n", msg_ret.client_id, pacote.jogador[msg_ret.client_id].qualPers );
 
         }
 
@@ -137,7 +145,7 @@ int main() {
 
           case 'w':
 
-            if( canMove( movimento , id ) ){     
+            if( canMove( movimento , id ) ){  //Realiza o movimento     
 
               (pacote.jogador[id].pos.posY) --;
 
@@ -146,13 +154,21 @@ int main() {
               pacoteInGame.idClient = id;
               pacoteInGame.vida = (pacote.jogador[id].vida);
               pacoteInGame.flag = 0;
+              pacoteInGame.direcao = 'w';
               broadcast(&pacoteInGame, sizeof(DadosInGame));
 
             }
 
-            else {
-              //Ele precisa rotacionar a sprite sem tirar do lugar!
-              //broadcast(&pacote, sizeof(Inicio));
+            else {            // Se encontrou um obstáculo, ele precisa rotacionar a sprite sem tirar do lugar!
+
+              pacoteInGame.posY = (pacote.jogador[id].pos.posY);
+              pacoteInGame.posX = (pacote.jogador[id].pos.posX);
+              pacoteInGame.idClient = id;
+              pacoteInGame.vida = (pacote.jogador[id].vida);
+              pacoteInGame.flag = 0;
+              pacoteInGame.direcao = 'w';
+              broadcast(&pacoteInGame, sizeof(DadosInGame));
+              
             }
 
           break;
@@ -160,7 +176,7 @@ int main() {
           case 's':
             printf("To no switch case S\n");
 
-            if( canMove( movimento , id ) ){   
+            if( canMove( movimento , id ) ){ //Realiza o movimento   
 
               printf("posso me mover\n");
 
@@ -171,20 +187,28 @@ int main() {
               pacoteInGame.idClient = id;
               pacoteInGame.vida = (pacote.jogador[id].vida);
               pacoteInGame.flag = 0;
+              pacoteInGame.direcao = 's';
               broadcast(&pacoteInGame, sizeof(DadosInGame));
 
             }
 
-            else {
-              //Ele precisa rotacionar a sprite sem tirar do lugar!
-              //broadcast(&pacote, sizeof(Inicio));
+            else { // Se encontrou um obstáculo, ele precisa rotacionar a sprite sem tirar do lugar!
+
+              pacoteInGame.posY = (pacote.jogador[id].pos.posY);
+              pacoteInGame.posX = (pacote.jogador[id].pos.posX);
+              pacoteInGame.idClient = id;
+              pacoteInGame.vida = (pacote.jogador[id].vida);
+              pacoteInGame.flag = 0;
+              pacoteInGame.direcao = 's';
+              broadcast(&pacoteInGame, sizeof(DadosInGame));
+
             }
 
           break;
 
           case 'a':
 
-            if( canMove( movimento , id ) ){     
+            if( canMove( movimento , id ) ){     //Realiza o movimento
 
               (pacote.jogador[id].pos.posX) --;
 
@@ -193,20 +217,29 @@ int main() {
               pacoteInGame.idClient = id;
               pacoteInGame.vida = (pacote.jogador[id].vida);
               pacoteInGame.flag = 0;
+              pacoteInGame.direcao = 'a';
               broadcast(&pacoteInGame, sizeof(DadosInGame));
 
             }
 
-            else {
-              //Ele precisa rotacionar a sprite sem tirar do lugar!
-              //broadcast(&pacote, sizeof(Inicio));
+            else { // Se encontrou um obstáculo, ele precisa rotacionar a sprite sem tirar do lugar!
+
+              pacoteInGame.posY = (pacote.jogador[id].pos.posY);
+              pacoteInGame.posX = (pacote.jogador[id].pos.posX);
+              pacoteInGame.idClient = id;
+              pacoteInGame.vida = (pacote.jogador[id].vida);
+              pacoteInGame.flag = 0;
+              pacoteInGame.direcao = 'a';
+              broadcast(&pacoteInGame, sizeof(DadosInGame));
+
             }
 
           break;
 
           case 'd':
 
-            if( canMove( movimento , id ) ){     
+            if( canMove( movimento , id ) ){     //Realiza o movimento
+
               
               (pacote.jogador[id].pos.posX) ++;
 
@@ -215,13 +248,21 @@ int main() {
               pacoteInGame.idClient = id;
               pacoteInGame.vida = (pacote.jogador[id].vida);
               pacoteInGame.flag = 0;
+              pacoteInGame.direcao = 'd';
               broadcast(&pacoteInGame, sizeof(DadosInGame));
 
             }
 
-            else {
-              //Ele precisa rotacionar a sprite sem tirar do lugar!
-              //broadcast(&pacote, sizeof(Inicio));
+            else { // Se encontrou um obstáculo, ele precisa rotacionar a sprite sem tirar do lugar!
+
+              pacoteInGame.posY = (pacote.jogador[id].pos.posY);
+              pacoteInGame.posX = (pacote.jogador[id].pos.posX);
+              pacoteInGame.idClient = id;
+              pacoteInGame.vida = (pacote.jogador[id].vida);
+              pacoteInGame.flag = 0;
+              pacoteInGame.direcao = 'd';
+              broadcast(&pacoteInGame, sizeof(DadosInGame));
+
             }
 
           break;
@@ -238,6 +279,7 @@ int main() {
 
           comecar = 1;
           InGame = 0;
+          printf("Jogadores desconectados\n");
           printf("Servidor reiniciando...\n");
       }
 
@@ -247,49 +289,128 @@ int main() {
 
 int canMove(char direcao , int id){
 
-  int posX = pacote.jogador[id].pos.posX;
-  int posY = pacote.jogador[id].pos.posY;
+  int **posicoesJogadores = NULL; 
+  int i;
+
+  posicoesJogadores = (int **) malloc(2 * sizeof(int*)); // Essa sera a matriz que armazenara a posicao  de todos os jogadores
+  posicoesJogadores[0] = (int *) malloc(pacote.qtdPlayers * sizeof(int) ); //Esse sera o vetor da posicao x de todos os jogadores
+  posicoesJogadores[1] = (int *) malloc(pacote.qtdPlayers * sizeof(int) ); //Esse sera o vetor da posicao y de todos os jogadores
+
+  for(i = 0 ; i < pacote.qtdPlayers ; i ++){
+
+    int posX = pacote.jogador[i].pos.posX;
+    int posY = pacote.jogador[i].pos.posY;
+
+    posicoesJogadores[0][i] = posX; 
+    posicoesJogadores[1][i] = posY; 
+
+  }
 
   switch(direcao){
 
     case 'w':
 
-      if(map[posY - 1][posX] > 0){
+      for(i = 0 ; i < pacote.qtdPlayers ; i++){
+        
+        if( i != id){
 
-        return 1;
+          if(pacote.jogador[id].pos.posX == posicoesJogadores[0][i] && pacote.jogador[id].pos.posY - 1 == posicoesJogadores[1][i]){
 
+            free(posicoesJogadores[0]);
+            free(posicoesJogadores[1]);
+            free(posicoesJogadores);
+
+            return 0;
+            break;
+
+          }
+        }
       }
 
+      free(posicoesJogadores[0]);
+      free(posicoesJogadores[1]);
+      free(posicoesJogadores);
+      return 1;
       break;
 
     case 's':
 
-      if(map[posY + 1][posX] > 0){
+      for(i = 0 ; i < pacote.qtdPlayers ; i++){
 
-        return 1;
+        if( i != id){
 
+          if(pacote.jogador[id].pos.posX == posicoesJogadores[0][i] && pacote.jogador[id].pos.posY + 1 == posicoesJogadores[1][i]){
+
+            free(posicoesJogadores[0]);
+            free(posicoesJogadores[1]);
+            free(posicoesJogadores);
+
+            return 0;
+            break;
+
+          }
+
+        }
+        
       }
 
+      free(posicoesJogadores[0]);
+      free(posicoesJogadores[1]);
+      free(posicoesJogadores);
+      return 1;
       break;
 
     case 'a':
 
-      if(map[posY][posX - 1] > 0){
+      for(i = 0 ; i < pacote.qtdPlayers ; i++){
 
-        return 1;
+        if(i != id){
 
+          if(pacote.jogador[id].pos.posX - 1 == posicoesJogadores[0][i] && pacote.jogador[id].pos.posY == posicoesJogadores[1][i]){
+
+            free(posicoesJogadores[0]);
+            free(posicoesJogadores[1]);
+            free(posicoesJogadores);
+
+            return 0;
+            break;
+
+          }
+
+        }
+        
       }
 
+      free(posicoesJogadores[0]);
+      free(posicoesJogadores[1]);
+      free(posicoesJogadores);
+      return 1;
       break;
 
     case 'd':
 
-      if(map[posY][posX + 1] > 0){
+      for(i = 0 ; i < pacote.qtdPlayers ; i++){
 
-        return 1;
+        if(i != id){
+          
+          if(pacote.jogador[id].pos.posX + 1 == posicoesJogadores[0][i] && pacote.jogador[id].pos.posY == posicoesJogadores[1][i]){
 
+            free(posicoesJogadores[0]);
+            free(posicoesJogadores[1]);
+            free(posicoesJogadores);
+            return 0;
+            break;
+
+          }
+
+        }
+        
       }
 
+      free(posicoesJogadores[0]);
+      free(posicoesJogadores[1]);
+      free(posicoesJogadores);
+      return 1;
       break;
   }
 
