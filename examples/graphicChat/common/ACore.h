@@ -62,6 +62,7 @@ ALLEGRO_BITMAP *objetos;
 
 ALLEGRO_BITMAP *Sprite_Skeleton0;
 ALLEGRO_BITMAP *Sprite_Ripper01;
+ALLEGRO_BITMAP *Sprite_DeathKnight02;
 
 //========================
 

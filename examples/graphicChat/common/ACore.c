@@ -403,5 +403,14 @@ bool loadGraphics(){    //Carregando todos os graficos!
 
     }
 
+    Sprite_DeathKnight02 = al_load_bitmap("examples/graphicChat/Resources/Tilesets/Sprite_DeathKnight02.png");
+
+    if (!Sprite_DeathKnight02){
+
+        fprintf(stderr, "Falha carregando Sprite_DeathKnight02.png");
+        return false;
+
+    }
+
     return true;
 }

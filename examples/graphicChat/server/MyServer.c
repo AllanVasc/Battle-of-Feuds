@@ -46,6 +46,7 @@ int map[24][32] = {      {17, 20, 19, 20, 18, 20, 18, 20, 18, 20, 18, 20, 20, 20
 ///////Funções
 
 int canMove(char direcao , int id);
+int canHit();
 
 int main() {
 
@@ -134,7 +135,6 @@ int main() {
     while(InGame){  //Enquanto o jogo estiver rolando!
 
       struct msg_ret_t mensagemMov = recvMsg(&movimento); //Recebendo qual movimento foi feito
-      printf("Recebi o movimento [%c]\n", movimento);
 
       if(mensagemMov.status == MESSAGE_OK){
 
@@ -258,6 +258,18 @@ int main() {
               pacoteInGame.flag = 0;
               pacoteInGame.direcao = 'd';
               broadcast(&pacoteInGame, sizeof(DadosInGame));
+
+            }
+
+          break;
+
+          case 'k': //Momento que ele esta atacando
+
+            printf("PLAYER [%d] ATACANDO\n", mensagemMov.client_id);
+
+            if(canHit(id)){
+
+
 
             }
 
@@ -411,4 +423,35 @@ int canMove(char direcao , int id){
   }
 
   return 0;
+}
+
+int canHit(int id){
+
+  int **posicoesJogadores = NULL; 
+  int i;
+
+  posicoesJogadores = (int **) malloc(2 * sizeof(int*));                   // Essa sera a matriz que armazenara a posicao  de todos os jogadores
+  posicoesJogadores[0] = (int *) malloc(pacote.qtdPlayers * sizeof(int) ); //Esse sera o vetor da posicao x de todos os jogadores
+  posicoesJogadores[1] = (int *) malloc(pacote.qtdPlayers * sizeof(int) ); //Esse sera o vetor da posicao y de todos os jogadores
+
+  for(i = 0 ; i < pacote.qtdPlayers ; i ++){
+
+    int posX = pacote.jogador[i].pos.posX;
+    int posY = pacote.jogador[i].pos.posY;
+
+    posicoesJogadores[0][i] = posX; 
+    posicoesJogadores[1][i] = posY; 
+
+  }
+  for(i = 0; i < pacote.qtdPlayers; i++){
+
+    if(pacote.jogador[id].pos.posX + 1 == posicoesJogadores[0][i]){
+
+
+
+    }
+
+
+  }
+  
 }
