@@ -911,11 +911,15 @@ int main() {
                     //Lifesound(0);
 
                     if (inWinnerEvent.type == ALLEGRO_EVENT_KEY_DOWN){
-
+                        
+                        char mov;
+                        
                         switch(inWinnerEvent.keyboard.keycode){
 
                             case ALLEGRO_KEY_ESCAPE:
 
+                                mov = '*';
+                                sendMsgToServer(&mov, sizeof(char));
                                 inWinner = 0;
                                 apertouBotaoPlay = 0;
                                 break;

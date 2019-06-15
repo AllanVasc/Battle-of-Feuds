@@ -357,11 +357,11 @@ int main() {
         printf("Jogadores desconectados\n");
         printf("Servidor reiniciando...\n");
 
-        for(i = 0; i < pacote.qtdPlayers; i++){
+        //for(i = 0; i < pacote.qtdPlayers; i++){
 
-          disconnectClient(i);
+          //disconnectClient(i);
 
-        }
+        //}
 
       }
 
