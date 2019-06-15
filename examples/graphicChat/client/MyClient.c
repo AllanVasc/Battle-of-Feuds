@@ -102,8 +102,8 @@ int main() {
 
     while (inMenu){
 
-        //Playsound();
-        //al_set_audio_stream_playing(menuGameSong,1);    
+        Playsound();
+        al_set_audio_stream_playing(menuGameSong,1);    
 
         while(!al_is_event_queue_empty(eventsQueue)){
             
@@ -459,8 +459,7 @@ int main() {
                 recvMsgFromServer(&playersInGame, WAIT_FOR_IT);    //Recebendo os dados de todos os personagens para iniciar o jogo!
                 printf("Dados de todos os jogadores recebidos!\n");
                 printf("Quantidade de jogadores: [%d]\n", playersInGame.qtdPlayers);
-                //al_destroy_audio_stream(menuGameSong);
-                //al_set_audio_stream_playing(menuGameSong,0);
+                al_set_audio_stream_playing(menuGameSong,0);
 
             }
 
@@ -528,6 +527,7 @@ int main() {
                     } else if(pacoteInGame.flag == 2){  //Eu que morri!
 
                         printf("Morri!\n");
+                        playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
                         inDeath = 1;
                         inGame = 0;
 
@@ -639,45 +639,36 @@ int main() {
 
                             case ALLEGRO_KEY_W:
 
-                                if(map[(playersInGame.jogador[meuID].pos.posY) - 1][playersInGame.jogador[meuID].pos.posX] > 0 && (playersInGame.jogador[meuID].pos.posY) - 1 >= 0){
-
-                                    mov = 'w';
-                                    sendMsgToServer(&mov, sizeof(char));
-                                    printf("Mandei comando: [%c]\n", mov);
-                                }
-
+                                mov = 'w';
+                                sendMsgToServer(&mov, sizeof(char));
+                                printf("Mandei comando: [%c]\n", mov);
+                             
                                 break;
 
                             case ALLEGRO_KEY_S:
 
-                                if(map[(playersInGame.jogador[meuID].pos.posY) + 1][playersInGame.jogador[meuID].pos.posX] > 0 && (playersInGame.jogador[meuID].pos.posY) + 1 < 24 ){
-
                                     mov = 's';  
                                     sendMsgToServer(&mov, sizeof(char));
                                     printf("Mandei comando: [%c]\n", mov);
-                                }                              
+                                                            
 
                                 break;
 
                             case ALLEGRO_KEY_A:
 
-                                if(map[playersInGame.jogador[meuID].pos.posY][playersInGame.jogador[meuID].pos.posX -1] > 0 && (playersInGame.jogador[meuID].pos.posX) - 1 >= 0){
-
                                     mov = 'a';   
                                     sendMsgToServer(&mov, sizeof(char));
                                     printf("Mandei comando: [%c]\n", mov);
-                                }
+                                
                                 
                                 break;
 
                             case ALLEGRO_KEY_D:
 
-                                if(map[playersInGame.jogador[meuID].pos.posY][playersInGame.jogador[meuID].pos.posX + 1] > 0 && (playersInGame.jogador[meuID].pos.posX) + 1 < 32){
-
                                     mov = 'd';  
                                     sendMsgToServer(&mov, sizeof(char));
                                     printf("Mandei comando: [%c]\n", mov);
-                                }
+                                
                                 
                                 break;
 
@@ -776,6 +767,7 @@ int main() {
                     } else if(pacoteInGame.flag == 2){  //Eu que morri!
 
                         printf("Morri!\n");
+                        playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
                         inDeath = 1;
                         inGame = 0;
 
@@ -849,6 +841,7 @@ int main() {
                     } else if(pacoteInGame.flag == 2){  //Eu que morri!
 
                         printf("Morri!\n");
+                        playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
                         inDeath = 1;
                         inGame = 0;
 
@@ -941,11 +934,9 @@ int main() {
 
             }
 
-            
+            al_rewind_audio_stream(menuGameSong);
 
-        }    
-        //al_rewind_audio_stream(menuGameSong);
-        //Playsound();            
+        }               
 
         if(apertouBotaoHowtoPlay == 1){			//Tela How to play vai ficar aqui
 
@@ -1698,7 +1689,7 @@ void printSprite(){
 
         int x = playersInGame.jogador[i].pos.posX;
         int y = playersInGame.jogador[i].pos.posY;
-
+        
         if(playersInGame.jogador[i].qualPers == 0){     //Minha sprite é Skeleton
 
             if(playersInGame.jogador[i].direcao == 'w'){

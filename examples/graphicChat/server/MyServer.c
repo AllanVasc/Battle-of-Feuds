@@ -404,15 +404,16 @@ int canMove(char direcao , int id){
         
         if( i != id){
 
-          if(pacote.jogador[id].pos.posX == posicoesJogadores[0][i] && pacote.jogador[id].pos.posY - 1 == posicoesJogadores[1][i]){
+          if( (pacote.jogador[id].pos.posX == posicoesJogadores[0][i] && pacote.jogador[id].pos.posY - 1 == posicoesJogadores[1][i] ) || map[pacote.jogador[id].pos.posY - 1][pacote.jogador[id].pos.posX] < 0 || (pacote.jogador[id].pos.posY) - 1 < 0 ){
+              
+              free(posicoesJogadores[0]);
+              free(posicoesJogadores[1]);
+              free(posicoesJogadores);
 
-            free(posicoesJogadores[0]);
-            free(posicoesJogadores[1]);
-            free(posicoesJogadores);
+              return 0;
+              break;
 
-            return 0;
-            break;
-
+            
           }
         }
       }
@@ -429,14 +430,14 @@ int canMove(char direcao , int id){
 
         if( i != id){
 
-          if(pacote.jogador[id].pos.posX == posicoesJogadores[0][i] && pacote.jogador[id].pos.posY + 1 == posicoesJogadores[1][i]){
+          if( (pacote.jogador[id].pos.posX == posicoesJogadores[0][i] && pacote.jogador[id].pos.posY + 1 == posicoesJogadores[1][i]) || map[pacote.jogador[id].pos.posY + 1][pacote.jogador[id].pos.posX] < 0 || (pacote.jogador[id].pos.posY) + 1 >= 24 ){
+              
+              free(posicoesJogadores[0]);
+              free(posicoesJogadores[1]);
+              free(posicoesJogadores);
 
-            free(posicoesJogadores[0]);
-            free(posicoesJogadores[1]);
-            free(posicoesJogadores);
-
-            return 0;
-            break;
+              return 0;
+              break;
 
           }
 
@@ -456,14 +457,15 @@ int canMove(char direcao , int id){
 
         if(i != id){
 
-          if(pacote.jogador[id].pos.posX - 1 == posicoesJogadores[0][i] && pacote.jogador[id].pos.posY == posicoesJogadores[1][i]){
+          if( (pacote.jogador[id].pos.posX - 1 == posicoesJogadores[0][i] && pacote.jogador[id].pos.posY == posicoesJogadores[1][i]) || map[pacote.jogador[id].pos.posY][pacote.jogador[id].pos.posX - 1] < 0 || (pacote.jogador[id].pos.posX) - 1 < 0) {
 
-            free(posicoesJogadores[0]);
-            free(posicoesJogadores[1]);
-            free(posicoesJogadores);
+              free(posicoesJogadores[0]);
+              free(posicoesJogadores[1]);
+              free(posicoesJogadores);
 
-            return 0;
-            break;
+              return 0;
+              break;
+
 
           }
 
@@ -483,13 +485,14 @@ int canMove(char direcao , int id){
 
         if(i != id){
           
-          if(pacote.jogador[id].pos.posX + 1 == posicoesJogadores[0][i] && pacote.jogador[id].pos.posY == posicoesJogadores[1][i]){
+          if( (pacote.jogador[id].pos.posX + 1 == posicoesJogadores[0][i] && pacote.jogador[id].pos.posY == posicoesJogadores[1][i]) || map[pacote.jogador[id].pos.posY][pacote.jogador[id].pos.posX + 1] < 0 || (pacote.jogador[id].pos.posX) + 1 >= 32 ){
 
-            free(posicoesJogadores[0]);
-            free(posicoesJogadores[1]);
-            free(posicoesJogadores);
-            return 0;
-            break;
+              free(posicoesJogadores[0]);
+              free(posicoesJogadores[1]);
+              free(posicoesJogadores);
+
+              return 0;
+              break;
 
           }
 
