@@ -578,6 +578,7 @@ int main() {
 
                         printf("Morri!\n");
                         playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
+                        playersInGame.jogador[pacoteInGame.idClient].qualPers = -1;
                         inDeath = 1;
                         inGame = 0;
 
@@ -585,6 +586,8 @@ int main() {
 
                         printDeath = 1;
                         playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
+                        playersInGame.jogador[pacoteInGame.idClient].qualPers = -1;
+
                         sprintf(messagePlayerDeath, "Player %d is dead!", pacoteInGame.idClient);
                         printf("%s\n", messagePlayerDeath);
 
@@ -658,6 +661,7 @@ int main() {
 
                             printf("Morri!\n");
                             playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
+                            playersInGame.jogador[pacoteInGame.idClient].qualPers = -1;
                             inDeath = 1;
                             inGame = 0;
 
@@ -665,6 +669,8 @@ int main() {
 
                             printDeath = 1;
                             playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
+                            playersInGame.jogador[pacoteInGame.idClient].qualPers = -1;
+
                             sprintf(messagePlayerDeath, "Player %d is dead!", pacoteInGame.idClient);
                             printf("%s\n", messagePlayerDeath);
 
@@ -821,6 +827,7 @@ int main() {
 
                         printf("Morri!\n");
                         playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
+                        playersInGame.jogador[pacoteInGame.idClient].qualPers = -1;
                         inDeath = 1;
                         inGame = 0;
 
@@ -828,6 +835,8 @@ int main() {
 
                         printDeath = 1;
                         playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
+                        playersInGame.jogador[pacoteInGame.idClient].qualPers = -1;
+
                         sprintf(messagePlayerDeath, "Player %d is dead!", pacoteInGame.idClient);
                         printf("%s\n", messagePlayerDeath);
                     }
@@ -895,6 +904,7 @@ int main() {
 
                         printf("Morri!\n");
                         playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
+                        playersInGame.jogador[pacoteInGame.idClient].qualPers = -1;
                         inDeath = 1;
                         inGame = 0;
 
@@ -902,6 +912,8 @@ int main() {
 
                         printDeath = 1;
                         playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
+                        playersInGame.jogador[pacoteInGame.idClient].qualPers = -1;
+
                         sprintf(messagePlayerDeath, "Player %d is dead!", pacoteInGame.idClient);
                         printf("%s\n", messagePlayerDeath);
                     }
@@ -990,7 +1002,6 @@ int main() {
                 printWinnerScreen();
                 al_flip_display();
                 FPSLimit();
-                printf("entrei!\n");
             }
             
             printDeath = 0;
@@ -1760,8 +1771,12 @@ void printSprite(){
 
         int x = playersInGame.jogador[i].pos.posX;
         int y = playersInGame.jogador[i].pos.posY;
-        
-        if(playersInGame.jogador[i].qualPers == 0){     //Minha sprite é Skeleton
+
+        if(playersInGame.jogador[i].qualPers == -1){
+
+            al_draw_bitmap_region(obstaculos, 0*32, 2*32, 32, 32, x*32 , y*32 , 0); 
+
+        } else if(playersInGame.jogador[i].qualPers == 0){     //Minha sprite é Skeleton
 
             if(playersInGame.jogador[i].direcao == 'w'){
 
@@ -1832,9 +1847,7 @@ void printSprite(){
             }
             
             */
-        }
-
-        if(playersInGame.jogador[i].qualPers == 1){     //Minha sprite é Ripper
+        } else if(playersInGame.jogador[i].qualPers == 1){     //Minha sprite é Ripper
 
             if(playersInGame.jogador[i].direcao == 'w'){
 
@@ -1859,9 +1872,7 @@ void printSprite(){
                 al_draw_bitmap_region(Sprite_Ripper01, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento), playersInGame.jogador[i].spriteJogador.linhaD * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
 
             }
-        }
-
-        if(playersInGame.jogador[i].qualPers == 2){     //Minha sprite é DeathKnight
+        } else if(playersInGame.jogador[i].qualPers == 2){     //Minha sprite é DeathKnight
 
             if(playersInGame.jogador[i].direcao == 'w'){
 
@@ -1886,9 +1897,7 @@ void printSprite(){
                 al_draw_bitmap_region(Sprite_DeathKnight02, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento), playersInGame.jogador[i].spriteJogador.linhaD * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
 
             }
-        }
-
-        if(playersInGame.jogador[i].qualPers == 3){     //Minha sprite é Ogre
+        } else if(playersInGame.jogador[i].qualPers == 3){     //Minha sprite é Ogre
 
             if(playersInGame.jogador[i].direcao == 'w'){
 
@@ -1913,9 +1922,7 @@ void printSprite(){
                 al_draw_bitmap_region(Sprite_Ogre03, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) +6, playersInGame.jogador[i].spriteJogador.linhaD * playersInGame.jogador[i].spriteJogador.espacamento +8,32, 32 , x*32 , y*32 , 0);
 
             }
-        }
-
-        if(playersInGame.jogador[i].qualPers == 4){     //Minha sprite é Goblin
+        } else if(playersInGame.jogador[i].qualPers == 4){     //Minha sprite é Goblin
 
             if(playersInGame.jogador[i].direcao == 'w'){
 
@@ -1940,9 +1947,7 @@ void printSprite(){
                 al_draw_bitmap_region(Sprite_Goblin04, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) , playersInGame.jogador[i].spriteJogador.linhaD * playersInGame.jogador[i].spriteJogador.espacamento ,28, 28 , x*32 , y*32 , 0);
 
             }
-        }
-
-        if(playersInGame.jogador[i].qualPers == 5){     //Minha sprite é Skeleton05
+        } else if(playersInGame.jogador[i].qualPers == 5){     //Minha sprite é Skeleton05
 
             if(playersInGame.jogador[i].direcao == 'w'){
 

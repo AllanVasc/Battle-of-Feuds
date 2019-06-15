@@ -61,6 +61,8 @@ int main() {
 
   int comecar = 1;
   int InGame = 0 ;
+  int playersSairam = 0;
+  int jaGanhou = 0;
 
   while(1){
 
@@ -135,7 +137,10 @@ int main() {
     broadcast(&pacote, sizeof(Inicio));
     printf("Dados de todos os personagens enviados...\n");
     printf("Jogo ira começar...\n");
+
+    playersSairam = 0;
     qtdJogadoresMortos = 0;
+    jaGanhou = 0;
 
     while(InGame){  //Enquanto o jogo estiver rolando!
 
@@ -297,10 +302,13 @@ int main() {
                 printf("Player [%d] esta com [%d] vidas\n", pacoteInGame.idClient, pacoteInGame.vida);
 
 
-              } else if(pacote.jogador[idPlayerHittado].vida <= 0){
+              } else if(pacote.jogador[idPlayerHittado].vida <= 0 && pacote.jogador[idPlayerHittado].qualPers != -1){
 
-                printf("Player [%d] morreu!\n", idPlayerHittado); 
+                //printf("Player [%d] morreu!\n", idPlayerHittado); 
+
                 qtdJogadoresMortos++;
+                printf("MORTOS  = [%d]\n", qtdJogadoresMortos);
+                pacote.jogador[idPlayerHittado].qualPers = -1;
 
                 pacoteInGame.idClient = idPlayerHittado;  //Preparar um pacote especifico para quem morreu!
                 pacoteInGame.vida = 0;
@@ -322,12 +330,17 @@ int main() {
 
             printf("Player [%d] saiu do jogo!\n", mensagemMov.client_id);
             disconnectClient(mensagemMov.client_id);
-            qtdJogadores--;
 
-            if(qtdJogadores == 0){
+            playersSairam++;
+            printf("SAIRAM  = [%d]\n", playersSairam);
+
+            if(playersSairam == qtdJogadores){
               
               comecar = 1;
               InGame = 0;
+              playersSairam = 0;
+              qtdJogadores = 0;
+              qtdJogadoresMortos = 0;
               printf("Jogadores desconectados\n");
               printf("Servidor reiniciando...\n");
 
@@ -338,36 +351,42 @@ int main() {
           }
 
       } else if (mensagemMov.status == DISCONNECT_MSG) {
-
-        qtdJogadores--;
+        
+        qtdJogadoresMortos++;
+        printf("MORTOS  = [%d]\n", qtdJogadoresMortos);
 
       }
 
-      if(qtdJogadoresMortos == qtdJogadores - 1){ //Enviar mensagem para o vencedor!
+      if(qtdJogadoresMortos == qtdJogadores - 1 && jaGanhou == 0) { //Enviar mensagem para o vencedor!
 
         for(i = 0; i < pacote.qtdPlayers; i++){
 
           if(pacote.jogador[i].vida > 0){
 
             idWinner = i;
-            break;
-          }
 
+          }
+          
         }
+        printf("IDWINNER = [%d]\n", idWinner);
 
         pacoteInGame.idClient = idWinner;  //Preparar um pacote especifico para quem venceu!
         pacoteInGame.flag = 4;
         sendMsgToClient(&pacoteInGame, sizeof(DadosInGame), idWinner);
-        printf("Player [%d] is the WINNER!\n", idWinner);
+        jaGanhou = 1;
 
       }
 
-      if(qtdJogadores == 0) {
+      if(playersSairam == qtdJogadores){
+              
+        comecar = 1;
+        InGame = 0;
+        playersSairam = 0;
+        qtdJogadores = 0;
+        qtdJogadoresMortos = 0;
+        printf("Jogadores desconectados\n");
+        printf("Servidor reiniciando...\n");
 
-          comecar = 1;
-          InGame = 0;
-          printf("Jogadores desconectados\n");
-          printf("Servidor reiniciando...\n");
       }
 
     }
