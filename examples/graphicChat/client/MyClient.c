@@ -913,7 +913,7 @@ int main() {
                     if (inWinnerEvent.type == ALLEGRO_EVENT_KEY_DOWN){
                         
                         char mov;
-                        
+
                         switch(inWinnerEvent.keyboard.keycode){
 
                             case ALLEGRO_KEY_ESCAPE:
@@ -935,7 +935,7 @@ int main() {
                 printWinnerScreen();
                 al_flip_display();
                 FPSLimit();
-
+                printf("entrei!\n");
             }
 
             al_rewind_audio_stream(menuGameSong);

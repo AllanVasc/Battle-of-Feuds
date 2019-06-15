@@ -324,7 +324,16 @@ int main() {
             disconnectClient(mensagemMov.client_id);
             qtdJogadores--;
 
-          break;
+            if(qtdJogadores == 0){
+              
+              comecar = 1;
+              InGame = 0;
+              printf("Jogadores desconectados\n");
+              printf("Servidor reiniciando...\n");
+
+            }
+          
+            break;
 
           }
 
@@ -334,7 +343,7 @@ int main() {
 
       }
 
-      if(qtdJogadoresMortos == qtdJogadores - 1){
+      if(qtdJogadoresMortos == qtdJogadores - 1){ //Enviar mensagem para o vencedor!
 
         for(i = 0; i < pacote.qtdPlayers; i++){
 
@@ -350,18 +359,6 @@ int main() {
         pacoteInGame.flag = 4;
         sendMsgToClient(&pacoteInGame, sizeof(DadosInGame), idWinner);
         printf("Player [%d] is the WINNER!\n", idWinner);
-
-        comecar = 1;
-        InGame = 0;
-        qtdJogadores = 0;
-        printf("Jogadores desconectados\n");
-        printf("Servidor reiniciando...\n");
-
-        //for(i = 0; i < pacote.qtdPlayers; i++){
-
-          //disconnectClient(i);
-
-        //}
 
       }
 
