@@ -142,6 +142,19 @@ int main() {
 
 				}
 
+            } else if (menuEvent.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+
+                int resposta;
+
+                resposta = al_show_native_message_box(main_window,"Battle Of Feuds", "Deseja sair do programa?","",NULL,ALLEGRO_MESSAGEBOX_YES_NO);
+                printf("resp == [%d]\n", resposta);
+
+                if (resposta == 1){
+
+                    allegroEnd();
+                    return 0;
+
+                }
             }
 
         }
@@ -190,6 +203,19 @@ int main() {
                                     break;
                             }
                                 
+                        } else if (connectEvent.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+
+                            int resposta;
+
+                            resposta = al_show_native_message_box(main_window,"Battle Of Feuds", "Deseja sair do programa?","",NULL,ALLEGRO_MESSAGEBOX_YES_NO);
+                            printf("resp == [%d]\n", resposta);
+
+                            if (resposta == 1){
+
+                                allegroEnd();
+                                return 0;
+
+                            }
                         }
 
                     }
@@ -232,6 +258,19 @@ int main() {
                                     lobby = 0;
                                     apertouBotaoPlay = 0;
                                     break;
+                            }
+                        } else if (loginEvent.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+
+                            int resposta;
+
+                            resposta = al_show_native_message_box(main_window,"Battle Of Feuds", "Deseja sair do programa?","",NULL,ALLEGRO_MESSAGEBOX_YES_NO);
+                            printf("resp == [%d]\n", resposta);
+
+                            if (resposta == 1){
+
+                                allegroEnd();
+                                return 0;
+
                             }
                         }
                     }
@@ -325,9 +364,7 @@ int main() {
                                     lobby = 1;
 
                             }
-                        }
-
-                        if (chooseCharEvent.type == ALLEGRO_EVENT_KEY_DOWN){
+                        } else if (chooseCharEvent.type == ALLEGRO_EVENT_KEY_DOWN){
 
                             switch(chooseCharEvent.keyboard.keycode){
 
@@ -338,6 +375,19 @@ int main() {
                                     lobby = 0;
                                     apertouBotaoPlay = 0;
                                     break;
+                            }
+                        } else if (chooseCharEvent.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+
+                            int resposta;
+
+                            resposta = al_show_native_message_box(main_window,"Battle Of Feuds", "Deseja sair do programa?","",NULL,ALLEGRO_MESSAGEBOX_YES_NO);
+                            printf("resp == [%d]\n", resposta);
+
+                            if (resposta == 1){
+
+                                allegroEnd();
+                                return 0;
+
                             }
                         }
                     }
@@ -872,6 +922,7 @@ int main() {
                             sendMsgToServer(&mov, sizeof(char));
                             inDeath = 0;
                             apertouBotaoPlay = 0;
+                            al_rewind_audio_stream(menuGameSong);
                             break;
 
                     }
@@ -925,6 +976,7 @@ int main() {
                                 sendMsgToServer(&mov, sizeof(char));
                                 inWinner = 0;
                                 apertouBotaoPlay = 0;
+                                al_rewind_audio_stream(menuGameSong);
                                 break;
 
                         }
@@ -943,7 +995,6 @@ int main() {
             
             printDeath = 0;
             timerPrintDeath = 0;
-            al_rewind_audio_stream(menuGameSong);
 
         }               
 
@@ -976,14 +1027,25 @@ int main() {
 
                             printf("Apertasse botão voltar\n");
                         }
-                    }
-
-                    if(howToPlayEvent.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                    } else if(howToPlayEvent.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
 
                         apertouBotaoHowtoPlay = 0;
                         printf("Saindo tela howtoplay!\n");
 
-                    }
+                    } else if (howToPlayEvent.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+
+			            int resposta;
+
+                        resposta = al_show_native_message_box(main_window,"Battle Of Feuds", "Deseja sair do programa?","",NULL,ALLEGRO_MESSAGEBOX_YES_NO);
+                        printf("resp == [%d]\n", resposta);
+
+			            if (resposta == 1){
+
+                            allegroEnd();
+                            return 0;
+
+                        }
+		            }
                 }
             }
         }
