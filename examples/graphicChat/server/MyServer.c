@@ -282,9 +282,42 @@ int main() {
 
             if(canHit(id)){
 
-              printf("O ataque pegou!\n");
+              (pacote.jogador[idPlayerHittado].vida)--; //Atualiza o backup de players do server!
 
+              if(pacote.jogador[idPlayerHittado].vida > 0){
+                
+                pacoteInGame.idClient = idPlayerHittado; //Preparando pacote para enviar!
+                pacoteInGame.vida = (pacote.jogador[idPlayerHittado].vida);
+                pacoteInGame.flag = 1;
+                broadcast(&pacoteInGame, sizeof(DadosInGame));
+                printf("Player [%d] esta com [%d] vidas\n", pacoteInGame.idClient, pacoteInGame.vida);
+
+
+              } else if(pacote.jogador[idPlayerHittado].vida <= 0){
+
+                printf("Player [%d] morreu!\n", idPlayerHittado); 
+
+                pacoteInGame.idClient = idPlayerHittado;  //Preparar um pacote especifico para quem morreu!
+                pacoteInGame.vida = 0;
+                pacoteInGame.flag = 2;
+                sendMsgToClient(&pacoteInGame, sizeof(DadosInGame), idPlayerHittado);
+
+                pacoteInGame.idClient = idPlayerHittado; //Preparando pacote para dizer a todos que ele morreu!
+                pacoteInGame.vida = 0;
+                pacoteInGame.flag = 3;
+                broadcast(&pacoteInGame, sizeof(DadosInGame));
+
+              }
+              
             }
+
+          break;
+
+          case '*': //Player saiu do jogo!
+
+            printf("Player [%d] saiu do jogo!\n", mensagemMov.client_id);
+            disconnectClient(mensagemMov.client_id);
+            qtdJogadores--;
 
           break;
 

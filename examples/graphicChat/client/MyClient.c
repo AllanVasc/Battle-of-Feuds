@@ -25,7 +25,7 @@ DadosInGame pacoteInGame;
 DADOS pacote;
 DADOS auxID;
 int meuID;
-int meuChar;
+int meuChar; 
 MoveSprite spriteConfigurada;
 
 
@@ -68,10 +68,17 @@ void printSprite();
 void printHeart();
 void configuraSprite();
 void Playsound();
+void printMessageDeathScreen(char str[]);
+void printDeathScreen();
+void printWinnerScreen();
+//void PlayAttacksound(int idchar);
+//void inGamesound();
 
 int main() {
 
     int apertouBotaoPlay = 0, inMenu = 1, inGame = 0, apertouBotaoExit = 0, apertouBotaoHowtoPlay = 0, delay = 0, inChat = 0, inChooseChar;
+    int printDeath = 0, timerPrintDeath = 0, inDeath = 0;
+    char messagePlayerDeath[100];
     int i,k;
 
     if (!coreInit()) //Inicializando os modulos centrais
@@ -249,8 +256,8 @@ int main() {
 
                         if (chooseCharEvent.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
 
-                            if (chooseCharEvent.mouse.x >= (LARGURA/10)*1 &&                               //Verificamos se o mouse esta em cima do personagem Skeleton!
-                                chooseCharEvent.mouse.x <= (LARGURA/10)*1 + al_get_bitmap_width(skeletonButton) &&
+                            if (chooseCharEvent.mouse.x >= (LARGURA/5)*1 +20 &&                               //Verificamos se o mouse esta em cima do personagem Skeleton!
+                                chooseCharEvent.mouse.x <= (LARGURA/5)*1 + 20 + al_get_bitmap_width(skeletonButton) &&
                                 chooseCharEvent.mouse.y >= 220 &&
                                 chooseCharEvent.mouse.y <= 220 + al_get_bitmap_height(skeletonButton) ) {
 
@@ -261,8 +268,8 @@ int main() {
                             }
 
 
-                            if (chooseCharEvent.mouse.x >= (LARGURA/10)*3 &&                               //Verificamos se o mouse esta em cima do personagem Ripper!
-                                chooseCharEvent.mouse.x <= (LARGURA/10)*3 + al_get_bitmap_width(ripperButton) &&
+                            if (chooseCharEvent.mouse.x >= (LARGURA/5)*2 + 20 &&                               //Verificamos se o mouse esta em cima do personagem Ripper!
+                                chooseCharEvent.mouse.x <= (LARGURA/5)*2 + 20 + al_get_bitmap_width(ripperButton) &&
                                 chooseCharEvent.mouse.y >= 220 &&
                                 chooseCharEvent.mouse.y <= 220 + al_get_bitmap_height(ripperButton) ) {
 
@@ -272,10 +279,10 @@ int main() {
 
                             }
 
-                            if (chooseCharEvent.mouse.x >= (LARGURA/10)*5 &&                               //Verificamos se o mouse esta em cima do personagem DeathKnight!
-                                chooseCharEvent.mouse.x <= (LARGURA/10)*5 + al_get_bitmap_width(ripperButton) &&
+                            if (chooseCharEvent.mouse.x >= (LARGURA/5)*3 + 20 &&                               //Verificamos se o mouse esta em cima do personagem DeathKnight!
+                                chooseCharEvent.mouse.x <= (LARGURA/5)*3 + 20 + al_get_bitmap_width(deathKnightButton) &&
                                 chooseCharEvent.mouse.y >= 220 &&
-                                chooseCharEvent.mouse.y <= 220 + al_get_bitmap_height(ripperButton) ) {
+                                chooseCharEvent.mouse.y <= 220 + al_get_bitmap_height(deathKnightButton) ) {
 
                                     meuChar = 2;
                                     inChooseChar = false;
@@ -283,10 +290,10 @@ int main() {
 
                             }
 
-                            if (chooseCharEvent.mouse.x >= (LARGURA/10)*7 &&                               //Verificamos se o mouse esta em cima do personagem Ogre!
-                                chooseCharEvent.mouse.x <= (LARGURA/10)*7 + al_get_bitmap_width(ripperButton) &&
-                                chooseCharEvent.mouse.y >= 220 &&
-                                chooseCharEvent.mouse.y <= 220 + al_get_bitmap_height(ripperButton) ) {
+                            if (chooseCharEvent.mouse.x >= (LARGURA/5)*1 + 20 &&                               //Verificamos se o mouse esta em cima do personagem Ogre!
+                                chooseCharEvent.mouse.x <= (LARGURA/5)*1 + 20 + al_get_bitmap_width(ogreButton) &&
+                                chooseCharEvent.mouse.y >= 400 &&
+                                chooseCharEvent.mouse.y <= 400 + al_get_bitmap_height(ogreButton) ) {
 
                                     meuChar = 3;
                                     inChooseChar = false;
@@ -294,12 +301,23 @@ int main() {
 
                             }
 
-                            if (chooseCharEvent.mouse.x >= (LARGURA/10)*3 &&                               //Verificamos se o mouse esta em cima do personagem Goblin!
-                                chooseCharEvent.mouse.x <= (LARGURA/10)*3 + al_get_bitmap_width(ripperButton) &&
+                            if (chooseCharEvent.mouse.x >= (LARGURA/5)*2 + 25 &&                               //Verificamos se o mouse esta em cima do personagem Goblin!
+                                chooseCharEvent.mouse.x <= (LARGURA/5)*2 + 25 + al_get_bitmap_width(ripperButton) &&
                                 chooseCharEvent.mouse.y >= 400 &&
                                 chooseCharEvent.mouse.y <= 400 + al_get_bitmap_height(ripperButton) ) {
 
                                     meuChar = 4;
+                                    inChooseChar = false;
+                                    lobby = 1;
+
+                            }
+
+                            if (chooseCharEvent.mouse.x >= (LARGURA/5)*3 + 20 &&                               //Verificamos se o mouse esta em cima do personagem Skeleton05!
+                                chooseCharEvent.mouse.x <= (LARGURA/5)*3 + 20 + al_get_bitmap_width(skeleton05Button) &&
+                                chooseCharEvent.mouse.y >= 400 &&
+                                chooseCharEvent.mouse.y <= 400 + al_get_bitmap_height(skeleton05Button) ) {
+
+                                    meuChar = 5;
                                     inChooseChar = false;
                                     lobby = 1;
 
@@ -438,7 +456,8 @@ int main() {
                 recvMsgFromServer(&playersInGame, WAIT_FOR_IT);    //Recebendo os dados de todos os personagens para iniciar o jogo!
                 printf("Dados de todos os jogadores recebidos!\n");
                 printf("Quantidade de jogadores: [%d]\n", playersInGame.qtdPlayers);
-                al_destroy_audio_stream(menuGameSong);
+                //al_destroy_audio_stream(menuGameSong);
+                al_set_audio_stream_playing(menuGameSong,0);
 
             }
 
@@ -446,63 +465,15 @@ int main() {
 
             while(inGame){  //Momento do jogo!
 
+            // inGamesound();
                 startTimer();
                 int rec = recvMsgFromServer(&pacoteInGame, DONT_WAIT);
 
-                if(rec != NO_MESSAGE){  //Atualizando a posição dos jogadores!
-                    
-                    if(pacoteInGame.direcao == playersInGame.jogador[pacoteInGame.idClient].direcao){
+                if(rec != NO_MESSAGE && inDeath == 0){  
 
-                        playersInGame.jogador[pacoteInGame.idClient].colunaSprite ++;
+                    if(pacoteInGame.flag == 0){ //Atualizando a posição dos jogadores!
 
-                        if(playersInGame.jogador[pacoteInGame.idClient].direcao == 'w'){
-                            
-                            if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoW - 1){
-
-                            playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
-
-                            }
-                        } else if(playersInGame.jogador[pacoteInGame.idClient].direcao == 's'){
-                            
-                            if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoS - 1){
-
-                            playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
-
-                            }
-                        } else if(playersInGame.jogador[pacoteInGame.idClient].direcao == 'a'){
-                            
-                            if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoA - 1){
-
-                            playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
-
-                            }
-                        } else if(playersInGame.jogador[pacoteInGame.idClient].direcao == 'd'){
-                            
-                            if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoD - 1){
-
-                            playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
-
-                            }
-                        } 
-                        
-                    } else if (pacoteInGame.direcao != playersInGame.jogador[pacoteInGame.idClient].direcao){
-
-                        playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
-
-                    }
-
-                    playersInGame.jogador[pacoteInGame.idClient].pos.posX = pacoteInGame.posX;
-                    playersInGame.jogador[pacoteInGame.idClient].pos.posY = pacoteInGame.posY;
-                    playersInGame.jogador[pacoteInGame.idClient].direcao = pacoteInGame.direcao;
-                }
-
-                while(!al_is_event_queue_empty(eventsQueue)){
-
-                    rec = recvMsgFromServer(&pacoteInGame, DONT_WAIT);
-
-                    if(rec != NO_MESSAGE){  //Atualizando a posição dos jogadores!
-
-                       if(pacoteInGame.direcao == playersInGame.jogador[pacoteInGame.idClient].direcao){
+                        if(pacoteInGame.direcao == playersInGame.jogador[pacoteInGame.idClient].direcao){
 
                             playersInGame.jogador[pacoteInGame.idClient].colunaSprite ++;
 
@@ -513,6 +484,7 @@ int main() {
                                 playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
 
                                 }
+                                
                             } else if(playersInGame.jogador[pacoteInGame.idClient].direcao == 's'){
                                 
                                 if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoS - 1){
@@ -536,7 +508,6 @@ int main() {
                                 }
                             } 
                             
-
                         } else if (pacoteInGame.direcao != playersInGame.jogador[pacoteInGame.idClient].direcao){
 
                             playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
@@ -546,6 +517,99 @@ int main() {
                         playersInGame.jogador[pacoteInGame.idClient].pos.posX = pacoteInGame.posX;
                         playersInGame.jogador[pacoteInGame.idClient].pos.posY = pacoteInGame.posY;
                         playersInGame.jogador[pacoteInGame.idClient].direcao = pacoteInGame.direcao;
+
+                    } else if(pacoteInGame.flag == 1){  //Algum jogador perdeu vida!
+
+                        playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
+
+                    } else if(pacoteInGame.flag == 2){  //Eu que morri!
+
+                        printf("Morri!\n");
+                        inDeath = 1;
+                        inGame = 0;
+
+                    } else if(pacoteInGame.flag == 3 && pacoteInGame.idClient != meuID){  //Algum jogador morreu!
+
+                        printDeath = 1;
+                        playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
+                        sprintf(messagePlayerDeath, "Player %d is dead!", pacoteInGame.idClient);
+                        printf("%s\n", messagePlayerDeath);
+                    }
+
+                }
+
+                while(!al_is_event_queue_empty(eventsQueue) && inDeath == 0){
+
+                    rec = recvMsgFromServer(&pacoteInGame, DONT_WAIT);
+
+                    if(rec != NO_MESSAGE){  
+
+                        if(pacoteInGame.flag == 0){ //Atualizando a posição dos jogadores!
+
+                            if(pacoteInGame.direcao == playersInGame.jogador[pacoteInGame.idClient].direcao){
+
+                                playersInGame.jogador[pacoteInGame.idClient].colunaSprite ++;
+
+                                if(playersInGame.jogador[pacoteInGame.idClient].direcao == 'w'){
+                                    
+                                    if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoW - 1){
+
+                                    playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                                    }
+                                    
+                                } else if(playersInGame.jogador[pacoteInGame.idClient].direcao == 's'){
+                                    
+                                    if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoS - 1){
+
+                                    playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                                    }
+                                } else if(playersInGame.jogador[pacoteInGame.idClient].direcao == 'a'){
+                                    
+                                    if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoA - 1){
+
+                                    playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                                    }
+                                } else if(playersInGame.jogador[pacoteInGame.idClient].direcao == 'd'){
+                                    
+                                    if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoD - 1){
+
+                                    playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                                    }
+                                } 
+                                
+                            } else if (pacoteInGame.direcao != playersInGame.jogador[pacoteInGame.idClient].direcao){
+
+                                playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                            }
+
+                            playersInGame.jogador[pacoteInGame.idClient].pos.posX = pacoteInGame.posX;
+                            playersInGame.jogador[pacoteInGame.idClient].pos.posY = pacoteInGame.posY;
+                            playersInGame.jogador[pacoteInGame.idClient].direcao = pacoteInGame.direcao;
+
+                        } else if(pacoteInGame.flag == 1){  //Algum jogador perdeu vida!
+
+                            playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
+
+                        } else if(pacoteInGame.flag == 2){  //Eu que morri!
+
+                            printf("Morri!\n");
+                            playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
+                            inDeath = 1;
+                            inGame = 0;
+
+                        } else if(pacoteInGame.flag == 3 && pacoteInGame.idClient != meuID){  //Algum jogador morreu!
+
+                            printDeath = 1;
+                            playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
+                            sprintf(messagePlayerDeath, "Player %d is dead!", pacoteInGame.idClient);
+                            printf("%s\n", messagePlayerDeath);
+                        }
+
                     }
 
                     ALLEGRO_EVENT inGameEvent;
@@ -604,6 +668,7 @@ int main() {
                                 
                                 mov = 'k';  
                                 sendMsgToServer(&mov, sizeof(char));
+                                //PlayAttacksound(meuChar);
                                 printf("Mandei comando: [%c]\n", mov);
                                 
                                 
@@ -615,10 +680,215 @@ int main() {
                 printMap();
                 printSprite();
                 printHeart();
+                if(printDeath){     //Mensagem de player morto!
+
+                    printMessageDeathScreen(messagePlayerDeath);
+
+                    if(timerPrintDeath >= 100){
+
+                        timerPrintDeath = 0;
+                        printDeath = 0;
+
+                    }
+
+                    timerPrintDeath++;
+                }
                 al_flip_display();
                 FPSLimit();	
                 //inGame = 0; //Ira ficar preso, ajeitar quando botar a vida!	  
-            } 
+            }
+
+            while(inDeath){     //Tela de morte
+
+                int rec = recvMsgFromServer(&pacoteInGame, DONT_WAIT);
+
+                if(rec != NO_MESSAGE){  
+
+                    if(pacoteInGame.flag == 0){ //Atualizando a posição dos jogadores!
+
+                        if(pacoteInGame.direcao == playersInGame.jogador[pacoteInGame.idClient].direcao){
+
+                            playersInGame.jogador[pacoteInGame.idClient].colunaSprite ++;
+
+                            if(playersInGame.jogador[pacoteInGame.idClient].direcao == 'w'){
+                                
+                                if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoW - 1){
+
+                                playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                                }
+                                
+                            } else if(playersInGame.jogador[pacoteInGame.idClient].direcao == 's'){
+                                
+                                if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoS - 1){
+
+                                playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                                }
+                            } else if(playersInGame.jogador[pacoteInGame.idClient].direcao == 'a'){
+                                
+                                if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoA - 1){
+
+                                playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                                }
+                            } else if(playersInGame.jogador[pacoteInGame.idClient].direcao == 'd'){
+                                
+                                if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoD - 1){
+
+                                playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                                }
+                            } 
+                            
+                        } else if (pacoteInGame.direcao != playersInGame.jogador[pacoteInGame.idClient].direcao){
+
+                            playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                        }
+
+                        playersInGame.jogador[pacoteInGame.idClient].pos.posX = pacoteInGame.posX;
+                        playersInGame.jogador[pacoteInGame.idClient].pos.posY = pacoteInGame.posY;
+                        playersInGame.jogador[pacoteInGame.idClient].direcao = pacoteInGame.direcao;
+
+                    } else if(pacoteInGame.flag == 1){  //Algum jogador perdeu vida!
+
+                        playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
+
+                    } else if(pacoteInGame.flag == 2){  //Eu que morri!
+
+                        printf("Morri!\n");
+                        inDeath = 1;
+                        inGame = 0;
+
+                    } else if(pacoteInGame.flag == 3 && pacoteInGame.idClient != meuID ){  //Algum jogador morreu!
+
+                        printDeath = 1;
+                        playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
+                        sprintf(messagePlayerDeath, "Player %d is dead!", pacoteInGame.idClient);
+                        printf("%s\n", messagePlayerDeath);
+                    }
+                }
+
+            while(!al_is_event_queue_empty(eventsQueue)){
+
+                rec = recvMsgFromServer(&pacoteInGame, DONT_WAIT);
+
+                if(rec != NO_MESSAGE){  
+
+                    if(pacoteInGame.flag == 0){ //Atualizando a posição dos jogadores!
+
+                        if(pacoteInGame.direcao == playersInGame.jogador[pacoteInGame.idClient].direcao){
+
+                            playersInGame.jogador[pacoteInGame.idClient].colunaSprite ++;
+
+                            if(playersInGame.jogador[pacoteInGame.idClient].direcao == 'w'){
+                                
+                                if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoW - 1){
+
+                                playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                                }
+                                
+                            } else if(playersInGame.jogador[pacoteInGame.idClient].direcao == 's'){
+                                
+                                if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoS - 1){
+
+                                playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                                }
+                            } else if(playersInGame.jogador[pacoteInGame.idClient].direcao == 'a'){
+                                
+                                if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoA - 1){
+
+                                playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                                }
+                            } else if(playersInGame.jogador[pacoteInGame.idClient].direcao == 'd'){
+                                
+                                if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoD - 1){
+
+                                playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                                }
+                            } 
+                            
+                        } else if (pacoteInGame.direcao != playersInGame.jogador[pacoteInGame.idClient].direcao){
+
+                            playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
+
+                        }
+
+                        playersInGame.jogador[pacoteInGame.idClient].pos.posX = pacoteInGame.posX;
+                        playersInGame.jogador[pacoteInGame.idClient].pos.posY = pacoteInGame.posY;
+                        playersInGame.jogador[pacoteInGame.idClient].direcao = pacoteInGame.direcao;
+
+                    } else if(pacoteInGame.flag == 1){  //Algum jogador perdeu vida!
+
+                        playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
+
+                    } else if(pacoteInGame.flag == 2){  //Eu que morri!
+
+                        printf("Morri!\n");
+                        inDeath = 1;
+                        inGame = 0;
+
+                    } else if(pacoteInGame.flag == 3 && pacoteInGame.idClient != meuID){  //Algum jogador morreu!
+
+                        printDeath = 1;
+                        playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
+                        sprintf(messagePlayerDeath, "Player %d is dead!", pacoteInGame.idClient);
+                        printf("%s\n", messagePlayerDeath);
+                    }
+                }
+
+                ALLEGRO_EVENT inDeathGame;
+                al_wait_for_event(eventsQueue, &inDeathGame);
+
+                if (inDeathGame.type == ALLEGRO_EVENT_KEY_DOWN){
+
+                    char mov;
+                    
+                    switch(inDeathGame.keyboard.keycode){
+
+                        case ALLEGRO_KEY_ESCAPE:
+
+                            mov = '*';
+                            sendMsgToServer(&mov, sizeof(char));
+                            inDeath = 0;
+                            apertouBotaoPlay = 0;
+                            break;
+
+                    }
+                }
+
+            }
+
+            printMap();
+            printSprite();
+            printHeart();
+
+            if(printDeath){     //Mensagem de player morto!
+
+                printMessageDeathScreen(messagePlayerDeath);
+
+                if(timerPrintDeath >= 100){
+
+                    timerPrintDeath = 0;
+                    printDeath = 0;
+
+                }
+
+                timerPrintDeath++;
+            }
+
+            printDeathScreen();
+
+            al_flip_display();
+            FPSLimit();
+
+            }
+            
         }
 
         if(apertouBotaoHowtoPlay == 1){			//Tela How to play vai ficar aqui
@@ -670,7 +940,7 @@ int main() {
             al_draw_bitmap(botaoExit, 300, 480, 0);
             al_flip_display(); //atualiza tela
 
-        }
+    }
 
   allegroEnd();
   return 0;
@@ -782,11 +1052,12 @@ void printChooseChar(){
 
     al_draw_bitmap(BackgroundMenu,0,0,0);
 
-    al_draw_bitmap(skeletonButton, (LARGURA/10) *1, 220, 0);
-    al_draw_bitmap(ripperButton, (LARGURA/10) *3, 220, 0);
-    al_draw_bitmap(ripperButton, (LARGURA/10) *5, 220, 0);
-    al_draw_bitmap(ripperButton, (LARGURA/10) *7, 220, 0);
-    al_draw_bitmap(ripperButton, (LARGURA/10) *3, 400, 0);
+    al_draw_bitmap(skeletonButton, (LARGURA/5) *1+20, 220, 0);
+    al_draw_bitmap(ripperButton, (LARGURA/5) *2+20, 220, 0);
+    al_draw_bitmap(deathKnightButton, (LARGURA/5) *3+20, 220, 0);
+    al_draw_bitmap(ogreButton, (LARGURA/5) *1+20, 400, 0);
+    al_draw_bitmap(goblinButton, (LARGURA/5) *2 + 25, 400, 0);
+    al_draw_bitmap(skeleton05Button, (LARGURA/5) *3+20, 430, 0);
 
     
 
@@ -1505,6 +1776,33 @@ void printSprite(){
             }
         }
 
+        if(playersInGame.jogador[i].qualPers == 5){     //Minha sprite é Skeleton05
+
+            if(playersInGame.jogador[i].direcao == 'w'){
+
+            al_draw_bitmap_region(Sprite_Skeleton05, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) +9, playersInGame.jogador[i].spriteJogador.linhaW * playersInGame.jogador[i].spriteJogador.espacamento +6,32, 32 , x*32 , y*32 , 0);
+
+            }
+
+            if(playersInGame.jogador[i].direcao == 's'){
+
+                al_draw_bitmap_region(Sprite_Skeleton05, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) +9, playersInGame.jogador[i].spriteJogador.linhaS * playersInGame.jogador[i].spriteJogador.espacamento +6,32, 32 , x*32 , y*32 , 0);
+
+            }
+
+            if(playersInGame.jogador[i].direcao == 'a'){
+
+                al_draw_bitmap_region(Sprite_Skeleton05, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) +9, playersInGame.jogador[i].spriteJogador.linhaA * playersInGame.jogador[i].spriteJogador.espacamento +6,32, 32 , x*32 , y*32 , ALLEGRO_FLIP_HORIZONTAL);
+
+            }
+
+            if(playersInGame.jogador[i].direcao == 'd'){
+
+                al_draw_bitmap_region(Sprite_Skeleton05, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) +9, playersInGame.jogador[i].spriteJogador.linhaD * playersInGame.jogador[i].spriteJogador.espacamento +6,32, 32 , x*32 , y*32 , 0);
+
+            }
+        }            
+
     }
 }
 
@@ -1631,8 +1929,48 @@ void configuraSprite(){
             spriteConfigurada.limiteAtaqueA = 3;
             spriteConfigurada.limiteAtaqueD = 3;
             playersInGame.jogador[i].spriteJogador = spriteConfigurada;
+        }      
+
+        if(playersInGame.jogador[i].qualPers == 5){ //Configurando dados da sprite Skeleton05
+
+            spriteConfigurada.linhaW = 4;
+            spriteConfigurada.linhaS = 7;
+            spriteConfigurada.linhaA = 1;
+            spriteConfigurada.linhaD = 1;
+            spriteConfigurada.limiteMovimentacaoW = 4;
+            spriteConfigurada.limiteMovimentacaoS = 4;
+            spriteConfigurada.limiteMovimentacaoA = 4;
+            spriteConfigurada.limiteMovimentacaoD = 4; //O limite muda para os lados!
+            spriteConfigurada.linhaAtaqueW = 3;
+            spriteConfigurada.linhaAtaqueS = 6;
+            spriteConfigurada.linhaAtaqueA = 0;
+            spriteConfigurada.linhaAtaqueD = 0;
+            spriteConfigurada.espacamento = 49;
+            spriteConfigurada.limiteAtaqueW = 3;
+            spriteConfigurada.limiteAtaqueS = 3;
+            spriteConfigurada.limiteAtaqueA = 3;
+            spriteConfigurada.limiteAtaqueD = 3;
+            playersInGame.jogador[i].spriteJogador = spriteConfigurada;
         }                                     
     }
+}
+
+void printMessageDeathScreen(char str[]){ 
+
+    al_draw_text(ubuntu, al_map_rgb(255, 255, 255), LARGURA - al_get_font_ascent(ubuntu),(HEIGHT - al_get_font_ascent(ubuntu)) - 20, ALLEGRO_ALIGN_RIGHT, str);
+
+}
+
+void printDeathScreen(){
+
+    al_draw_text(fonteHTPTitulo, al_map_rgb(255, 255, 255), WIDTH / 2, 30, ALLEGRO_ALIGN_CENTRE, "You are Dead!");
+    al_draw_text(fonteHTP, al_map_rgb(255, 255, 255), 20, (HEIGHT - al_get_font_ascent(fonteHTP)) - 20, ALLEGRO_ALIGN_LEFT, "Press ESC to exit...");
+    
+}
+
+void printWinnerScreen(){
+
+
 }
 
 void Playsound(){
@@ -1645,5 +1983,49 @@ void Playsound(){
     //defina que o stream vai tocar no modo repeat 
     al_set_audio_stream_playmode(menuGameSong, ALLEGRO_PLAYMODE_LOOP);
    
-    
 }
+
+/*
+void PlayAttacksound(int idchar){
+     switch (idchar)
+     {
+     case 0:
+         al_play_sample(SwordAttackSound,1.0,0.0,1.25,ALLEGRO_PLAYMODE_ONCE,NULL);
+         break;
+
+     case 1:
+        al_play_sample(SwordAttackSound2,1.0,0.0,1.25,ALLEGRO_PLAYMODE_ONCE,NULL);
+         break;
+
+     case 2: 
+        al_play_sample(SwordAttackSound3,1.0,0.0,1.25,ALLEGRO_PLAYMODE_ONCE,NULL);
+         break;
+
+     case 3: 
+        al_play_sample(SwordAttackSound4,1.0,0.0,1.25,ALLEGRO_PLAYMODE_ONCE,NULL);
+         break;
+
+     case 4: 
+        al_play_sample(SwordAttackSound5,1.0,0.0,1.25,ALLEGRO_PLAYMODE_ONCE,NULL);
+         break;
+
+     case 5: 
+        al_play_sample(SwordAttackSound6,1.0,0.0,1.25,ALLEGRO_PLAYMODE_ONCE,NULL);
+         break;
+        
+     
+     }
+
+
+  void inGamesound(){
+
+        al_reserve_samples(7);
+
+        //liga o stream no mixer
+        al_attach_audio_stream_to_mixer(inGameSong, al_get_default_mixer());
+
+        //defina que o stream vai tocar no modo repeat 
+        al_set_audio_stream_playmode(inGameSong, ALLEGRO_PLAYMODE_LOOP);
+    
+  }
+*/

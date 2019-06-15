@@ -53,6 +53,7 @@ ALLEGRO_BITMAP *ripperButton;
 ALLEGRO_BITMAP *deathKnightButton;
 ALLEGRO_BITMAP *ogreButton;
 ALLEGRO_BITMAP *goblinButton;
+ALLEGRO_BITMAP *skeleton05Button;
 
 ALLEGRO_BITMAP *grama;   //Variaveis do mapa!
 ALLEGRO_BITMAP *pedra;
@@ -70,6 +71,8 @@ ALLEGRO_BITMAP *Sprite_Ripper01;
 ALLEGRO_BITMAP *Sprite_DeathKnight02;
 ALLEGRO_BITMAP *Sprite_Ogre03;
 ALLEGRO_BITMAP *Sprite_Goblin04;
+ALLEGRO_BITMAP *Sprite_Skeleton05;
+
 
 //========================
 
@@ -78,6 +81,14 @@ ALLEGRO_BITMAP *Sprite_Goblin04;
 // SOUNDS 
 
 ALLEGRO_AUDIO_STREAM *menuGameSong;
+//ALLEGRO_AUDIO_STREAM *inGameSong;
+// ALLEGRO_SAMPLE *SwordAttackSound;
+// ALLEGRO_SAMPLE *SwordAttackSound2;
+// ALLEGRO_SAMPLE *SwordAttackSound3;
+// ALLEGRO_SAMPLE *SwordAttackSound4;
+// ALLEGRO_SAMPLE *SwordAttackSound5;
+// ALLEGRO_SAMPLE *SwordAttackSound6;
+
 
 
 
@@ -145,10 +156,10 @@ typedef struct {
 
 typedef struct {
 
-    int posX;
-    int posY;
-    int idClient;
-    int vida;
+    int posX;             //Flag 0 = Pacote de movimentação
+    int posY;             //Flag 1 = Pacote de perda de vida
+    int idClient;         //Flag 2 = Pacote dizendo que o client morreu!
+    int vida;             //Flag 3 = Pacote dizendo qual client morreu! 
     int flag;
     char direcao;
 

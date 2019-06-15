@@ -41,6 +41,14 @@ bool coreInit(){  //Inicializando os modulos basicos!
 
    }
 
+/*  if(!al_reserve_samples(7)){
+
+     fprintf(stderr, "Falha ao inicializar add-on al_reserve_sample.\n");
+      return -1;
+
+}
+*/
+
    if(!al_init_acodec_addon()) {
 
    fprintf(stderr, "failed to initialize audio codecs!\n");
@@ -58,6 +66,8 @@ bool coreInit(){  //Inicializando os modulos basicos!
 
     return true;
 }
+
+
 
 bool windowInit(int W, int H, char title[]){    //Inicializando a janela!
 
@@ -399,27 +409,36 @@ bool loadGraphics(){    //Carregando todos os graficos!
         return false;
     }
 
-    deathKnightButton = al_load_bitmap("examples/graphicChat/Resources/Tilesets/RipperButton.png");
+    deathKnightButton = al_load_bitmap("examples/graphicChat/Resources/Tilesets/DeathKnightButton.png");
     
-    if (!ripperButton){
+    if (!deathKnightButton){
 
         fprintf(stderr, "Falha carregando ripperButton.png\n");
         return false;
     }
 
-    ogreButton = al_load_bitmap("examples/graphicChat/Resources/Tilesets/RipperButton.png");
+    ogreButton = al_load_bitmap("examples/graphicChat/Resources/Tilesets/OgreButton.png");
     
-    if (!ripperButton){
+    if (!ogreButton){
 
         fprintf(stderr, "Falha carregando ogre.png\n");
         return false;
     }
 
-    goblinButton = al_load_bitmap("examples/graphicChat/Resources/Tilesets/RipperButton.png");
+    goblinButton = al_load_bitmap("examples/graphicChat/Resources/Tilesets/GoblinButton.png");
     
-    if (!ripperButton){
+    if (!goblinButton){
 
         fprintf(stderr, "Falha carregando goblinButton.png\n");
+        return false;
+    }
+
+    
+    skeleton05Button = al_load_bitmap("examples/graphicChat/Resources/Tilesets/Skeleton05Button.png");
+
+    if (!skeleton05Button){
+
+        fprintf(stderr, "Falha carregando Skeleton05Button.png\n");
         return false;
     }
 
@@ -469,6 +488,15 @@ bool loadGraphics(){    //Carregando todos os graficos!
         return false;
 
     }
+    
+    Sprite_Skeleton05 = al_load_bitmap("examples/graphicChat/Resources/Tilesets/Sprite_Skeleton05.png"); 
+    
+    if (!Sprite_Skeleton05){
+
+        fprintf(stderr, "Falha carregando Sprite_Skeleton05.png");
+        return false;
+
+    }
 
     //Carregando os sons
 
@@ -480,6 +508,71 @@ bool loadGraphics(){    //Carregando todos os graficos!
         return false;
 
     }
+ /* 
+    inGameSong = al_load_audio_stream("examples/graphicChat/Resources/Tilesets/inGameSong.ogg", 4, 1024);
 
+    if (!inGameSong){
+
+        fprintf(stderr, "Falha carregando inGameSong.ogg");
+        return false;
+
+    }
+
+    SwordAttackSound = al_load_sample("examples/graphicChat/Resources/Tilesets/SwordAttackSound.ogg");
+    
+    if (!SwordAttackSound){
+
+        fprintf(stderr, "Falha carregando SwordAttackSound.ogg");
+        return false;
+
+    }
+
+    SwordAttackSound2 = al_load_sample("examples/graphicChat/Resources/Tilesets/SwordAttackSound2.ogg");
+    
+    if (!SwordAttackSound2){
+
+        fprintf(stderr, "Falha carregando SwordAttackSound2.ogg");
+        return false;
+
+    }
+
+    SwordAttackSound3 = al_load_sample("examples/graphicChat/Resources/Tilesets/SwordAttackSound3.ogg");
+    
+    if (!SwordAttackSound3){
+
+        fprintf(stderr, "Falha carregando SwordAttackSound3.ogg");
+        return false;
+
+    }
+
+    SwordAttackSound4 = al_load_sample("examples/graphicChat/Resources/Tilesets/SwordAttackSound4.ogg");
+    
+    if (!SwordAttackSound4){
+
+        fprintf(stderr, "Falha carregando SwordAttackSound4.ogg");
+        return false;
+
+    }
+
+    SwordAttackSound5 = al_load_sample("examples/graphicChat/Resources/Tilesets/SwordAttackSound5.ogg");
+    
+    if (!SwordAttackSound5){
+
+        fprintf(stderr, "Falha carregando SwordAttackSound5.ogg");
+        return false;
+
+    }
+
+    SwordAttackSound6 = al_load_sample("examples/graphicChat/Resources/Tilesets/SwordAttackSound6.ogg");
+    
+    if (!SwordAttackSound6){
+
+        fprintf(stderr, "Falha carregando SwordAttackSound6.ogg");
+        return false;
+
+    }
+
+
+  */
     return true;
 }
