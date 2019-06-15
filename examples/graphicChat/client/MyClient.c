@@ -16,7 +16,7 @@
 #define MAX_LOG_SIZE 17
 
 
-//Variaveis globais
+//Variaveis globais!
 
 Inicio playersInGame;
 Personagem posicoes[MAX_CHAT_CLIENTS];
