@@ -707,6 +707,9 @@ int main() {
                 FPSLimit();		  
             }
 
+            printDeath = 0;
+            timerPrintDeath = 0;
+
             while(inDeath){     //Tela de morte
 
                 int rec = recvMsgFromServer(&pacoteInGame, DONT_WAIT);
@@ -937,7 +940,9 @@ int main() {
                 FPSLimit();
                 printf("entrei!\n");
             }
-
+            
+            printDeath = 0;
+            timerPrintDeath = 0;
             al_rewind_audio_stream(menuGameSong);
 
         }               
