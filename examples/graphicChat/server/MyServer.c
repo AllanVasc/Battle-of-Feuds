@@ -83,13 +83,77 @@ int main() {
         printf("%s connected id = %d\n", client_names[id], id);
         aux2.mensagem[0]='\0';
 
-        qtdJogadores++;                     //Configurando o personagem!  
-        pacote.jogador[id].qualPers = id;
-        pacote.jogador[id].direcao = 's';
-        pacote.jogador[id].vida = 5;
-        pacote.jogador[id].pos.posX = 0 + id;
-        pacote.jogador[id].pos.posY = 0 + id;
-        pacote.jogador[id].colunaSprite = 0;
+        qtdJogadores++;                     
+
+        switch(id){ //Configurando o personagem! 
+          
+          case 0:
+
+            pacote.jogador[id].qualPers = id;
+            pacote.jogador[id].direcao = 's';
+            pacote.jogador[id].vida = 5;
+            pacote.jogador[id].pos.posX = 4;
+            pacote.jogador[id].pos.posY = 7;
+            pacote.jogador[id].colunaSprite = 0;
+
+            break;
+
+          case 1:
+
+            pacote.jogador[id].qualPers = id;
+            pacote.jogador[id].direcao = 's';
+            pacote.jogador[id].vida = 5;
+            pacote.jogador[id].pos.posX = 2;
+            pacote.jogador[id].pos.posY = 17;
+            pacote.jogador[id].colunaSprite = 0;
+            
+            break;
+
+          case 2:
+
+            pacote.jogador[id].qualPers = id;
+            pacote.jogador[id].direcao = 's';
+            pacote.jogador[id].vida = 5;
+            pacote.jogador[id].pos.posX = 12;
+            pacote.jogador[id].pos.posY = 2;
+            pacote.jogador[id].colunaSprite = 0;
+            
+            break;
+
+          case 3:
+
+            pacote.jogador[id].qualPers = id;
+            pacote.jogador[id].direcao = 's';
+            pacote.jogador[id].vida = 5;
+            pacote.jogador[id].pos.posX = 16;
+            pacote.jogador[id].pos.posY = 20;
+            pacote.jogador[id].colunaSprite = 0;
+            
+            break;
+
+          case 4:
+
+            pacote.jogador[id].qualPers = id;
+            pacote.jogador[id].direcao = 's';
+            pacote.jogador[id].vida = 5;
+            pacote.jogador[id].pos.posX = 24;
+            pacote.jogador[id].pos.posY = 7;
+            pacote.jogador[id].colunaSprite = 0;
+            
+            break;
+
+          case 5:
+
+            pacote.jogador[id].qualPers = id;
+            pacote.jogador[id].direcao = 's';
+            pacote.jogador[id].vida = 5;
+            pacote.jogador[id].pos.posX = 26;
+            pacote.jogador[id].pos.posY = 16;
+            pacote.jogador[id].colunaSprite = 0;
+            
+            break;
+
+        } 
 
       }
 

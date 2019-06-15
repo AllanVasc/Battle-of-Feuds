@@ -508,15 +508,35 @@ bool loadGraphics(){    //Carregando todos os graficos!
         return false;
 
     }
- /* 
-    inGameSong = al_load_audio_stream("examples/graphicChat/Resources/Tilesets/inGameSong.ogg", 4, 1024);
 
-    if (!inGameSong){
+    conflictSong = al_load_audio_stream("examples/graphicChat/Resources/Tilesets/conflictSong.ogg", 4, 1024);
 
-        fprintf(stderr, "Falha carregando inGameSong.ogg");
+    if (!conflictSong){
+
+        fprintf(stderr, "Falha carregando conflictSong.ogg");
         return false;
 
     }
+
+    deathSong = al_load_audio_stream("examples/graphicChat/Resources/Tilesets/deathSong.ogg", 4, 1024);
+
+    if (!deathSong){
+
+        fprintf(stderr, "Falha carregando deathSong.ogg");
+        return false;
+
+    }
+
+    victorySong = al_load_audio_stream("examples/graphicChat/Resources/Tilesets/victorySong.ogg", 4, 1024);
+    
+    if (!victorySong){
+
+        fprintf(stderr, "Falha carregando victorySong.ogg");
+        return false;
+
+    }
+
+ /* 
 
     SwordAttackSound = al_load_sample("examples/graphicChat/Resources/Tilesets/SwordAttackSound.ogg");
     
@@ -571,25 +591,6 @@ bool loadGraphics(){    //Carregando todos os graficos!
         return false;
 
     }
-
-    Victory = al_load_sample("examples/graphicChat/Resources/Tilesets/Victory.ogg");
-    
-    if (!Victory){
-
-        fprintf(stderr, "Falha carregando Victory.ogg");
-        return false;
-
-    }
-
-    Death = al_load_sample("examples/graphicChat/Resources/Tilesets/Death.ogg");
-    
-    if (!Death){
-
-        fprintf(stderr, "Falha carregando Death.ogg");
-        return false;
-
-    }
-
 
   */
     return true;

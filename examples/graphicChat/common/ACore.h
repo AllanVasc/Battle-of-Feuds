@@ -81,18 +81,16 @@ ALLEGRO_BITMAP *Sprite_Skeleton05;
 // SOUNDS 
 
 ALLEGRO_AUDIO_STREAM *menuGameSong;
-//ALLEGRO_AUDIO_STREAM *inGameSong;
+ALLEGRO_AUDIO_STREAM *deathSong;
+ALLEGRO_AUDIO_STREAM *victorySong;
+ALLEGRO_AUDIO_STREAM *conflictSong;
+
 // ALLEGRO_SAMPLE *SwordAttackSound;
 // ALLEGRO_SAMPLE *SwordAttackSound2;
 // ALLEGRO_SAMPLE *SwordAttackSound3;
 // ALLEGRO_SAMPLE *SwordAttackSound4;
 // ALLEGRO_SAMPLE *SwordAttackSound5;
 // ALLEGRO_SAMPLE *SwordAttackSound6;
-// ALLEGRO_SAMPLE *Victory;
-// ALLEGRO_SAMPLE *Death;
-
-
-
 
 //========================
 

@@ -67,13 +67,11 @@ void assertConnection(char IP[], char login[]);
 void printSprite();
 void printHeart();
 void configuraSprite();
-void Playsound();
+void Playsound(ALLEGRO_AUDIO_STREAM *musica);
 void printMessageDeathScreen(char str[]);
 void printDeathScreen();
 void printWinnerScreen();
 //void PlayAttacksound(int idchar);
-//void inGamesound();
-//void Lifesound(int victoryordeath);
 
 int main() {
 
@@ -102,7 +100,7 @@ int main() {
 
     while (inMenu){
 
-        Playsound();
+        Playsound(menuGameSong);
         al_set_audio_stream_playing(menuGameSong,1);    
 
         while(!al_is_event_queue_empty(eventsQueue)){
@@ -509,6 +507,9 @@ int main() {
                 recvMsgFromServer(&playersInGame, WAIT_FOR_IT);    //Recebendo os dados de todos os personagens para iniciar o jogo!
                 printf("Dados de todos os jogadores recebidos!\n");
                 printf("Quantidade de jogadores: [%d]\n", playersInGame.qtdPlayers);
+
+                Playsound(conflictSong);
+                al_set_audio_stream_playing(conflictSong,1);
                 al_set_audio_stream_playing(menuGameSong,0);
 
             }
@@ -579,6 +580,12 @@ int main() {
                         printf("Morri!\n");
                         playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
                         playersInGame.jogador[pacoteInGame.idClient].qualPers = -1;
+
+                        al_set_audio_stream_playing(conflictSong,0);
+
+                        Playsound(deathSong);
+                        al_set_audio_stream_playing(deathSong,1);
+                        
                         inDeath = 1;
                         inGame = 0;
 
@@ -594,6 +601,12 @@ int main() {
                     } else if(pacoteInGame.flag == 4){  //Fim de jogo!
 
                         printf("Eu ganhei!\n");
+
+                        al_set_audio_stream_playing(conflictSong,0);
+
+                        Playsound(victorySong); 
+                        al_set_audio_stream_playing(victorySong,1);
+
                         inWinner = 1;
                         inGame = 0;
                     }
@@ -662,6 +675,12 @@ int main() {
                             printf("Morri!\n");
                             playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
                             playersInGame.jogador[pacoteInGame.idClient].qualPers = -1;
+
+                            al_set_audio_stream_playing(conflictSong,0);
+
+                            Playsound(deathSong);
+                            al_set_audio_stream_playing(deathSong,1);
+
                             inDeath = 1;
                             inGame = 0;
 
@@ -677,6 +696,12 @@ int main() {
                         } else if(pacoteInGame.flag == 4){  //Fim de jogo!
 
                             printf("Eu ganhei aqui!\n");
+
+                            al_set_audio_stream_playing(conflictSong,0);
+
+                            Playsound(victorySong); 
+                            al_set_audio_stream_playing(victorySong,1);
+
                             inWinner = 1;
                             inGame = 0;
                             break;
@@ -828,6 +853,12 @@ int main() {
                         printf("Morri!\n");
                         playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
                         playersInGame.jogador[pacoteInGame.idClient].qualPers = -1;
+
+                        al_set_audio_stream_playing(conflictSong,0);
+
+                        Playsound(deathSong);
+                        al_set_audio_stream_playing(deathSong,1);
+
                         inDeath = 1;
                         inGame = 0;
 
@@ -905,6 +936,12 @@ int main() {
                         printf("Morri!\n");
                         playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
                         playersInGame.jogador[pacoteInGame.idClient].qualPers = -1;
+
+                        al_set_audio_stream_playing(conflictSong,0);
+
+                        Playsound(deathSong);
+                        al_set_audio_stream_playing(deathSong,1);
+
                         inDeath = 1;
                         inGame = 0;
 
@@ -934,7 +971,14 @@ int main() {
                             sendMsgToServer(&mov, sizeof(char));
                             inDeath = 0;
                             apertouBotaoPlay = 0;
+
+                            al_set_audio_stream_playing(deathSong,0);
+                            al_set_audio_stream_playing(menuGameSong,1);
+
+                            al_rewind_audio_stream(conflictSong);
+                            al_rewind_audio_stream(victorySong);
                             al_rewind_audio_stream(menuGameSong);
+                            al_rewind_audio_stream(deathSong);
                             break;
 
                     }
@@ -974,7 +1018,6 @@ int main() {
 
                     ALLEGRO_EVENT inWinnerEvent;
                     al_wait_for_event(eventsQueue, &inWinnerEvent);
-                    //Lifesound(0);
 
                     if (inWinnerEvent.type == ALLEGRO_EVENT_KEY_DOWN){
                         
@@ -988,7 +1031,14 @@ int main() {
                                 sendMsgToServer(&mov, sizeof(char));
                                 inWinner = 0;
                                 apertouBotaoPlay = 0;
+
+                                al_set_audio_stream_playing(victorySong,0);
+                                al_set_audio_stream_playing(menuGameSong,1);
+                                
+                                al_rewind_audio_stream(conflictSong);
+                                al_rewind_audio_stream(victorySong);
                                 al_rewind_audio_stream(menuGameSong);
+                                al_rewind_audio_stream(deathSong);
                                 break;
 
                         }
@@ -2146,15 +2196,15 @@ void printWinnerScreen(){
 
 }
 
-void Playsound(){
+void Playsound(ALLEGRO_AUDIO_STREAM *musica){
        
      al_reserve_samples(1);
 
     //liga o stream no mixer
-    al_attach_audio_stream_to_mixer(menuGameSong, al_get_default_mixer());
+    al_attach_audio_stream_to_mixer(musica, al_get_default_mixer());
 
     //defina que o stream vai tocar no modo repeat 
-    al_set_audio_stream_playmode(menuGameSong, ALLEGRO_PLAYMODE_LOOP);
+    al_set_audio_stream_playmode(musica, ALLEGRO_PLAYMODE_LOOP);
    
 }
 
@@ -2188,31 +2238,4 @@ void PlayAttacksound(int idchar){
         
      
      }
-
-
-  void inGamesound(){
-
-        al_reserve_samples(7);
-
-        //liga o stream no mixer
-        al_attach_audio_stream_to_mixer(inGameSong, al_get_default_mixer());
-
-        //defina que o stream vai tocar no modo repeat 
-        al_set_audio_stream_playmode(inGameSong, ALLEGRO_PLAYMODE_LOOP);
-    
-  }
-
-  void Lifesound(int victoryordeath){
-        switch(victoryordeath)
-    {
-         case 0:
-            al_play_sample(Victory,1.0,0.0,1.25,ALLEGRO_PLAYMODE_ONCE,NULL);
-            break;
-         case 1:
-            al_play_sample(Death,1.0,0.0,1.25,ALLEGRO_PLAYMODE_ONCE,NULL);
-            break;
-         
-    }        
-                
-  }  
 */
