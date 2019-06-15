@@ -41,7 +41,7 @@ bool coreInit(){  //Inicializando os modulos basicos!
 
    }
 
-/*  if(!al_reserve_samples(7)){
+/*  if(!al_reserve_samples(14)){
 
      fprintf(stderr, "Falha ao inicializar add-on al_reserve_sample.\n");
       return -1;
@@ -568,6 +568,24 @@ bool loadGraphics(){    //Carregando todos os graficos!
     if (!SwordAttackSound6){
 
         fprintf(stderr, "Falha carregando SwordAttackSound6.ogg");
+        return false;
+
+    }
+
+    Victory = al_load_sample("examples/graphicChat/Resources/Tilesets/Victory.ogg");
+    
+    if (!Victory){
+
+        fprintf(stderr, "Falha carregando Victory.ogg");
+        return false;
+
+    }
+
+    Death = al_load_sample("examples/graphicChat/Resources/Tilesets/Death.ogg");
+    
+    if (!Death){
+
+        fprintf(stderr, "Falha carregando Death.ogg");
         return false;
 
     }

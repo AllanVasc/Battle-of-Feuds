@@ -73,11 +73,13 @@ void printDeathScreen();
 void printWinnerScreen();
 //void PlayAttacksound(int idchar);
 //void inGamesound();
+//void Lifesound(int victoryordeath);
 
 int main() {
 
     int apertouBotaoPlay = 0, inMenu = 1, inGame = 0, apertouBotaoExit = 0, apertouBotaoHowtoPlay = 0, delay = 0, inChat = 0, inChooseChar;
     int printDeath = 0, timerPrintDeath = 0, inDeath = 0;
+    int inWinner = 0;
     char messagePlayerDeath[100];
     int i,k;
 
@@ -100,7 +102,8 @@ int main() {
 
     while (inMenu){
 
-        Playsound();    
+        //Playsound();
+        //al_set_audio_stream_playing(menuGameSong,1);    
 
         while(!al_is_event_queue_empty(eventsQueue)){
             
@@ -457,7 +460,7 @@ int main() {
                 printf("Dados de todos os jogadores recebidos!\n");
                 printf("Quantidade de jogadores: [%d]\n", playersInGame.qtdPlayers);
                 //al_destroy_audio_stream(menuGameSong);
-                al_set_audio_stream_playing(menuGameSong,0);
+                //al_set_audio_stream_playing(menuGameSong,0);
 
             }
 
@@ -469,7 +472,7 @@ int main() {
                 startTimer();
                 int rec = recvMsgFromServer(&pacoteInGame, DONT_WAIT);
 
-                if(rec != NO_MESSAGE && inDeath == 0){  
+                if(rec != NO_MESSAGE && inDeath == 0 && inWinner == 0){  
 
                     if(pacoteInGame.flag == 0){ //Atualizando a posição dos jogadores!
 
@@ -534,11 +537,17 @@ int main() {
                         playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
                         sprintf(messagePlayerDeath, "Player %d is dead!", pacoteInGame.idClient);
                         printf("%s\n", messagePlayerDeath);
+
+                    } else if(pacoteInGame.flag == 4){  //Fim de jogo!
+
+                        printf("Eu ganhei!\n");
+                        inWinner = 1;
+                        inGame = 0;
                     }
 
                 }
-
-                while(!al_is_event_queue_empty(eventsQueue) && inDeath == 0){
+                
+                while(!al_is_event_queue_empty(eventsQueue) && inDeath == 0 && inWinner == 0){
 
                     rec = recvMsgFromServer(&pacoteInGame, DONT_WAIT);
 
@@ -608,6 +617,13 @@ int main() {
                             playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
                             sprintf(messagePlayerDeath, "Player %d is dead!", pacoteInGame.idClient);
                             printf("%s\n", messagePlayerDeath);
+
+                        } else if(pacoteInGame.flag == 4){  //Fim de jogo!
+
+                            printf("Eu ganhei aqui!\n");
+                            inWinner = 1;
+                            inGame = 0;
+                            break;
                         }
 
                     }
@@ -664,6 +680,7 @@ int main() {
                                 }
                                 
                                 break;
+
                             case ALLEGRO_KEY_K: //Ataque
                                 
                                 mov = 'k';  
@@ -680,6 +697,7 @@ int main() {
                 printMap();
                 printSprite();
                 printHeart();
+
                 if(printDeath){     //Mensagem de player morto!
 
                     printMessageDeathScreen(messagePlayerDeath);
@@ -693,9 +711,9 @@ int main() {
 
                     timerPrintDeath++;
                 }
+
                 al_flip_display();
-                FPSLimit();	
-                //inGame = 0; //Ira ficar preso, ajeitar quando botar a vida!	  
+                FPSLimit();		  
             }
 
             while(inDeath){     //Tela de morte
@@ -804,6 +822,7 @@ int main() {
                                 playersInGame.jogador[pacoteInGame.idClient].colunaSprite = 0;
 
                                 }
+
                             } else if(playersInGame.jogador[pacoteInGame.idClient].direcao == 'd'){
                                 
                                 if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoD - 1){
@@ -848,7 +867,7 @@ int main() {
                 if (inDeathGame.type == ALLEGRO_EVENT_KEY_DOWN){
 
                     char mov;
-                    
+
                     switch(inDeathGame.keyboard.keycode){
 
                         case ALLEGRO_KEY_ESCAPE:
@@ -871,6 +890,7 @@ int main() {
             if(printDeath){     //Mensagem de player morto!
 
                 printMessageDeathScreen(messagePlayerDeath);
+                //Lifesound(1);
 
                 if(timerPrintDeath >= 100){
 
@@ -888,8 +908,44 @@ int main() {
             FPSLimit();
 
             }
+
+            while(inWinner){
+
+                while(!al_is_event_queue_empty(eventsQueue)){
+
+                    ALLEGRO_EVENT inWinnerEvent;
+                    al_wait_for_event(eventsQueue, &inWinnerEvent);
+                    //Lifesound(0);
+
+                    if (inWinnerEvent.type == ALLEGRO_EVENT_KEY_DOWN){
+
+                        switch(inWinnerEvent.keyboard.keycode){
+
+                            case ALLEGRO_KEY_ESCAPE:
+
+                                inWinner = 0;
+                                apertouBotaoPlay = 0;
+                                break;
+
+                        }
+                    }
+
+                }
+
+                printMap();
+                printSprite();
+                printHeart(); 
+                printWinnerScreen();
+                al_flip_display();
+                FPSLimit();
+
+            }
+
             
-        }
+
+        }    
+        //al_rewind_audio_stream(menuGameSong);
+        //Playsound();            
 
         if(apertouBotaoHowtoPlay == 1){			//Tela How to play vai ficar aqui
 
@@ -1635,11 +1691,13 @@ void printMap(){
 void printSprite(){
 
     int i;
+    
+    int auxAtaque = 1;
 
     for(i = 0 ; i < playersInGame.qtdPlayers ; i++){
 
-    int x = playersInGame.jogador[i].pos.posX;
-    int y = playersInGame.jogador[i].pos.posY;
+        int x = playersInGame.jogador[i].pos.posX;
+        int y = playersInGame.jogador[i].pos.posY;
 
         if(playersInGame.jogador[i].qualPers == 0){     //Minha sprite é Skeleton
 
@@ -1666,6 +1724,52 @@ void printSprite(){
                 al_draw_bitmap_region(Sprite_Skeleton0, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) + 8 , playersInGame.jogador[i].spriteJogador.linhaD * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
 
             }
+            /*            
+            if(playersInGame.Jogador[i].direcao == 'k'){
+
+                auxAtaque = 0; // O jogador só vai poder atacar de novo se auxAtaque = 1; (Declaração de auxAtaque fora desse for)
+                timer = al_create_timer(10.0 / FPS); // criando um delay de 10/60 segundo;
+                if(!timer) {
+                    error_msg("Falha ao criar temporizador");
+                    return 0;
+                }
+
+                if(playersInGame.jogador[i].direcao == 'w'){
+
+                    for(int j= 0; j<3; j++){
+                        al_draw_bitmap_region(Sprite_Skeleton0, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento ) + 8 , playersInGame.jogador[i].spriteJogador.linhaAtaqueW * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
+                        colunaSprite++;
+                        al_start_timer(timer);                        
+                    }
+                    colunaSprite = 0;
+                    auxAtaque = 1;
+                }
+
+                if(playersInGame.jogador[i].direcao == 's'){
+
+                    al_draw_bitmap_region(Sprite_Skeleton0, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) + 8 , playersInGame.jogador[i].spriteJogador.linhaS * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
+
+                }
+
+                if(playersInGame.jogador[i].direcao == 'a'){
+
+                    al_draw_bitmap_region(Sprite_Skeleton0, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) + 8 , playersInGame.jogador[i].spriteJogador.linhaA * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , ALLEGRO_FLIP_HORIZONTAL);
+
+                }
+
+                if(playersInGame.jogador[i].direcao == 'd'){
+
+                    al_draw_bitmap_region(Sprite_Skeleton0, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) + 8 , playersInGame.jogador[i].spriteJogador.linhaD * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
+
+                }                
+
+
+
+                
+                
+            }
+            
+            */
         }
 
         if(playersInGame.jogador[i].qualPers == 1){     //Minha sprite é Ripper
@@ -1970,6 +2074,8 @@ void printDeathScreen(){
 
 void printWinnerScreen(){
 
+    al_draw_text(fonteHTPTitulo, al_map_rgb(255, 255, 255), WIDTH / 2, 30, ALLEGRO_ALIGN_CENTRE, "You are the WINNER!");
+    al_draw_text(fonteHTP, al_map_rgb(255, 255, 255), 20, (HEIGHT - al_get_font_ascent(fonteHTP)) - 20, ALLEGRO_ALIGN_LEFT, "Press ESC to exit...");
 
 }
 
@@ -2028,4 +2134,18 @@ void PlayAttacksound(int idchar){
         al_set_audio_stream_playmode(inGameSong, ALLEGRO_PLAYMODE_LOOP);
     
   }
+
+  void Lifesound(int victoryordeath){
+        switch(victoryordeath)
+    {
+         case 0:
+            al_play_sample(Victory,1.0,0.0,1.25,ALLEGRO_PLAYMODE_ONCE,NULL);
+            break;
+         case 1:
+            al_play_sample(Death,1.0,0.0,1.25,ALLEGRO_PLAYMODE_ONCE,NULL);
+            break;
+         
+    }        
+                
+  }  
 */

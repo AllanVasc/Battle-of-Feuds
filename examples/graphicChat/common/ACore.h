@@ -88,6 +88,8 @@ ALLEGRO_AUDIO_STREAM *menuGameSong;
 // ALLEGRO_SAMPLE *SwordAttackSound4;
 // ALLEGRO_SAMPLE *SwordAttackSound5;
 // ALLEGRO_SAMPLE *SwordAttackSound6;
+// ALLEGRO_SAMPLE *Victory;
+// ALLEGRO_SAMPLE *Death;
 
 
 
@@ -160,7 +162,7 @@ typedef struct {
     int posY;             //Flag 1 = Pacote de perda de vida
     int idClient;         //Flag 2 = Pacote dizendo que o client morreu!
     int vida;             //Flag 3 = Pacote dizendo qual client morreu! 
-    int flag;
+    int flag;             //Flag 4 = Pacote dizendo qual client Venceu!
     char direcao;
 
 } DadosInGame;

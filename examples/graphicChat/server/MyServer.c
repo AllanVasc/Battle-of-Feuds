@@ -17,6 +17,8 @@ DADOS aux2;
 Inicio pacote;
 DadosInGame pacoteInGame;
 int idPlayerHittado;
+int qtdJogadoresMortos = 0;
+int idWinner;
 
 int map[24][32] = {      {17, 20, 19, 20, 18, 20, 18, 20, 18, 20, 18, 20, 20, 20, 18, 20, 20, -5, 20, 20, 17, 20, 20, 18, 20, 20, 20, 18, 20, 20, 18,18},
                          {20, 19, 20, 17, 19, 20, 17, 19, -5, 20, 18, 20, 6 , 6 , 6 , 6 , 6 , -1, -2, -6, 20, 20, 18, 20, 20, 18, 20, 20,-55,-56, 20, 20},
@@ -51,10 +53,11 @@ int canHit();
 
 int main() {
 
+  int i;
   char client_names[MAX_CHAT_CLIENTS][LOGIN_MAX_SIZE];
   char str_buffer[BUFFER_SIZE], aux_buffer[BUFFER_SIZE];
   serverInit(MAX_CHAT_CLIENTS);
-  puts("Server is running!!");
+  puts("Servidor esta rodando!\n");
 
   int comecar = 1;
   int InGame = 0 ;
@@ -132,6 +135,7 @@ int main() {
     broadcast(&pacote, sizeof(Inicio));
     printf("Dados de todos os personagens enviados...\n");
     printf("Jogo ira começar...\n");
+    qtdJogadoresMortos = 0;
 
     while(InGame){  //Enquanto o jogo estiver rolando!
 
@@ -296,6 +300,7 @@ int main() {
               } else if(pacote.jogador[idPlayerHittado].vida <= 0){
 
                 printf("Player [%d] morreu!\n", idPlayerHittado); 
+                qtdJogadoresMortos++;
 
                 pacoteInGame.idClient = idPlayerHittado;  //Preparar um pacote especifico para quem morreu!
                 pacoteInGame.vida = 0;
@@ -326,6 +331,37 @@ int main() {
       } else if (mensagemMov.status == DISCONNECT_MSG) {
 
         qtdJogadores--;
+
+      }
+
+      if(qtdJogadoresMortos == qtdJogadores - 1){
+
+        for(i = 0; i < pacote.qtdPlayers; i++){
+
+          if(pacote.jogador[i].vida > 0){
+
+            idWinner = i;
+            break;
+          }
+
+        }
+
+        pacoteInGame.idClient = idWinner;  //Preparar um pacote especifico para quem venceu!
+        pacoteInGame.flag = 4;
+        sendMsgToClient(&pacoteInGame, sizeof(DadosInGame), idWinner);
+        printf("Player [%d] is the WINNER!\n", idWinner);
+
+        comecar = 1;
+        InGame = 0;
+        qtdJogadores = 0;
+        printf("Jogadores desconectados\n");
+        printf("Servidor reiniciando...\n");
+
+        for(i = 0; i < pacote.qtdPlayers; i++){
+
+          disconnectClient(i);
+
+        }
 
       }
 
