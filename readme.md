@@ -1,9 +1,9 @@
-# Projeto de IP
+# Battle Of Feuds
 
-Projeto de Introdução à Programação - CIn, UFPE.  
+Projeto de Introdução à Programação - CIn, UFPE- 2019.1. 
 De maneira geral, o projeto é um jogo que envolve conexão e pessoas em computadores diferentes jogando ao mesmo tempo.  
 Para isso, vai ser usada a arquitetura cliente-servidor, e a ferramenta utilizada na conexão é socket.
-Neste git será disponibilizada uma biblioteca desenvolvida pela equipe de monitores, para facilitar o uso de socket.  
+Neste git foi disponibilizada uma biblioteca desenvolvida pela equipe de monitores, para facilitar o uso de socket.  
 
 ## O que é?
 
@@ -25,12 +25,10 @@ No arquivo do [makefile](./makefile) as variáves _serverName_ e _clientName_ de
 	$ make client
 #### Compilando client e server:
 	$ make
-
-
-## Exemplos:
-Idealmente alguns exemplos de uso da biblioteca serão colocados na pasta de exemplos.
-* [Simple Chat](./examples/simpleChatExplanation.md)
-
+	
+## Jogo desenvolvido por:
 
 ## Agradecimentos:
 Esta é uma modificação de 2016.2, onde [Lucas Santana](https://github.com/luucasv/), [Mateus Valgueiro](https://github.com/Valgueiro), [Vitor Castelo Branco](https://github.com/vtcb) e [Erik Zambom](https://github.com/Zambom) foram contribuidores.
+
+

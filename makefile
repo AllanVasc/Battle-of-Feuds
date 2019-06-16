@@ -1,12 +1,8 @@
-#UNCOMMENT THESE TO COMPILE SIMPLE CHAT
-CLIENTDIR := examples/graphicChat/client
-SERVERDIR := examples/graphicChat/server
-COMMONDIR := examples/graphicChat/common
+#Diretorio dos arquivos do jogo!
 
-#UNCOMMENT THESE TO COMPILE GRAPHIC CHAT
-#CLIENTDIR := examples/graphicChat/client
-#SERVERDIR := examples/graphicChat/server
-#COMMONDIR := examples/graphicChat/common
+CLIENTDIR := Battle_Of_Feuds/client
+SERVERDIR := Battle_Of_Feuds/server
+COMMONDIR := Battle_Of_Feuds/common
 
 CC := gcc -std=c99
 RM := rm -f
