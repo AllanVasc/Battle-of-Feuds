@@ -66,13 +66,13 @@ int main() {
 
   while(1){
 
-    while (comecar){   //Momento do chat e da configuração dos personagens!
+    while (comecar){   //Realiza as conexões e a parte do chat
 
       int id = acceptConnection();
 
       if (id != NO_CONNECTION){
 
-        aux2.valor = id;                              //Mandando o ID para o client!
+        aux2.valor = id;                              //Manda o respectivo ID para o client
         sendMsgToClient(&aux2, sizeof(DADOS), id);
         printf("mandei o id: [%d]\n", aux2.valor);
 
@@ -195,6 +195,7 @@ int main() {
         qtdJogadores--;
 
       }
+
     }
 
     pacote.qtdPlayers = qtdJogadores;      //Envio de todos os jogadores para todos os clients!
@@ -206,7 +207,7 @@ int main() {
     qtdJogadoresMortos = 0;
     jaGanhou = 0;
 
-    while(InGame){  //Enquanto o jogo estiver rolando!
+    while(InGame){  //Realiza toda a logica do jogo
 
       struct msg_ret_t mensagemMov = recvMsg(&movimento); //Recebendo qual movimento foi feito
 
@@ -266,7 +267,7 @@ int main() {
 
             }
 
-            else { // Se encontrou um obstáculo, ele precisa rotacionar a sprite sem tirar do lugar!
+            else {          // Se encontrou um obstáculo, ele precisa rotacionar a sprite sem tirar do lugar!
 
               pacote.jogador[id].direcao = 's'; //Atualiza o backup de players do server!
 
@@ -299,7 +300,7 @@ int main() {
 
             }
 
-            else { // Se encontrou um obstáculo, ele precisa rotacionar a sprite sem tirar do lugar!
+            else {          // Se encontrou um obstáculo, ele precisa rotacionar a sprite sem tirar do lugar!
 
               pacote.jogador[id].direcao = 'a'; //Atualiza o backup de players do server!
 
@@ -333,7 +334,7 @@ int main() {
 
             }
 
-            else { // Se encontrou um obstáculo, ele precisa rotacionar a sprite sem tirar do lugar!
+            else {          // Se encontrou um obstáculo, ele precisa rotacionar a sprite sem tirar do lugar!
 
               pacote.jogador[id].direcao = 'd'; //Atualiza o backup de players do server!
 
@@ -349,9 +350,7 @@ int main() {
 
           break;
 
-          case 'k': //Momento que ele esta atacando
-
-            printf("PLAYER [%d] ATACANDO\n", mensagemMov.client_id);
+          case 'k': //Realiza o ataque
 
             if(canHit(id)){
 
@@ -363,15 +362,13 @@ int main() {
                 pacoteInGame.vida = (pacote.jogador[idPlayerHittado].vida);
                 pacoteInGame.flag = 1;
                 broadcast(&pacoteInGame, sizeof(DadosInGame));
-                printf("Player [%d] esta com [%d] vidas\n", pacoteInGame.idClient, pacoteInGame.vida);
+                //printf("Player [%d] esta com [%d] vidas\n", pacoteInGame.idClient, pacoteInGame.vida); //Debugando!
 
 
-              } else if(pacote.jogador[idPlayerHittado].vida <= 0 && pacote.jogador[idPlayerHittado].qualPers != -1){
-
-                //printf("Player [%d] morreu!\n", idPlayerHittado); 
+              } else if(pacote.jogador[idPlayerHittado].vida <= 0 && pacote.jogador[idPlayerHittado].qualPers != -1){ 
 
                 qtdJogadoresMortos++;
-                printf("MORTOS  = [%d]\n", qtdJogadoresMortos);
+                //printf("MORTOS  = [%d]\n", qtdJogadoresMortos); //Debugando!
                 pacote.jogador[idPlayerHittado].qualPers = -1;
 
                 pacoteInGame.idClient = idPlayerHittado;  //Preparar um pacote especifico para quem morreu!
@@ -390,25 +387,13 @@ int main() {
 
           break;
 
-          case '*': //Player saiu do jogo!
+          case '*': //Algum player saiu do jogo
 
             printf("Player [%d] saiu do jogo!\n", mensagemMov.client_id);
             disconnectClient(mensagemMov.client_id);
 
             playersSairam++;
-            printf("SAIRAM  = [%d]\n", playersSairam);
-
-            if(playersSairam == qtdJogadores){
-              
-              comecar = 1;
-              InGame = 0;
-              playersSairam = 0;
-              qtdJogadores = 0;
-              qtdJogadoresMortos = 0;
-              printf("Jogadores desconectados\n");
-              printf("Servidor reiniciando...\n");
-
-            }
+            //printf("SAIRAM  = [%d]\n", playersSairam); //Debugando!
           
             break;
 
@@ -417,11 +402,11 @@ int main() {
       } else if (mensagemMov.status == DISCONNECT_MSG) {
         
         qtdJogadoresMortos++;
-        printf("MORTOS  = [%d]\n", qtdJogadoresMortos);
+        //printf("MORTOS  = [%d]\n", qtdJogadoresMortos);  //Debugando!
 
       }
 
-      if(qtdJogadoresMortos == qtdJogadores - 1 && jaGanhou == 0) { //Enviar mensagem para o vencedor!
+      if(qtdJogadoresMortos == qtdJogadores - 1 && jaGanhou == 0) { //Realiza o envio da mensagem para o vencedor
 
         for(i = 0; i < pacote.qtdPlayers; i++){
 
@@ -434,7 +419,7 @@ int main() {
         }
         printf("IDWINNER = [%d]\n", idWinner);
 
-        pacoteInGame.idClient = idWinner;  //Preparar um pacote especifico para quem venceu!
+        pacoteInGame.idClient = idWinner;  //Preparando pacote para o jogador vencedor
         pacoteInGame.flag = 4;
         sendMsgToClient(&pacoteInGame, sizeof(DadosInGame), idWinner);
         jaGanhou = 1;
@@ -457,7 +442,7 @@ int main() {
   }
 }
 
-int canMove(char direcao , int id){
+int canMove(char direcao , int id){ //Função que checa se o personagem pode realizar o movimento
 
   int **posicoesJogadores = NULL; 
   int i;
@@ -590,7 +575,7 @@ int canMove(char direcao , int id){
   return 0;
 }
 
-int canHit(int id){
+int canHit(int id){ //Função que checa se o personagem pode realizar o ataque
 
   int **posicoesJogadores = NULL; 
   int i;
@@ -621,7 +606,7 @@ int canHit(int id){
           free(posicoesJogadores[0]);
           free(posicoesJogadores[1]);
           free(posicoesJogadores);
-          printf("Player [%d] ira sofrer o ataque de [%d]\n", idPlayerHittado, id);
+          //printf("Player [%d] ira sofrer o ataque de [%d]\n", idPlayerHittado, id); //Debugando!
 
           return 1;
 
@@ -635,7 +620,7 @@ int canHit(int id){
           free(posicoesJogadores[0]);
           free(posicoesJogadores[1]);
           free(posicoesJogadores);
-          printf("Player [%d] ira sofrer o ataque de [%d]\n", idPlayerHittado, id);
+          //printf("Player [%d] ira sofrer o ataque de [%d]\n", idPlayerHittado, id); //Debugando!
 
           return 1;
 
@@ -649,7 +634,7 @@ int canHit(int id){
           free(posicoesJogadores[0]);
           free(posicoesJogadores[1]);
           free(posicoesJogadores);
-          printf("Player [%d] ira sofrer o ataque de [%d]\n", idPlayerHittado, id);
+          //printf("Player [%d] ira sofrer o ataque de [%d]\n", idPlayerHittado, id); //Debugando!
 
           return 1;
 
@@ -663,7 +648,7 @@ int canHit(int id){
           free(posicoesJogadores[0]);
           free(posicoesJogadores[1]);
           free(posicoesJogadores);
-          printf("Player [%d] ira sofrer o ataque de [%d]\n", idPlayerHittado, id);
+          //printf("Player [%d] ira sofrer o ataque de [%d]\n", idPlayerHittado, id); //Debugando!
 
           return 1;
 

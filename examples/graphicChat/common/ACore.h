@@ -34,32 +34,31 @@ ALLEGRO_FONT *start;
 ALLEGRO_FONT *fonteHTP;
 ALLEGRO_FONT *fonteHTPTitulo;
 
-ALLEGRO_BITMAP *BackgroundMenu;
+ALLEGRO_BITMAP *BackgroundMenu; //Imagens do menu
 ALLEGRO_BITMAP *gameName;
 ALLEGRO_BITMAP *gameIcon;
 ALLEGRO_BITMAP *HTPwasd;
-ALLEGRO_BITMAP *HTPJ;
 ALLEGRO_BITMAP *HTPK;
 ALLEGRO_BITMAP *HTPReturn;
 ALLEGRO_BITMAP *botaoPlay;
 ALLEGRO_BITMAP *botaoHTP;
 ALLEGRO_BITMAP *botaoExit;
-ALLEGRO_BITMAP *texturaMapa;
-ALLEGRO_BITMAP *detalhesDoChao;
-ALLEGRO_BITMAP *charSprite;
-ALLEGRO_BITMAP *heart;
-ALLEGRO_BITMAP *skeletonButton;
+
+ALLEGRO_BITMAP *skeletonButton; //Botões dos personagens
 ALLEGRO_BITMAP *ripperButton;
 ALLEGRO_BITMAP *deathKnightButton;
 ALLEGRO_BITMAP *ogreButton;
 ALLEGRO_BITMAP *goblinButton;
 ALLEGRO_BITMAP *skeleton05Button;
 
-ALLEGRO_BITMAP *grama;   //Variaveis do mapa!
+ALLEGRO_BITMAP *texturaMapa; //Variaveis do mapa!
+ALLEGRO_BITMAP *detalhesDoChao;
+ALLEGRO_BITMAP *grama;   
 ALLEGRO_BITMAP *pedra;
 ALLEGRO_BITMAP *cerca;
 ALLEGRO_BITMAP *obstaculos;
 ALLEGRO_BITMAP *objetos;
+
 //========================
 
 
@@ -73,6 +72,7 @@ ALLEGRO_BITMAP *Sprite_Ogre03;
 ALLEGRO_BITMAP *Sprite_Goblin04;
 ALLEGRO_BITMAP *Sprite_Skeleton05;
 
+ALLEGRO_BITMAP *heart;
 
 //========================
 
@@ -85,20 +85,13 @@ ALLEGRO_AUDIO_STREAM *deathSong;
 ALLEGRO_AUDIO_STREAM *victorySong;
 ALLEGRO_AUDIO_STREAM *conflictSong;
 
-// ALLEGRO_SAMPLE *SwordAttackSound;
-// ALLEGRO_SAMPLE *SwordAttackSound2;
-// ALLEGRO_SAMPLE *SwordAttackSound3;
-// ALLEGRO_SAMPLE *SwordAttackSound4;
-// ALLEGRO_SAMPLE *SwordAttackSound5;
-// ALLEGRO_SAMPLE *SwordAttackSound6;
-
 //========================
 
 
 //========================
 //Structs
 
-typedef struct DADOS{
+typedef struct DADOS{ //Struct usada no inicio do server
 
     char mensagem[100];
     int valor;
@@ -113,7 +106,7 @@ typedef struct {
 
 } Posicao;
 
-typedef struct{ //Struct com os dados da sprite selecionada
+typedef struct{ //Struct com os dados da sprite selecionada pelo client
    
     int linhaW;         
     int linhaS;
@@ -136,7 +129,7 @@ typedef struct{ //Struct com os dados da sprite selecionada
 
 } MoveSprite;
 
-typedef struct{
+typedef struct{ //Struct das configurações do personagem
 
   Posicao pos;
   int qualPers;
@@ -147,7 +140,7 @@ typedef struct{
 
 } Personagem;
 
-typedef struct {
+typedef struct {  //Struct usada em todo o jogo! 
 
   Personagem jogador[MAX_CHAT_CLIENTS];
   int qtdPlayers;
@@ -158,7 +151,7 @@ typedef struct {
 
     int posX;             //Flag 0 = Pacote de movimentação
     int posY;             //Flag 1 = Pacote de perda de vida
-    int idClient;         //Flag 2 = Pacote dizendo que o client morreu!
+    int idClient;         //Flag 2 = Pacote dizendo que o client especifico morreu!
     int vida;             //Flag 3 = Pacote dizendo qual client morreu! 
     int flag;             //Flag 4 = Pacote dizendo qual client Venceu!
     char direcao;
@@ -167,22 +160,22 @@ typedef struct {
 
 //========================
 
-//MAIN ALLEGRO FUNCTIONS
+//Funções iniciais da alegro!
 bool coreInit();
 bool windowInit(int W, int H, char title[]);
 bool inputInit();
 void allegroEnd();
 
-//FPS CONTROL FUNCTIONS
+//Funções para controle do FPS
 void startTimer();
 double getTimer();
 void FPSLimit();
 
-//RESOURCE LOADING FUNCTIONS
+//Funções para carregar todos os arquivos usados
 bool loadGraphics();
 bool fontInit();
 
-//INPUT READING FUNCTION
+//Função para realizar a leitura das entradas do teclado no chat
 void readInput(ALLEGRO_EVENT event, char str[], int limit);
 
 

@@ -3,7 +3,6 @@
 
 bool coreInit(){  //Inicializando os modulos basicos!
 
-    //modules and add-ons initialization
 	if (!al_init()) {
 
         fprintf(stderr, "Falha ao inicializar Allegro.\n");
@@ -36,24 +35,14 @@ bool coreInit(){  //Inicializando os modulos basicos!
 
     if(!al_install_audio()){
 
-      fprintf(stderr, "Falha ao inicializar add-on al_install_audio.\n");
-      return -1;
-
-   }
-
-/*  if(!al_reserve_samples(14)){
-
-     fprintf(stderr, "Falha ao inicializar add-on al_reserve_sample.\n");
-      return -1;
-
-}
-*/
+        fprintf(stderr, "Falha ao inicializar add-on al_install_audio.\n");
+        return -1;
+    }
 
    if(!al_init_acodec_addon()) {
 
-   fprintf(stderr, "failed to initialize audio codecs!\n");
-   return -1;
-
+        fprintf(stderr, "Falha ao inicializar add-on al_init_acodec!\n");
+        return -1;
     }
 
     eventsQueue = al_create_event_queue();
@@ -68,10 +57,8 @@ bool coreInit(){  //Inicializando os modulos basicos!
 }
 
 
+bool windowInit(int W, int H, char title[]){ //Inicializando a janela principal da allegro!
 
-bool windowInit(int W, int H, char title[]){    //Inicializando a janela!
-
-    //window and event queue creation
     main_window = al_create_display(W, H);
 
     if (!main_window) {
@@ -82,13 +69,10 @@ bool windowInit(int W, int H, char title[]){    //Inicializando a janela!
 
     al_set_window_title(main_window, "Battle Of Feuds");
 
-    //registra janela na fila de eventos
-
-    al_register_event_source(eventsQueue, al_get_display_event_source(main_window));
+    al_register_event_source(eventsQueue, al_get_display_event_source(main_window));    //registra janela na fila de eventos
 
     return true;
 }
-
 
 
 bool inputInit(){ //Inicializando as entradas do teclado!
@@ -159,7 +143,7 @@ void readInput(ALLEGRO_EVENT event, char str[], int limit){ //Lendo as entradas 
 }
 
 
-//FPS CONTROL (FPS IS DEFINED IN ACORE.H)
+//Funções que realizando o controle do FPS
 void startTimer(){
 
     startingTime = al_get_time();
@@ -180,19 +164,62 @@ void FPSLimit(){
 }
 
 
-//FOR DEALLOCATING ALL ALLEGRO STUFF
+//Desalocar todos os ponteiros usados na Allegro
 void allegroEnd(){
 
     al_destroy_display(main_window);
     al_destroy_event_queue(eventsQueue);
+
+    al_destroy_bitmap(BackgroundMenu); //BITMAPS!
+    al_destroy_bitmap(gameName);
+    al_destroy_bitmap(gameIcon);
+    al_destroy_bitmap(HTPwasd);
+    al_destroy_bitmap(HTPK);
+    al_destroy_bitmap(HTPReturn);
+    al_destroy_bitmap(botaoPlay);
+    al_destroy_bitmap(botaoHTP);
+    al_destroy_bitmap(botaoExit);
+    al_destroy_bitmap(skeletonButton);
+    al_destroy_bitmap(ripperButton);
+    al_destroy_bitmap(deathKnightButton);
+    al_destroy_bitmap(ogreButton);
+    al_destroy_bitmap(goblinButton);
+    al_destroy_bitmap(skeleton05Button);
+    al_destroy_bitmap(texturaMapa);
+    al_destroy_bitmap(detalhesDoChao);
+    al_destroy_bitmap(grama);
+    al_destroy_bitmap(pedra);
+    al_destroy_bitmap(cerca);
+    al_destroy_bitmap(obstaculos);
+    al_destroy_bitmap(objetos);
+
+    al_destroy_bitmap(Sprite_Skeleton0);    //SPRITES
+    al_destroy_bitmap(Sprite_Ripper01);
+    al_destroy_bitmap(Sprite_DeathKnight02);
+    al_destroy_bitmap(Sprite_Ogre03);
+    al_destroy_bitmap(Sprite_Goblin04);
+    al_destroy_bitmap(Sprite_Skeleton05);
+    al_destroy_bitmap(heart);
+
+    al_destroy_audio_stream(menuGameSong);  // SOUNDS
+    al_destroy_audio_stream(deathSong);
+    al_destroy_audio_stream(victorySong);
+    al_destroy_audio_stream(conflictSong);
+
+    al_destroy_font(ubuntu);    //FONTS 
+    al_destroy_font(start);
+    al_destroy_font(fonteHTP);
+    al_destroy_font(fonteHTPTitulo);
+
 }
 
 
-bool fontInit(){        //Carregando todas as fontes!
+bool fontInit(){    //Inicializando todas as fontes usadas
 
     /*------------------------------FONTE--------------------------------*/
 
     start = al_load_font("examples/graphicChat/Resources/Fonts/pressStart.ttf", 16, 0);
+
     if (!start){
 
         fprintf(stderr, "Falha ao carregar \"examples/graphicChat/Resources/Fonts/pressStart.ttf\".\n");
@@ -228,7 +255,10 @@ bool fontInit(){        //Carregando todas as fontes!
 
 
 
-bool loadGraphics(){    //Carregando todos os graficos!
+bool loadGraphics(){    //Carregando todos os graficos utilizados
+
+
+    /*------------------------------Buttons && Background--------------------------------*/
 
     BackgroundMenu = al_load_bitmap("examples/graphicChat/Resources/Tilesets/BackgroundMenu.png"); 	
 
@@ -254,7 +284,7 @@ bool loadGraphics(){    //Carregando todos os graficos!
         return false;
     }
 
-	botaoPlay = al_load_bitmap("examples/graphicChat/Resources/Tilesets/StartGameButton01.png");
+	botaoPlay = al_load_bitmap("examples/graphicChat/Resources/Tilesets/StartGameButton.png");
 
     if (!gameIcon){
 
@@ -262,7 +292,7 @@ bool loadGraphics(){    //Carregando todos os graficos!
         return false;
     }
 
-	botaoHTP = al_load_bitmap("examples/graphicChat/Resources/Tilesets/HowToPlayButton01.png");
+	botaoHTP = al_load_bitmap("examples/graphicChat/Resources/Tilesets/HowToPlayButton.png");
 
     if (!botaoHTP){
 
@@ -270,7 +300,7 @@ bool loadGraphics(){    //Carregando todos os graficos!
         return false;
     }
 
-	botaoExit = al_load_bitmap("examples/graphicChat/Resources/Tilesets/ExitButton01.png");
+	botaoExit = al_load_bitmap("examples/graphicChat/Resources/Tilesets/ExitButton.png");
 
     if (!botaoExit){
 
@@ -283,14 +313,6 @@ bool loadGraphics(){    //Carregando todos os graficos!
     if (!HTPwasd){
 
         fprintf(stderr, "Falha carregando HTPwasd.png");
-        return false;
-    }
-
-	HTPJ = al_load_bitmap("examples/graphicChat/Resources/Tilesets/HTPJ.png");
-
-    if (!HTPJ){
-
-        fprintf(stderr, "Falha carregando HTPJ.png");
         return false;
     }
 
@@ -310,30 +332,6 @@ bool loadGraphics(){    //Carregando todos os graficos!
         return false;
     }
 
-	charSprite = al_load_bitmap("examples/graphicChat/Resources/Tilesets/PreviewSprite.png");
-
-    if (!charSprite){
-
-        fprintf(stderr, "Falha carregando charSprite.png\n");
-        return false;
-    }
-
-	texturaMapa = al_load_bitmap("examples/graphicChat/Resources/Tilesets/imagemTexturas.png");
-
-    if (!texturaMapa){
-
-        fprintf(stderr, "Falha carregando texturaMapa.png\n");
-        return false;
-    }
-
-    detalhesDoChao = al_load_bitmap("examples/graphicChat/Resources/Tilesets/detalhesDoChao.png");
-
-    if (!detalhesDoChao){
-
-        fprintf(stderr, "Falha carregando detalhesDoChao.png\n");
-        return false;
-    }
-
 	heart = al_load_bitmap("examples/graphicChat/Resources/Tilesets/FullHeart.png");
 
     if (!heart){
@@ -342,56 +340,6 @@ bool loadGraphics(){    //Carregando todos os graficos!
         return false;
 
     }
-
-    // Carrega a imagem
-    
-    grama = al_load_bitmap("examples/graphicChat/Resources/Tilesets/detalhesDoChao.png");
-
-    if (!grama){
-
-        fprintf(stderr, "Falha carregando detalhesDoChao.png");
-        return false;
-
-    }
-
-    pedra = al_load_bitmap("examples/graphicChat/Resources/Tilesets/pedraChao.png");
-
-    if (!pedra){
-
-        fprintf(stderr, "Falha carregando pedraChao.png");
-        return false;
-
-    }
-
-    cerca = al_load_bitmap("examples/graphicChat/Resources/Tilesets/cerca.png");
-
-    if (!cerca){
-
-        fprintf(stderr, "Falha carregando cerca.png");
-        return false;
-
-    }
-
-    //obstaculo;
-    obstaculos = al_load_bitmap("examples/graphicChat/Resources/Tilesets/obstaculos.png");
-
-    if (!obstaculos){
-
-        fprintf(stderr, "Falha carregando obstaculos.png");
-        return false;
-
-    }
-
-    objetos = al_load_bitmap("examples/graphicChat/Resources/Tilesets/objetos.png"); 
-
-    if (!objetos){
-
-        fprintf(stderr, "Falha carregando objetos.png");
-        return false;
-
-    }
-
-    // Botões Sprites
 
     skeletonButton = al_load_bitmap("examples/graphicChat/Resources/Tilesets/SkeletonButton.png");
 
@@ -442,7 +390,70 @@ bool loadGraphics(){    //Carregando todos os graficos!
         return false;
     }
 
-    //Carregando as sprites
+    /*------------------------------------Mapa------------------------------------*/
+
+    texturaMapa = al_load_bitmap("examples/graphicChat/Resources/Tilesets/imagemTexturas.png");
+
+    if (!texturaMapa){
+
+        fprintf(stderr, "Falha carregando texturaMapa.png\n");
+        return false;
+    }
+
+    detalhesDoChao = al_load_bitmap("examples/graphicChat/Resources/Tilesets/detalhesDoChao.png");
+
+    if (!detalhesDoChao){
+
+        fprintf(stderr, "Falha carregando detalhesDoChao.png\n");
+        return false;
+    }
+    
+    grama = al_load_bitmap("examples/graphicChat/Resources/Tilesets/detalhesDoChao.png");
+
+    if (!grama){
+
+        fprintf(stderr, "Falha carregando detalhesDoChao.png");
+        return false;
+
+    }
+
+    pedra = al_load_bitmap("examples/graphicChat/Resources/Tilesets/pedraChao.png");
+
+    if (!pedra){
+
+        fprintf(stderr, "Falha carregando pedraChao.png");
+        return false;
+
+    }
+
+    cerca = al_load_bitmap("examples/graphicChat/Resources/Tilesets/cerca.png");
+
+    if (!cerca){
+
+        fprintf(stderr, "Falha carregando cerca.png");
+        return false;
+
+    }
+
+    obstaculos = al_load_bitmap("examples/graphicChat/Resources/Tilesets/obstaculos.png");
+
+    if (!obstaculos){
+
+        fprintf(stderr, "Falha carregando obstaculos.png");
+        return false;
+
+    }
+
+    objetos = al_load_bitmap("examples/graphicChat/Resources/Tilesets/objetos.png"); 
+
+    if (!objetos){
+
+        fprintf(stderr, "Falha carregando objetos.png");
+        return false;
+
+    }
+    
+    /*------------------------------------Sprites------------------------------------*/
 
     Sprite_Skeleton0 = al_load_bitmap("examples/graphicChat/Resources/Tilesets/Sprite_Skeleton0.png"); 
     
@@ -498,7 +509,7 @@ bool loadGraphics(){    //Carregando todos os graficos!
 
     }
 
-    //Carregando os sons
+    /*------------------------------------Songs------------------------------------*/
 
     menuGameSong = al_load_audio_stream("examples/graphicChat/Resources/Tilesets/menuSong.ogg", 4, 1024);
 
@@ -536,62 +547,5 @@ bool loadGraphics(){    //Carregando todos os graficos!
 
     }
 
- /* 
-
-    SwordAttackSound = al_load_sample("examples/graphicChat/Resources/Tilesets/SwordAttackSound.ogg");
-    
-    if (!SwordAttackSound){
-
-        fprintf(stderr, "Falha carregando SwordAttackSound.ogg");
-        return false;
-
-    }
-
-    SwordAttackSound2 = al_load_sample("examples/graphicChat/Resources/Tilesets/SwordAttackSound2.ogg");
-    
-    if (!SwordAttackSound2){
-
-        fprintf(stderr, "Falha carregando SwordAttackSound2.ogg");
-        return false;
-
-    }
-
-    SwordAttackSound3 = al_load_sample("examples/graphicChat/Resources/Tilesets/SwordAttackSound3.ogg");
-    
-    if (!SwordAttackSound3){
-
-        fprintf(stderr, "Falha carregando SwordAttackSound3.ogg");
-        return false;
-
-    }
-
-    SwordAttackSound4 = al_load_sample("examples/graphicChat/Resources/Tilesets/SwordAttackSound4.ogg");
-    
-    if (!SwordAttackSound4){
-
-        fprintf(stderr, "Falha carregando SwordAttackSound4.ogg");
-        return false;
-
-    }
-
-    SwordAttackSound5 = al_load_sample("examples/graphicChat/Resources/Tilesets/SwordAttackSound5.ogg");
-    
-    if (!SwordAttackSound5){
-
-        fprintf(stderr, "Falha carregando SwordAttackSound5.ogg");
-        return false;
-
-    }
-
-    SwordAttackSound6 = al_load_sample("examples/graphicChat/Resources/Tilesets/SwordAttackSound6.ogg");
-    
-    if (!SwordAttackSound6){
-
-        fprintf(stderr, "Falha carregando SwordAttackSound6.ogg");
-        return false;
-
-    }
-
-  */
     return true;
 }

@@ -117,7 +117,6 @@ int main() {
 
 					apertouBotaoPlay = 1;
 
-					printf("Apertasse botão Play\n");
 
 				}else if (menuEvent.mouse.x >= 300 &&  // Verificamos se ele está sobre a região do botao How to play
 						  menuEvent.mouse.x <= 300 + al_get_bitmap_width(botaoHTP) &&
@@ -126,8 +125,6 @@ int main() {
 
 					apertouBotaoHowtoPlay = 1;
 					
-					
-					printf("Apertasse botão How to play\n");
 
 				}else if (menuEvent.mouse.x >= 300 &&  // Verificamos se ele está sobre a região do botao Exit
 						  menuEvent.mouse.x <= 300 + al_get_bitmap_width(botaoExit) &&
@@ -135,8 +132,6 @@ int main() {
 						  menuEvent.mouse.y <= 480 + al_get_bitmap_height(botaoExit) ){
 
 					inMenu = 0;
-					
-					printf("Apertasse botão Exit\n");
 
 				}
 
@@ -145,7 +140,6 @@ int main() {
                 int resposta;
 
                 resposta = al_show_native_message_box(main_window,"Battle Of Feuds", "Deseja sair do programa?","",NULL,ALLEGRO_MESSAGEBOX_YES_NO);
-                printf("resp == [%d]\n", resposta);
 
                 if (resposta == 1){
 
@@ -206,7 +200,6 @@ int main() {
                             int resposta;
 
                             resposta = al_show_native_message_box(main_window,"Battle Of Feuds", "Deseja sair do programa?","",NULL,ALLEGRO_MESSAGEBOX_YES_NO);
-                            printf("resp == [%d]\n", resposta);
 
                             if (resposta == 1){
 
@@ -262,7 +255,6 @@ int main() {
                             int resposta;
 
                             resposta = al_show_native_message_box(main_window,"Battle Of Feuds", "Deseja sair do programa?","",NULL,ALLEGRO_MESSAGEBOX_YES_NO);
-                            printf("resp == [%d]\n", resposta);
 
                             if (resposta == 1){
 
@@ -296,7 +288,7 @@ int main() {
 
                         if (chooseCharEvent.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
 
-                            if (chooseCharEvent.mouse.x >= (LARGURA/5)*1 +20 &&                               //Verificamos se o mouse esta em cima do personagem Skeleton!
+                            if (chooseCharEvent.mouse.x >= (LARGURA/5)*1 +20 &&    //Verificamos se o mouse esta em cima do personagem Skeleton!
                                 chooseCharEvent.mouse.x <= (LARGURA/5)*1 + 20 + al_get_bitmap_width(skeletonButton) &&
                                 chooseCharEvent.mouse.y >= 220 &&
                                 chooseCharEvent.mouse.y <= 220 + al_get_bitmap_height(skeletonButton) ) {
@@ -308,7 +300,7 @@ int main() {
                             }
 
 
-                            if (chooseCharEvent.mouse.x >= (LARGURA/5)*2 + 20 &&                               //Verificamos se o mouse esta em cima do personagem Ripper!
+                            if (chooseCharEvent.mouse.x >= (LARGURA/5)*2 + 20 &&     //Verificamos se o mouse esta em cima do personagem Ripper!
                                 chooseCharEvent.mouse.x <= (LARGURA/5)*2 + 20 + al_get_bitmap_width(ripperButton) &&
                                 chooseCharEvent.mouse.y >= 220 &&
                                 chooseCharEvent.mouse.y <= 220 + al_get_bitmap_height(ripperButton) ) {
@@ -319,7 +311,7 @@ int main() {
 
                             }
 
-                            if (chooseCharEvent.mouse.x >= (LARGURA/5)*3 + 20 &&                               //Verificamos se o mouse esta em cima do personagem DeathKnight!
+                            if (chooseCharEvent.mouse.x >= (LARGURA/5)*3 + 20 && //Verificamos se o mouse esta em cima do personagem DeathKnight!
                                 chooseCharEvent.mouse.x <= (LARGURA/5)*3 + 20 + al_get_bitmap_width(deathKnightButton) &&
                                 chooseCharEvent.mouse.y >= 220 &&
                                 chooseCharEvent.mouse.y <= 220 + al_get_bitmap_height(deathKnightButton) ) {
@@ -330,7 +322,7 @@ int main() {
 
                             }
 
-                            if (chooseCharEvent.mouse.x >= (LARGURA/5)*1 + 20 &&                               //Verificamos se o mouse esta em cima do personagem Ogre!
+                            if (chooseCharEvent.mouse.x >= (LARGURA/5)*1 + 20 &&   //Verificamos se o mouse esta em cima do personagem Ogre!
                                 chooseCharEvent.mouse.x <= (LARGURA/5)*1 + 20 + al_get_bitmap_width(ogreButton) &&
                                 chooseCharEvent.mouse.y >= 400 &&
                                 chooseCharEvent.mouse.y <= 400 + al_get_bitmap_height(ogreButton) ) {
@@ -341,7 +333,7 @@ int main() {
 
                             }
 
-                            if (chooseCharEvent.mouse.x >= (LARGURA/5)*2 + 25 &&                               //Verificamos se o mouse esta em cima do personagem Goblin!
+                            if (chooseCharEvent.mouse.x >= (LARGURA/5)*2 + 25 &&  //Verificamos se o mouse esta em cima do personagem Goblin!
                                 chooseCharEvent.mouse.x <= (LARGURA/5)*2 + 25 + al_get_bitmap_width(ripperButton) &&
                                 chooseCharEvent.mouse.y >= 400 &&
                                 chooseCharEvent.mouse.y <= 400 + al_get_bitmap_height(ripperButton) ) {
@@ -352,7 +344,7 @@ int main() {
 
                             }
 
-                            if (chooseCharEvent.mouse.x >= (LARGURA/5)*3 + 20 &&                               //Verificamos se o mouse esta em cima do personagem Skeleton05!
+                            if (chooseCharEvent.mouse.x >= (LARGURA/5)*3 + 20 &&   //Verificamos se o mouse esta em cima do personagem Skeleton05!
                                 chooseCharEvent.mouse.x <= (LARGURA/5)*3 + 20 + al_get_bitmap_width(skeleton05Button) &&
                                 chooseCharEvent.mouse.y >= 400 &&
                                 chooseCharEvent.mouse.y <= 400 + al_get_bitmap_height(skeleton05Button) ) {
@@ -362,7 +354,7 @@ int main() {
                                     lobby = 1;
 
                             }
-                        } else if (chooseCharEvent.type == ALLEGRO_EVENT_KEY_DOWN){
+                        } else if (chooseCharEvent.type == ALLEGRO_EVENT_KEY_DOWN){ 
 
                             switch(chooseCharEvent.keyboard.keycode){
 
@@ -379,7 +371,6 @@ int main() {
                             int resposta;
 
                             resposta = al_show_native_message_box(main_window,"Battle Of Feuds", "Deseja sair do programa?","",NULL,ALLEGRO_MESSAGEBOX_YES_NO);
-                            printf("resp == [%d]\n", resposta);
 
                             if (resposta == 1){
 
@@ -398,8 +389,7 @@ int main() {
 
                 if(lobby == 1){
                     
-                    //Função para realizar a conexão com o server
-                    assertConnection(ServerIP, loginMsg);
+                    assertConnection(ServerIP, loginMsg); //Função para realizar a conexão com o server
                     recvMsgFromServer(&auxID, WAIT_FOR_IT);
                     meuID = auxID.valor;
                     printf("Meu ID eh: [%d]\n", meuID);
@@ -434,7 +424,6 @@ int main() {
                             lobby = 0;
                             inChat = 0;
                             inGame = 1;
-                            printf("Outro player começou o jogo!\n");
                             break;
                         }
 
@@ -457,12 +446,11 @@ int main() {
 
                             }
 
-                            if(pacote.valor == -3){ //Alguem apertou para começar e ira começar
+                            if(pacote.valor == -3){ //Alguem apertou LCtrl para começar o jogo
 
                                 lobby = 0;
                                 inChat = 0;
                                 inGame = 1;
-                                printf("Outro player começou o jogo!\n");
                                 break;
                             }
 
@@ -484,7 +472,7 @@ int main() {
                                     lobbyMessage[0] = '\0';
                                     break;
 
-                                case ALLEGRO_KEY_LCTRL:				//Se apertar Left control começa o jogo
+                                case ALLEGRO_KEY_LCTRL:	//Se apertar Left control começa o jogo
 
                                     pacote.valor = -2;
                                     sendMsgToServer(&pacote, sizeof(DADOS));
@@ -518,7 +506,6 @@ int main() {
 
             while(inGame){  //Momento do jogo!
 
-            // inGamesound();
                 startTimer();
                 int rec = recvMsgFromServer(&pacoteInGame, DONT_WAIT);
 
@@ -530,6 +517,8 @@ int main() {
 
                             playersInGame.jogador[pacoteInGame.idClient].colunaSprite ++;
 
+                            // Aqui é onde o personagem começa a rotacionar seu corpo
+                            
                             if(playersInGame.jogador[pacoteInGame.idClient].direcao == 'w'){
                                 
                                 if(playersInGame.jogador[pacoteInGame.idClient].colunaSprite > playersInGame.jogador[pacoteInGame.idClient].spriteJogador.limiteMovimentacaoW - 1){
@@ -577,10 +566,10 @@ int main() {
 
                     } else if(pacoteInGame.flag == 2){  //Eu que morri!
 
-                        printf("Morri!\n");
                         playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
                         playersInGame.jogador[pacoteInGame.idClient].qualPers = -1;
-
+                        
+                        // Configurando a música que tocará quando você morrer (se morrer)
                         al_set_audio_stream_playing(conflictSong,0);
 
                         Playsound(deathSong);
@@ -600,8 +589,8 @@ int main() {
 
                     } else if(pacoteInGame.flag == 4){  //Fim de jogo!
 
-                        printf("Eu ganhei!\n");
 
+                        //Configurando música de fim de jogo
                         al_set_audio_stream_playing(conflictSong,0);
 
                         Playsound(victorySong); 
@@ -672,7 +661,6 @@ int main() {
 
                         } else if(pacoteInGame.flag == 2){  //Eu que morri!
 
-                            printf("Morri!\n");
                             playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
                             playersInGame.jogador[pacoteInGame.idClient].qualPers = -1;
 
@@ -695,7 +683,6 @@ int main() {
 
                         } else if(pacoteInGame.flag == 4){  //Fim de jogo!
 
-                            printf("Eu ganhei aqui!\n");
 
                             al_set_audio_stream_playing(conflictSong,0);
 
@@ -722,7 +709,7 @@ int main() {
 
                                 mov = 'w';
                                 sendMsgToServer(&mov, sizeof(char));
-                                printf("Mandei comando: [%c]\n", mov);
+                                // printf("Mandei comando: [%c]\n", mov); // Debugando!
                              
                                 break;
 
@@ -730,7 +717,7 @@ int main() {
 
                                     mov = 's';  
                                     sendMsgToServer(&mov, sizeof(char));
-                                    printf("Mandei comando: [%c]\n", mov);
+                                // printf("Mandei comando: [%c]\n", mov); // Debugando!
                                                             
 
                                 break;
@@ -739,7 +726,7 @@ int main() {
 
                                     mov = 'a';   
                                     sendMsgToServer(&mov, sizeof(char));
-                                    printf("Mandei comando: [%c]\n", mov);
+                                // printf("Mandei comando: [%c]\n", mov); // Debugando!
                                 
                                 
                                 break;
@@ -748,7 +735,7 @@ int main() {
 
                                     mov = 'd';  
                                     sendMsgToServer(&mov, sizeof(char));
-                                    printf("Mandei comando: [%c]\n", mov);
+                                // printf("Mandei comando: [%c]\n", mov); // Debugando!
                                 
                                 
                                 break;
@@ -758,7 +745,7 @@ int main() {
                                 mov = 'k';  
                                 sendMsgToServer(&mov, sizeof(char));
                                 //PlayAttacksound(meuChar);
-                                printf("Mandei comando: [%c]\n", mov);
+                               // printf("Mandei comando: [%c]\n", mov); // Debugando!
                                 
                                 
                                 break;
@@ -850,7 +837,6 @@ int main() {
 
                     } else if(pacoteInGame.flag == 2){  //Eu que morri!
 
-                        printf("Morri!\n");
                         playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
                         playersInGame.jogador[pacoteInGame.idClient].qualPers = -1;
 
@@ -933,7 +919,6 @@ int main() {
 
                     } else if(pacoteInGame.flag == 2){  //Eu que morri!
 
-                        printf("Morri!\n");
                         playersInGame.jogador[pacoteInGame.idClient].vida = pacoteInGame.vida;
                         playersInGame.jogador[pacoteInGame.idClient].qualPers = -1;
 
@@ -1086,19 +1071,17 @@ int main() {
 
                             apertouBotaoHowtoPlay = 0;
 
-                            printf("Apertasse botão voltar\n");
                         }
                     } else if(howToPlayEvent.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
 
                         apertouBotaoHowtoPlay = 0;
-                        printf("Saindo tela howtoplay!\n");
 
                     } else if (howToPlayEvent.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
 
 			            int resposta;
 
                         resposta = al_show_native_message_box(main_window,"Battle Of Feuds", "Deseja sair do programa?","",NULL,ALLEGRO_MESSAGEBOX_YES_NO);
-                        printf("resp == [%d]\n", resposta);
+                        
 
 			            if (resposta == 1){
 
@@ -1127,13 +1110,15 @@ int main() {
 
 //======================================================================================FUNCTIONS============================================================================================
 
-enum conn_ret_t tryConnect(char IP[]) {
+// Conexão com o servidor
+enum conn_ret_t tryConnect(char IP[]) { 
 
   char server_ip[30];
   return connectToServer(IP);
 
 }
 
+//Conexão do chat aqui no client com o servidor
 void assertConnection(char IP[], char login[]) {
 
     puts("Chat sendo inicializado...");
@@ -1206,6 +1191,7 @@ void assertConnection(char IP[], char login[]) {
 
 }
 
+// Mensagens que serão printadas na tela na hora de pedir o IP
 void printConnectScreen(char str[]){
 
     al_draw_bitmap(BackgroundMenu,0,0,0);
@@ -1227,6 +1213,7 @@ void printConnectScreen(char str[]){
     }
 }
 
+// Definindo os botões que usaremos para selecionar qual personagem escolheremos para jogar
 void printChooseChar(){
 
     al_draw_bitmap(BackgroundMenu,0,0,0);
@@ -1244,7 +1231,7 @@ void printChooseChar(){
 
 }
 
-
+// Iniciando o chat
 void printChatLog( char chatLog[][MSG_MAX_SIZE]){
 
     int i;
@@ -1257,7 +1244,7 @@ void printChatLog( char chatLog[][MSG_MAX_SIZE]){
     }
 
 }
-
+// Textos que serão printados na tela durante o chat
 void printLobbyText(char str[]){
 
     al_draw_bitmap(BackgroundMenu,0,0,0);
@@ -1279,6 +1266,7 @@ void printLobbyText(char str[]){
 
 }
 
+// Textos que serão printados na tela durante a tela de login
 void printLoginScreen(char str[]){
 
     al_draw_bitmap(BackgroundMenu,0,0,0);
@@ -1299,518 +1287,514 @@ void printLoginScreen(char str[]){
     }
 }
 
+// Função para printar na tela o mapa e suas figuras
 void printMap(){
 
     int i,k;
     
-    for(i = 0; i < 24; i++){ // Essa parte agora printa o map.
+    for(i = 0; i < 24; i++){
 
         for(k = 0; k < 32; k++){
 
             if(map[i][k] == 6){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);   // fundo padrao liso (grama)
                             al_draw_bitmap_region(pedra, 22*32, 34*32, 32, 32, k*32, i*32, 0); // piso de pedra 1,2
 				}
 				if(map[i][k] == 7){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);   // fundo padrao liso (grama)
 							al_draw_bitmap_region(pedra, 23*32, 34*32, 32, 32, k*32, i*32, 0); // piso de pedra 1,3
 				}
 				if(map[i][k] == 8){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);   // fundo padrao liso (grama)
                             al_draw_bitmap_region(pedra, 21*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,1
 				}
                 if(map[i][k] == 9){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);   // fundo padrao liso (grama)
 							al_draw_bitmap_region(pedra, 23*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,3
 				}
                 if(map[i][k] == 10){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);   // fundo padrao liso (grama)
                             al_draw_bitmap_region(pedra, 21*32, 36*32, 32, 32, k*32, i*32, 0); // piso de pedra 3,1
 				}
 				if(map[i][k] == 11){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);   // fundo padrao liso (grama)
 							al_draw_bitmap_region(pedra, 22*32, 36*32, 32, 32, k*32, i*32, 0); // piso de pedra 3,2
 				}
 				if(map[i][k] == 12){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);   // fundo padrao liso (grama)
                             al_draw_bitmap_region(pedra, 23*32, 36*32, 32, 32, k*32, i*32, 0); // piso de pedra 3,3
 				}
                 if(map[i][k] == 13){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);   // fundo padrao liso (grama)
 							al_draw_bitmap_region(pedra, 22*32, 32*32, 32, 32, k*32, i*32, 0); // piso de pedra encaixe 1,1
 				}
 				if(map[i][k] == 14){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);   // fundo padrao liso (grama)
 							al_draw_bitmap_region(pedra, 22*32, 33*32, 32, 32, k*32, i*32, 0); // piso de pedra encaixe 2,1
                 }
 				if(map[i][k] == 15){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);   // fundo padrao liso (grama)
                             al_draw_bitmap_region(pedra, 23*32, 33*32, 32, 32, k*32, i*32, 0); // piso de pedra encaixe 2,2
 				}
 
 				if(map[i][k] == 16){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);   // fundo padrao liso (grama)
 							al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
 				}
 		     	if(map[i][k] == 17){
 
-		           	        al_draw_bitmap_region(grama, 0*32, 11*32, 32, 32, k*32, i*32, 0); // fundo padrao esquerda
+		           	        al_draw_bitmap_region(grama, 0*32, 11*32, 32, 32, k*32, i*32, 0); // fundo padrao esquerda (grama)
 				}
 				if(map[i][k] == 18){
 
-							al_draw_bitmap_region(grama, 1*32, 11*32, 32, 32, k*32, i*32, 0); // fundo padrao meio
+							al_draw_bitmap_region(grama, 1*32, 11*32, 32, 32, k*32, i*32, 0); // fundo padrao meio (grama)
 				}
 				if(map[i][k] == 19){
 
-						    al_draw_bitmap_region(grama, 2*32, 11*32, 32, 32, k*32, i*32, 0); // fundo padrao direita
+						    al_draw_bitmap_region(grama, 2*32, 11*32, 32, 32, k*32, i*32, 0); // fundo padrao direita (grama)
 				}
 				if(map[i][k] == 20){
 
-							al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0); // fundo padrao liso
+							al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0); // fundo padrao liso (grama)
 				}
-                    //CERCA <0 (nao pode passar por cima)
+
+                    // <0 nao pode passar por cima
+
+                    //PRINTAR CERCA
+
                 if(map[i][k] == -1){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0); // fundo padrao liso (grama)
                             al_draw_bitmap_region(cerca, 0*32, 1*32, 32, 32, k*32, i*32, 0); // lado baixo
                             al_draw_bitmap_region(cerca, 0*32, 0*32, 32, 32, k*32, i*32, 0); // frente esq
 				}
                 if(map[i][k] == -2){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0); // fundo padrao liso (grama)
                             al_draw_bitmap_region(cerca, 1*32, 0*32, 32, 32, k*32, i*32, 0); // frente meio
                 }
                 if(map[i][k] == -3){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0); // fundo padrao liso (grama)
                             al_draw_bitmap_region(cerca, 0*32, 1*32, 32, 32, k*32, i*32, 0); // lado baixo
                             al_draw_bitmap_region(cerca, 2*32, 0*32, 32, 32, k*32, i*32, 0); // frente dir
                           
 				}
                 if(map[i][k] == -4){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0); // fundo padrao liso (grama)
                             al_draw_bitmap_region(cerca, 0*32, 0*32, 32, 32, k*32, i*32, 0); // frente esq
                             al_draw_bitmap_region(cerca, 2*32, 1*32, 32, 32, k*32, i*32, 0); // lado cima
 				}
                 if(map[i][k] == -5){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0); // fundo padrao liso (grama)
                             al_draw_bitmap_region(cerca, 1*32, 1*32, 32, 32, k*32, i*32, 0); // lado meio
 				}
                 if(map[i][k] == -6){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0); // fundo padrao liso (grama)
                             al_draw_bitmap_region(cerca, 2*32, 0*32, 32, 32, k*32, i*32, 0); // frente dir
                             al_draw_bitmap_region(cerca, 2*32, 1*32, 32, 32, k*32, i*32, 0); // lado cima
 				}
 
-                //arco e flecha
+                    // PRINTAR ARCO E FLECHA
                 
                 if(map[i][k] == -7){
-                            	al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 4*32, 47*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 4*32, 47*32, 32, 32, k*32, i*32, 0); // alvo 1,1
 				}
                 if(map[i][k] == -8){
-                            	al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2;
-                            al_draw_bitmap_region(obstaculos, 5*32, 47*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2;
+                            al_draw_bitmap_region(obstaculos, 5*32, 47*32, 32, 32, k*32, i*32, 0); // alvo 1,2
 				}
                 if(map[i][k] == -9){
                            	al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 4*32, 48*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(obstaculos, 4*32, 48*32, 32, 32, k*32, i*32, 0); // alvo 2,1
 				}
                 if(map[i][k] == -10){
                            	al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 5*32, 48*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(obstaculos, 5*32, 48*32, 32, 32, k*32, i*32, 0); // alvo 2,2
 				}
                 if(map[i][k] == -11){
-                            	al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 2*32, 48*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 2*32, 48*32, 32, 32, k*32, i*32, 0); // parte de cima dos arcos
 				}
                 if(map[i][k] == -12){
-                            	al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 2*32, 49*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 2*32, 49*32, 32, 32, k*32, i*32, 0); // parte de baixo dos arcos
 				}
                 if(map[i][k] == -13){
-                            	al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 3*32, 49*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 3*32, 49*32, 32, 32, k*32, i*32, 0); // cesto de flechas
 				}
 
-                //arvore com relogio
+                    // ARVORE COM RELOGIO
 
                 if(map[i][k] == -14){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
-                            al_draw_bitmap_region(obstaculos, 14*32, 9*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);       // fundo padrao liso (grama)
+                            al_draw_bitmap_region(obstaculos, 14*32, 9*32, 32, 32, k*32, i*32, 0); // arvore 1,1
 				}
                 if(map[i][k] == -15){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
-                            al_draw_bitmap_region(obstaculos, 15*32, 9*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);       // fundo padrao liso (grama)
+                            al_draw_bitmap_region(obstaculos, 15*32, 9*32, 32, 32, k*32, i*32, 0); // arvore 1,2
 				}
                 if(map[i][k] == -16){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
-                            al_draw_bitmap_region(obstaculos, 14*32, 10*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);        // fundo padrao liso (grama)
+                            al_draw_bitmap_region(obstaculos, 14*32, 10*32, 32, 32, k*32, i*32, 0); // arvore 2,1
 				}
                 if(map[i][k] == -17){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
-                            al_draw_bitmap_region(obstaculos, 15*32, 10*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);        // fundo padrao liso (grama)
+                            al_draw_bitmap_region(obstaculos, 15*32, 10*32, 32, 32, k*32, i*32, 0); // arvore 2,2
 				}
                 if(map[i][k] == -18){
-                             al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
-                            al_draw_bitmap_region(obstaculos, 14*32, 11*32, 32, 32, k*32, i*32, 0);
+                             al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);       // fundo padrao liso (grama)
+                            al_draw_bitmap_region(obstaculos, 14*32, 11*32, 32, 32, k*32, i*32, 0); // arvore 3,1
 				}
                 if(map[i][k] == -19){
-                             al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
-                            al_draw_bitmap_region(obstaculos, 15*32, 11*32, 32, 32, k*32, i*32, 0);
+                             al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);       // fundo padrao liso (grama)
+                            al_draw_bitmap_region(obstaculos, 15*32, 11*32, 32, 32, k*32, i*32, 0); // arvore 3,2
 				}
                 if(map[i][k] == -20){
-                             al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
-                            al_draw_bitmap_region(obstaculos, 14*32, 12*32, 32, 32, k*32, i*32, 0);
+                             al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);       // fundo padrao liso (grama)
+                            al_draw_bitmap_region(obstaculos, 14*32, 12*32, 32, 32, k*32, i*32, 0); // arvore 4,1
 				}
                 if(map[i][k] == -21){
-                             al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
-                            al_draw_bitmap_region(obstaculos, 15*32, 12*32, 32, 32, k*32, i*32, 0);
+                             al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);       // fundo padrao liso (grama)
+                            al_draw_bitmap_region(obstaculos, 15*32, 12*32, 32, 32, k*32, i*32, 0); // arvore 4,2
 				}
                 
                 
-                //guilhotina
+                    //GUILHOTINA
               
-                if(map[i][k] == -22){ //cima guilhotina esq fora do palco
+                if(map[i][k] == -22){ 
                             al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 2*32, 44*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(obstaculos, 2*32, 44*32, 32, 32, k*32, i*32, 0); //guilho
 				}
-                if(map[i][k] == -23){ //cima guilhotina dir fora do palco
-                           al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
+                if(map[i][k] == -23){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
                             al_draw_bitmap_region(obstaculos, 3*32, 44*32, 32, 32, k*32, i*32, 0); //guilho
 				}
-                if(map[i][k] == -24){ // cima esq palco
+                if(map[i][k] == -24){ 
                             al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
                             al_draw_bitmap_region(obstaculos, 2*32, 41*32, 32, 32, k*32, i*32, 0); //palco
                          
 				}
-                if(map[i][k] == -25){ //cima meio palco e meio esq guilho
+                if(map[i][k] == -25){
                             al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                           al_draw_bitmap_region(obstaculos, 3*32, 41*32, 32, 32, k*32, i*32, 0); //palco
+                            al_draw_bitmap_region(obstaculos, 3*32, 41*32, 32, 32, k*32, i*32, 0); //palco
                             al_draw_bitmap_region(obstaculos, 2*32, 45*32, 32, 32, k*32, i*32, 0); //guilho
 				}
-                if(map[i][k] == -26){ //cima dir palco e meio dir gilho
-                             al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
+                if(map[i][k] == -26){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
                             al_draw_bitmap_region(obstaculos, 4*32, 41*32, 32, 32, k*32, i*32, 0); //palco
                             al_draw_bitmap_region(obstaculos, 3*32, 45*32, 32, 32, k*32, i*32, 0); //guilho
 				}
-                if(map[i][k] == -27){ //meio esq palco 
-                             al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
+                if(map[i][k] == -27){
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
                             al_draw_bitmap_region(obstaculos, 2*32, 42*32, 32, 32, k*32, i*32, 0); //palco
                             
 				}
-                if(map[i][k] == -28){ //meio meio palco e baixo esq guilho
-                             al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
+                if(map[i][k] == -28){
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
                             al_draw_bitmap_region(obstaculos, 3*32, 42*32, 32, 32, k*32, i*32, 0); //palco
                             al_draw_bitmap_region(obstaculos, 2*32, 46*32, 32, 32, k*32, i*32, 0); //guilho
 				}
-                if(map[i][k] == -29){ //meio dir palco e baixo dir guilho
-                             al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                           al_draw_bitmap_region(obstaculos, 4*32, 42*32, 32, 32, k*32, i*32, 0); //palco
+                if(map[i][k] == -29){
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 4*32, 42*32, 32, 32, k*32, i*32, 0); //palco
                             al_draw_bitmap_region(obstaculos, 3*32, 46*32, 32, 32, k*32, i*32, 0); //guilho
 				}
-                if(map[i][k] == -30){ //baixo esq palco
-                             al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 2*32, 43*32, 32, 32, k*32, i*32, 0);
-				}
-                  if(map[i][k] == -31){ //baixo meio palco
+                if(map[i][k] == -30){ 
                             al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 3*32, 43*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(obstaculos, 2*32, 43*32, 32, 32, k*32, i*32, 0); //palco
 				}
-                if(map[i][k] == -32){ //baixo dir palco
-                           al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 4*32, 43*32, 32, 32, k*32, i*32, 0);
+                  if(map[i][k] == -31){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 3*32, 43*32, 32, 32, k*32, i*32, 0); //palco
+				}
+                if(map[i][k] == -32){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 4*32, 43*32, 32, 32, k*32, i*32, 0); //palco
 				}
 
-                // barraquinha peq
+                    // VENDINHA PEQUENA
 
-                 if(map[i][k] == -33){ //toldo cima
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); 
-                            al_draw_bitmap_region(obstaculos, 5*32, 25*32, 32, 32, k*32, i*32, 0);
+                 if(map[i][k] == -33){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);     // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 5*32, 25*32, 32, 32, k*32, i*32, 0); //toldo cima
 				}
-                if(map[i][k] == -34){ //toldo meio
-                           al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 5*32, 26*32, 32, 32, k*32, i*32, 0); 
+                if(map[i][k] == -34){ 
+                           al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);      // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 5*32, 26*32, 32, 32, k*32, i*32, 0); //toldo meio
 				}
-                if(map[i][k] == -35){ //toldo baixo e barraca cima
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 5*32, 28*32, 32, 32, k*32, i*32, 0); 
+                if(map[i][k] == -35){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);     // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 5*32, 28*32, 32, 32, k*32, i*32, 0); //toldo baixo e barraca cima
                             al_draw_bitmap_region(obstaculos, 5*32, 27*32, 32, 32, k*32, i*32, 0); 
                          
 				}
-                if(map[i][k] == -36){ //barraca baixo
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 5*32, 29*32, 32, 32, k*32, i*32, 0); 
+                if(map[i][k] == -36){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);     // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 5*32, 29*32, 32, 32, k*32, i*32, 0); //barraca baixo
                             
 				}
 
-                // barraca grande
+                    // VENDINHA GRANDE
 
-                if(map[i][k] == -37){ //toldo cima esq
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 6*32, 25*32, 32, 32, k*32, i*32, 0);
+                if(map[i][k] == -37){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);     // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 6*32, 25*32, 32, 32, k*32, i*32, 0); //toldo cima esq
 				}
-                if(map[i][k] == -38){ //toldo cima dir
-                             al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 7*32, 25*32, 32, 32, k*32, i*32, 0); 
+                if(map[i][k] == -38){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);     // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 7*32, 25*32, 32, 32, k*32, i*32, 0); //toldo cima dir
                             
 				}
-                if(map[i][k] == -39){ //toldo meio esq
-                             al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 6*32, 26*32, 32, 32, k*32, i*32, 0); 
+                if(map[i][k] == -39){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);     // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 6*32, 26*32, 32, 32, k*32, i*32, 0); //toldo meio esq
 				}
-                if(map[i][k] == -40){ //toldo meio dir
-                             al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 7*32, 26*32, 32, 32, k*32, i*32, 0);
+                if(map[i][k] == -40){ 
+                             al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);    // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 7*32, 26*32, 32, 32, k*32, i*32, 0); //toldo meio dir
 				}
-                if(map[i][k] == -41){ //toldo baixo esq e barraca cima esq
+                if(map[i][k] == -41){ 
                             al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 6*32, 28*32, 32, 32, k*32, i*32, 0); //barraca
-                            al_draw_bitmap_region(obstaculos, 6*32, 27*32, 32, 32, k*32, i*32, 0); //toldo
+                            al_draw_bitmap_region(obstaculos, 6*32, 28*32, 32, 32, k*32, i*32, 0); //barraca baixo esq
+                            al_draw_bitmap_region(obstaculos, 6*32, 27*32, 32, 32, k*32, i*32, 0); //toldo cima esq
 				}
-                if(map[i][k] == -42){ //toldo baixo dir e barraca cima dir
+                if(map[i][k] == -42){ 
                             al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 7*32, 28*32, 32, 32, k*32, i*32, 0); 
-                            al_draw_bitmap_region(obstaculos, 7*32, 27*32, 32, 32, k*32, i*32, 0); 
+                            al_draw_bitmap_region(obstaculos, 7*32, 28*32, 32, 32, k*32, i*32, 0);  // barraca baixo dir
+                            al_draw_bitmap_region(obstaculos, 7*32, 27*32, 32, 32, k*32, i*32, 0);  // toldo cima dir
 				}
-                if(map[i][k] == -43){ //barraca baixo esq
+                if(map[i][k] == -43){ 
                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 6*32, 29*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(obstaculos, 6*32, 29*32, 32, 32, k*32, i*32, 0); //barraca baixo esq
 				}
-                if(map[i][k] == -44){ //barraca baixo dir
+                if(map[i][k] == -44){ 
                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 7*32, 29*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(obstaculos, 7*32, 29*32, 32, 32, k*32, i*32, 0); //barraca baixo dir
 				}
                
+                    // CEMITERIO
 
-                    // agua
-                if(map[i][k] == -45){
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 415, 576, 32, 32, k*32, i*32, 0);
-				}
-                if(map[i][k] == -46){
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 447, 576, 32, 32, k*32, i*32, 0 );
-				}
-                if(map[i][k] == -47){
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 479, 576, 32, 32, k*32, i*32, 0 );
-				}
-                
-                // cemiterio
                 if(map[i][k] == -48){
-                            al_draw_bitmap_region(grama, 0*32, 11*32, 32, 32, k*32, i*32, 0); 
-                            al_draw_bitmap_region(obstaculos, 2*32, 2*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 0*32, 11*32, 32, 32, k*32, i*32, 0);       // fundo padrao liso (grama)
+                            al_draw_bitmap_region(obstaculos, 2*32, 2*32, 32, 32, k*32, i*32, 0);   // lapide 1
 				}
                 if(map[i][k] == -49){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
-                            al_draw_bitmap_region(obstaculos, 3*32, 4*32, 32, 32, k*32, i*32, 0 );
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);        // fundo padrao liso (grama)
+                            al_draw_bitmap_region(obstaculos, 3*32, 4*32, 32, 32, k*32, i*32, 0 );  // lapide 2
 				}
                 if(map[i][k] == -50){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
-                            al_draw_bitmap_region(obstaculos, 4*32, 3*32, 32, 32, k*32, i*32, 0 );
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);        // fundo padrao liso (grama)
+                            al_draw_bitmap_region(obstaculos, 4*32, 3*32, 32, 32, k*32, i*32, 0 );  // lapide 3
 				}
 
-                // fonte
+                    // FONTE
+
                 if(map[i][k] == -51){
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 0*32, 18*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);     // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 0*32, 18*32, 32, 32, k*32, i*32, 0); // fonte 1,1
 				}
                 if(map[i][k] == -52){
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 1*32, 18*32, 32, 32, k*32, i*32, 0 );
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);      // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 1*32, 18*32, 32, 32, k*32, i*32, 0 ); // fonte 1,2
 				}
                 if(map[i][k] == -53){
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 0*32, 19*32, 32, 32, k*32, i*32, 0 );
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);      // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 0*32, 19*32, 32, 32, k*32, i*32, 0 ); // fonte 2,1
 				}
                 if(map[i][k] == -54){
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 1*32, 19*32, 32, 32, k*32, i*32, 0 );
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);      // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 1*32, 19*32, 32, 32, k*32, i*32, 0 ); // fonte 2,2
 				}
 
-                // poço
+                    // POÇO
+
                 if(map[i][k] == -55){
-                            al_draw_bitmap_region(grama, 0*32, 11*32, 32, 32, k*32, i*32, 0); 
-                            al_draw_bitmap_region(obstaculos, 14*32, 13*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 0*32, 11*32, 32, 32, k*32, i*32, 0);        // fundo padrao liso (grama)
+                            al_draw_bitmap_region(obstaculos, 14*32, 13*32, 32, 32, k*32, i*32, 0);  // poço 1,1
 				}
                 if(map[i][k] == -56){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
-                            al_draw_bitmap_region(obstaculos, 15*32, 13*32, 32, 32, k*32, i*32, 0 );
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);         // fundo padrao liso (grama)
+                            al_draw_bitmap_region(obstaculos, 15*32, 13*32, 32, 32, k*32, i*32, 0 ); // poço 1,2
 				}
                 if(map[i][k] == -57){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
-                            al_draw_bitmap_region(obstaculos, 14*32, 14*32, 32, 32, k*32, i*32, 0 );
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);         // fundo padrao liso (grama)
+                            al_draw_bitmap_region(obstaculos, 14*32, 14*32, 32, 32, k*32, i*32, 0 ); // poço 2,1
 				}
                 if(map[i][k] == -58){
-                            al_draw_bitmap_region(grama, 0*32, 11*32, 32, 32, k*32, i*32, 0); 
-                            al_draw_bitmap_region(obstaculos, 15*32, 14*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(grama, 0*32, 11*32, 32, 32, k*32, i*32, 0);        // fundo padrao liso (grama) 
+                            al_draw_bitmap_region(obstaculos, 15*32, 14*32, 32, 32, k*32, i*32, 0);  // poço 2,2
 				}
                 if(map[i][k] == -59){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
-                            al_draw_bitmap_region(obstaculos, 14*32, 15*32, 32, 32, k*32, i*32, 0 );
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);         // fundo padrao liso (grama)
+                            al_draw_bitmap_region(obstaculos, 14*32, 15*32, 32, 32, k*32, i*32, 0 ); // poço 3,1
 				}
                 if(map[i][k] == -60){
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
-                            al_draw_bitmap_region(obstaculos, 15*32, 15*32, 32, 32, k*32, i*32, 0 );
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);         // fundo padrao liso (grama)
+                            al_draw_bitmap_region(obstaculos, 15*32, 15*32, 32, 32, k*32, i*32, 0 ); // poço 3,2
 				}
 
-                //sacas e saquinhos
-                if(map[i][k] == -61){ //sacas 1,1
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(objetos, 9*32, 8*32, 32, 32, k*32, i*32, 0 );
+                  // SACAS E SAQUINHOS
+
+                if(map[i][k] == -61){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);  // piso de pedra 2,2
+                            al_draw_bitmap_region(objetos, 9*32, 8*32, 32, 32, k*32, i*32, 0 ); //sacas 1,1
 				}
-                if(map[i][k] == -62){ //sacas 1,2
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(objetos, 10*32, 8*32, 32, 32, k*32, i*32, 0 );
+                if(map[i][k] == -62){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);  // piso de pedra 2,2
+                            al_draw_bitmap_region(objetos, 10*32, 8*32, 32, 32, k*32, i*32, 0 ); //sacas 1,2
 				}
-                if(map[i][k] == -63){ //sacas 2,1
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(objetos, 9*32, 9*32, 32, 32, k*32, i*32, 0 );
+                if(map[i][k] == -63){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);  // piso de pedra 2,2
+                            al_draw_bitmap_region(objetos, 9*32, 9*32, 32, 32, k*32, i*32, 0 ); //sacas 2,1
 				}
-                if(map[i][k] == -64){ //sacas 2,2
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(objetos, 10*32, 9*32, 32, 32, k*32, i*32, 0 );
+                if(map[i][k] == -64){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);   // piso de pedra 2,2
+                            al_draw_bitmap_region(objetos, 10*32, 9*32, 32, 32, k*32, i*32, 0 ); //sacas 2,2
 				}
-                if(map[i][k] == -65){ //saquinho 1
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(objetos, 7*32, 10*32, 32, 32, k*32, i*32, 0 );
+                if(map[i][k] == -65){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);  // piso de pedra 2,2
+                            al_draw_bitmap_region(objetos, 7*32, 10*32, 32, 32, k*32, i*32, 0 ); //saquinho 1
 				}
-                if(map[i][k] == -66){ //saquinho 2
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(objetos, 8*32, 10*32, 32, 32, k*32, i*32, 0 );
+                if(map[i][k] == -66){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);   // piso de pedra 2,2
+                            al_draw_bitmap_region(objetos, 8*32, 10*32, 32, 32, k*32, i*32, 0 ); //saquinho 2
 				}
 
-                 // barraquinha com produtos
+                    // VENDINHA COM PRODUTOS
 
-                 if(map[i][k] == -67){ //toldo cima esq
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); 
-                            al_draw_bitmap_region(objetos, 12*32, 0*32, 32, 32, k*32, i*32, 0);
+                 if(map[i][k] == -67){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);  // piso de pedra 2,2
+                            al_draw_bitmap_region(objetos, 12*32, 0*32, 32, 32, k*32, i*32, 0); //toldo cima esq
 				}
-                if(map[i][k] == -68){ //toldo meio esq
-                           al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(objetos, 13*32, 0*32, 32, 32, k*32, i*32, 0); 
+                if(map[i][k] == -68){ 
+                           al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);  // piso de pedra 2,2
+                           al_draw_bitmap_region(objetos, 13*32, 0*32, 32, 32, k*32, i*32, 0); //toldo meio esq
 				}
-                if(map[i][k] == -69){ //toldo meio dir
+                if(map[i][k] == -69){ 
                             al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(objetos, 14*32, 0*32, 32, 32, k*32, i*32, 0);                          
+                            al_draw_bitmap_region(objetos, 14*32, 0*32, 32, 32, k*32, i*32, 0); //toldo meio dir                         
 				}
-                if(map[i][k] == -70){ //toldo dir
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(objetos, 15*32, 0*32, 32, 32, k*32, i*32, 0);                
+                if(map[i][k] == -70){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);  // piso de pedra 2,2
+                            al_draw_bitmap_region(objetos, 15*32, 0*32, 32, 32, k*32, i*32, 0); //toldo dir               
                 }
-                if(map[i][k] == -71){ //meio esq
+                if(map[i][k] == -71){ 
                             al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(objetos, 12*32, 1*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(objetos, 12*32, 1*32, 32, 32, k*32, i*32, 0); //meio esq
 				}
-                if(map[i][k] == -72){ //meio meio esq
+                if(map[i][k] == -72){ 
                              al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(objetos, 13*32, 1*32, 32, 32, k*32, i*32, 0);             
+                            al_draw_bitmap_region(objetos, 13*32, 1*32, 32, 32, k*32, i*32, 0); //meio meio esq            
 				}
-                if(map[i][k] == -73){ //meio meio dir
+                if(map[i][k] == -73){ 
                              al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(objetos, 14*32, 1*32, 32, 32, k*32, i*32, 0); 
+                            al_draw_bitmap_region(objetos, 14*32, 1*32, 32, 32, k*32, i*32, 0); //meio meio dir
 				}
-                if(map[i][k] == -74){ //meio dir
+                if(map[i][k] == -74){ 
                              al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(objetos, 15*32, 1*32, 32, 32, k*32, i*32, 0);
+                            al_draw_bitmap_region(objetos, 15*32, 1*32, 32, 32, k*32, i*32, 0); //meio dir
 				}
-                if(map[i][k] == -75){ //barraca baixo esq
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(objetos, 12*32, 2*32, 32, 32, k*32, i*32, 0); //barraca                          
+                if(map[i][k] == -75){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);  // piso de pedra 2,2
+                            al_draw_bitmap_region(objetos, 12*32, 2*32, 32, 32, k*32, i*32, 0); //barraca baixo esq                        
 				}
-                if(map[i][k] == -76){ //barraca baixo meio esq
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(objetos, 13*32, 2*32, 32, 32, k*32, i*32, 0);  
+                if(map[i][k] == -76){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);  // piso de pedra 2,2
+                            al_draw_bitmap_region(objetos, 13*32, 2*32, 32, 32, k*32, i*32, 0); //barraca baixo meio esq 
 				}
-                if(map[i][k] == -77){ //barraca baixo meio dir
-                           al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(objetos, 14*32, 2*32, 32, 32, k*32, i*32, 0);
+                if(map[i][k] == -77){ 
+                           al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);   // piso de pedra 2,2
+                            al_draw_bitmap_region(objetos, 14*32, 2*32, 32, 32, k*32, i*32, 0); //barraca baixo meio dir
 				}
-                if(map[i][k] == -78){ //barraca baixo dir
-                           al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(objetos, 15*32, 2*32, 32, 32, k*32, i*32, 0);
+                if(map[i][k] == -78){ 
+                           al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);   // piso de pedra 2,2
+                            al_draw_bitmap_region(objetos, 15*32, 2*32, 32, 32, k*32, i*32, 0); //barraca baixo dir
 				}
 
-                //lenha e corte
-                 if(map[i][k] == -79){ //lenha 1,1
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
-                            al_draw_bitmap_region(objetos, 7*32, 11*32, 32, 32, k*32, i*32, 0 );
+                    //LENHA E CORTE DE LENHA
+
+                 if(map[i][k] == -79){ 
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);       // fundo padrao liso (grama)
+                            al_draw_bitmap_region(objetos, 7*32, 11*32, 32, 32, k*32, i*32, 0 );    //lenha 1,1
 				}
-                if(map[i][k] == -80){ //lenha 1,2
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
-                            al_draw_bitmap_region(objetos, 8*32, 11*32, 32, 32, k*32, i*32, 0 );
+                if(map[i][k] == -80){ 
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);        // fundo padrao liso (grama)
+                            al_draw_bitmap_region(objetos, 8*32, 11*32, 32, 32, k*32, i*32, 0 );    //lenha 1,2
 				}
-                if(map[i][k] == -81){ //lenha 2,1
-                            al_draw_bitmap_region(grama, 0*32, 11*32, 32, 32, k*32, i*32, 0); 
-                            al_draw_bitmap_region(objetos, 7*32, 12*32, 32, 32, k*32, i*32, 0);
+                if(map[i][k] == -81){ 
+                            al_draw_bitmap_region(grama, 0*32, 11*32, 32, 32, k*32, i*32, 0);       // fundo padrao liso (grama)
+                            al_draw_bitmap_region(objetos, 7*32, 12*32, 32, 32, k*32, i*32, 0);     //lenha 2,1
 				}
-                if(map[i][k] == -82){ //lenha 2,2
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
-                            al_draw_bitmap_region(objetos, 8*32, 12*32, 32, 32, k*32, i*32, 0 );
+                if(map[i][k] == -82){ 
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);        // fundo padrao liso (grama)
+                            al_draw_bitmap_region(objetos, 8*32, 12*32, 32, 32, k*32, i*32, 0 );    //lenha 2,2
 				}
-                if(map[i][k] == -83){ //corte
-                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);
-                            al_draw_bitmap_region(objetos, 15*32, 3*32, 32, 32, k*32, i*32, 0 );
+                if(map[i][k] == -83){ 
+                            al_draw_bitmap_region(grama, 1*32, 9*32, 32, 32, k*32, i*32, 0);        // fundo padrao liso (grama)
+                            al_draw_bitmap_region(objetos, 15*32, 3*32, 32, 32, k*32, i*32, 0 );    //corte
 				}
 
-                //forca
-
+                    // FORCA
                
-                if(map[i][k] == -84){ //toldo baixo esq e barraca cima esq
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 0*32, 1423, 32, 32, k*32, i*32, 0); //barraca
+                if(map[i][k] == -84){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);    // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 0*32, 1423, 32, 32, k*32, i*32, 0); //forca 1,1
                             
 				}
-                if(map[i][k] == -85){ //toldo baixo dir e barraca cima dir
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 1*32, 1423, 32, 32, k*32, i*32, 0); 
+                if(map[i][k] == -85){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);    // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 1*32, 1423, 32, 32, k*32, i*32, 0); //forca 1,2
                            
 				}
-                if(map[i][k] == -86){ //barraca baixo esq
-                           al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 0*32, 1455, 32, 32, k*32, i*32, 0);
+                if(map[i][k] == -86){ 
+                           al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);     // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 0*32, 1455, 32, 32, k*32, i*32, 0); //forca 2,1
 				}
-                if(map[i][k] == -87){ //barraca baixo esq
-                           al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 1*32, 1455, 32, 32, k*32, i*32, 0);
+                if(map[i][k] == -87){ 
+                           al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);     // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 1*32, 1455, 32, 32, k*32, i*32, 0); //forca 2,2
 				}
 
-                // mesinha
-                if(map[i][k] == -88){ //banco cima cima esq
+                    // MESA E BANCOS
+
+                if(map[i][k] == -88){ 
+                             al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);  // piso de pedra 2,2
+                             al_draw_bitmap_region(obstaculos, 6*32, 35*32, 32, 32, k*32, i*32, 0); //banco de cima cima esq
+				}
+                if(map[i][k] == -89){
                              al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                             al_draw_bitmap_region(obstaculos, 6*32, 35*32, 32, 32, k*32, i*32, 0); 
+                             al_draw_bitmap_region(obstaculos, 7*32, 35*32, 32, 32, k*32, i*32, 0);  // banco de cima cima dir
 				}
-                if(map[i][k] == -89){ // banco cima cima dir
-                             al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                             al_draw_bitmap_region(obstaculos, 7*32, 35*32, 32, 32, k*32, i*32, 0);
-				}
-                if(map[i][k] == -90){ //banco cima baixo esq e mesa esq
+                if(map[i][k] == -90){ 
                             al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 6*32, 36*32, 32, 32, k*32, i*32, 0);  // banco                    
+                            al_draw_bitmap_region(obstaculos, 6*32, 36*32, 32, 32, k*32, i*32, 0);  //banco de cima baixo esq e mesa esq                   
 				}
-                if(map[i][k] == -91){ //banco cima baixo dir e mesa dir
+                if(map[i][k] == -91){ 
                             al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 7*32, 36*32, 32, 32, k*32, i*32, 0); 
+                            al_draw_bitmap_region(obstaculos, 7*32, 36*32, 32, 32, k*32, i*32, 0); //banco de cima baixo dir e mesa dir
                             
 				}
-                if(map[i][k] == -92){ //banco baixo esq
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 6*32, 34*32, 32, 32, k*32, i*32, 0);
+                if(map[i][k] == -92){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);     // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 6*32, 34*32, 32, 32, k*32, i*32, 0); //banco de baixo esq
 				}
-                if(map[i][k] == -93){ //banco baixo dir
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 7*32, 34*32, 32, 32, k*32, i*32, 0);
+                if(map[i][k] == -93){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);     // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 7*32, 34*32, 32, 32, k*32, i*32, 0); //banco de baixo dir
 				}
-                if(map[i][k] == -94){ //banco baixo dir
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 8*32, 34*32, 32, 32, k*32, i*32, 0);  // mesa 
+                if(map[i][k] == -94){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);     // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 8*32, 34*32, 32, 32, k*32, i*32, 0); //mesa esq
 				}
-                if(map[i][k] == -95){ //banco baixo dir
-                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0); // piso de pedra 2,2
-                            al_draw_bitmap_region(obstaculos, 9*32, 34*32, 32, 32, k*32, i*32, 0); 
+                if(map[i][k] == -95){ 
+                            al_draw_bitmap_region(pedra, 22*32, 35*32, 32, 32, k*32, i*32, 0);      // piso de pedra 2,2
+                            al_draw_bitmap_region(obstaculos, 9*32, 34*32, 32, 32, k*32, i*32, 0);  //mesa dir
 				}
 		}
 	}
 }
 
+//Função com as definições e características dos personagens
 void printSprite(){
 
     int i;
@@ -1851,52 +1835,7 @@ void printSprite(){
                 al_draw_bitmap_region(Sprite_Skeleton0, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) + 8 , playersInGame.jogador[i].spriteJogador.linhaD * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
 
             }
-            /*            
-            if(playersInGame.Jogador[i].direcao == 'k'){
-
-                auxAtaque = 0; // O jogador só vai poder atacar de novo se auxAtaque = 1; (Declaração de auxAtaque fora desse for)
-                timer = al_create_timer(10.0 / FPS); // criando um delay de 10/60 segundo;
-                if(!timer) {
-                    error_msg("Falha ao criar temporizador");
-                    return 0;
-                }
-
-                if(playersInGame.jogador[i].direcao == 'w'){
-
-                    for(int j= 0; j<3; j++){
-                        al_draw_bitmap_region(Sprite_Skeleton0, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento ) + 8 , playersInGame.jogador[i].spriteJogador.linhaAtaqueW * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
-                        colunaSprite++;
-                        al_start_timer(timer);                        
-                    }
-                    colunaSprite = 0;
-                    auxAtaque = 1;
-                }
-
-                if(playersInGame.jogador[i].direcao == 's'){
-
-                    al_draw_bitmap_region(Sprite_Skeleton0, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) + 8 , playersInGame.jogador[i].spriteJogador.linhaS * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
-
-                }
-
-                if(playersInGame.jogador[i].direcao == 'a'){
-
-                    al_draw_bitmap_region(Sprite_Skeleton0, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) + 8 , playersInGame.jogador[i].spriteJogador.linhaA * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , ALLEGRO_FLIP_HORIZONTAL);
-
-                }
-
-                if(playersInGame.jogador[i].direcao == 'd'){
-
-                    al_draw_bitmap_region(Sprite_Skeleton0, (playersInGame.jogador[i].colunaSprite * playersInGame.jogador[i].spriteJogador.espacamento) + 8 , playersInGame.jogador[i].spriteJogador.linhaD * playersInGame.jogador[i].spriteJogador.espacamento ,32, 32 , x*32 , y*32 , 0);
-
-                }                
-
-
-
-                
-                
-            }
             
-            */
         } else if(playersInGame.jogador[i].qualPers == 1){     //Minha sprite é Ripper
 
             if(playersInGame.jogador[i].direcao == 'w'){
@@ -2027,6 +1966,7 @@ void printSprite(){
     }
 }
 
+// Função para printar os corações, que estarão no topo da tela e representarão a vida de cada personagem
 void printHeart(){
 
     int i, espacamentoHeart = 32;
@@ -2040,6 +1980,7 @@ void printHeart(){
 
 }
 
+// Definindo os parâmetros das sprites (a quantidade de imagens que teremos em cada foto png que está na pasta resources)
 void configuraSprite(){
 
     int i;
@@ -2176,12 +2117,14 @@ void configuraSprite(){
     }
 }
 
+// Definindo parâmetros das mensagens de gave over
 void printMessageDeathScreen(char str[]){ 
 
     al_draw_text(ubuntu, al_map_rgb(255, 255, 255), LARGURA - al_get_font_ascent(ubuntu),(HEIGHT - al_get_font_ascent(ubuntu)) - 20, ALLEGRO_ALIGN_RIGHT, str);
 
 }
 
+// Printando as mensagens de game over
 void printDeathScreen(){
 
     al_draw_text(fonteHTPTitulo, al_map_rgb(255, 255, 255), WIDTH / 2, 30, ALLEGRO_ALIGN_CENTRE, "You are Dead!");
@@ -2189,6 +2132,7 @@ void printDeathScreen(){
     
 }
 
+// Printando a mentagem de vitória
 void printWinnerScreen(){
 
     al_draw_text(fonteHTPTitulo, al_map_rgb(255, 255, 255), WIDTH / 2, 30, ALLEGRO_ALIGN_CENTRE, "You are the WINNER!");
@@ -2196,6 +2140,7 @@ void printWinnerScreen(){
 
 }
 
+// Função para colocar música
 void Playsound(ALLEGRO_AUDIO_STREAM *musica){
        
      al_reserve_samples(1);
@@ -2207,35 +2152,3 @@ void Playsound(ALLEGRO_AUDIO_STREAM *musica){
     al_set_audio_stream_playmode(musica, ALLEGRO_PLAYMODE_LOOP);
    
 }
-
-/*
-void PlayAttacksound(int idchar){
-     switch (idchar)
-     {
-     case 0:
-         al_play_sample(SwordAttackSound,1.0,0.0,1.25,ALLEGRO_PLAYMODE_ONCE,NULL);
-         break;
-
-     case 1:
-        al_play_sample(SwordAttackSound2,1.0,0.0,1.25,ALLEGRO_PLAYMODE_ONCE,NULL);
-         break;
-
-     case 2: 
-        al_play_sample(SwordAttackSound3,1.0,0.0,1.25,ALLEGRO_PLAYMODE_ONCE,NULL);
-         break;
-
-     case 3: 
-        al_play_sample(SwordAttackSound4,1.0,0.0,1.25,ALLEGRO_PLAYMODE_ONCE,NULL);
-         break;
-
-     case 4: 
-        al_play_sample(SwordAttackSound5,1.0,0.0,1.25,ALLEGRO_PLAYMODE_ONCE,NULL);
-         break;
-
-     case 5: 
-        al_play_sample(SwordAttackSound6,1.0,0.0,1.25,ALLEGRO_PLAYMODE_ONCE,NULL);
-         break;
-        
-     
-     }
-*/
