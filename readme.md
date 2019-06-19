@@ -32,4 +32,15 @@ Todos os jogadores precisam estar conectados em uma LAN e usando o sistema opera
     
 ## Imagens:
  
+![MenuBOF](https://user-images.githubusercontent.com/48449247/59805182-ea15fc00-92c6-11e9-9e9f-cf778bb5c4ab.png)
+ 
+![HowtoplayBOF](https://user-images.githubusercontent.com/48449247/59805179-ea15fc00-92c6-11e9-8b62-bd409b054a8c.png)
+
+![ingame](https://user-images.githubusercontent.com/48449247/59805180-ea15fc00-92c6-11e9-88ad-a8be3dd3f2ba.png)
+
+![PlayGameBOF](https://user-images.githubusercontent.com/48449247/59805183-eaae9280-92c6-11e9-86e6-5714fcf3c0df.png)
+
+![YouaredeadBOF](https://user-images.githubusercontent.com/48449247/59805185-eaae9280-92c6-11e9-8042-9079274175f5.png)
+
+![WinnerBOF](https://user-images.githubusercontent.com/48449247/59805184-eaae9280-92c6-11e9-9066-9b3c97bb37fc.png)
 
