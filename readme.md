@@ -1,22 +1,22 @@
 # Battle Of Feuds
 
-Battle of Feuds é um jogo desenvolvido como projeto de Introdução à Programação - CIn, UFPE, 2019.1. 
-Para jogar, é preciso que todos os jogadores se conectem ao servidor (MyServer.c) por meio do cliente (MyClient.c). Para isso, os jogadores devem obter o IP de onde o servidor está aberto.
+Battle of Feuds is a game developed for a Computing Engineering's course called "Programming Introduction", in the Federal University of Pernambuco - Brazil.
+To play, all players must connect to the server (MyServer.c) through the client (MyClient.c). For this, players must obtain the IP from where the server is open.
 
-## Como Jogar
+## How to Play
 
-Todos os jogadores precisam estar conectados em uma LAN e usando o sistema operacional Linux. Para abrir o server será preciso utilizar o comando make server no terminal. Após realizado esse processo, será necessário abrir o client, o qual será executado com o comando make client no terminal. Ao abrir o client, o menu do jogo mostra três opções, onde é possível iniciar o jogo, ver as instruções ou sair. Para iniciar o jogo, é necessário digitar o IP no qual o servidor está hospedado, digitar o seu login e escolher um personagem. Se o IP foi digitado incorretamente, o usuário será notificado e poderá introduzir um novo IP. Ao digitar o IP correto, o usuário é automaticamente conectado ao chat, onde deve esperar que todos se conectem para iniciar a partida. Quando todos os jogadores estiverem conectados, a tecla ctrl, do lado esquerdo, deverá ser pressionada para começar o jogo. Durante o jogo, cada jogador possui 5 vidas, e o seu objetivo será eliminar os outros e se manter vivo até o final.
+All players must be connected to a LAN and using the Linux operating system. To open the server you will need to use the make server command on the terminal. After this process has been carried out, it will be necessary to open the client, which will be executed with the make client command in the terminal. When opening the client, the game menu shows three options, where you can start the game, see the instructions or exit. To start the game, it is necessary to enter the IP on which the server is hosted, enter your login and choose a character. If the IP was entered incorrectly, the user will be notified and will be able to enter a new IP. When entering the correct IP, the user is automatically connected to the chat, where he must wait for everyone to connect to start the game. When all players are connected, the left-hand ctrl key must be pressed to start the game. During the game, each player has 5 lives, and your goal will be to eliminate the others and stay alive until the end.
 
-## Compilando e rodando:
+## Compiling and runnning:
 
-#### Compilando e rodando o server:
+#### Compiling and runnning the server:
 	$ make server
-#### Compiando e rodando o client:
+#### Compiling and runnning the client:
 	$ make client
-#### Compilando client e server:
+#### Compiling the client and the server:
 	$ make
 	
-## Jogo desenvolvido por:
+## Game developed by:
 
     • Allan Soares Vasconcelos [https://github.com/AllanVasc]
     • Eliasjan de Oliveira [https://github.com/eloliveira]
@@ -30,7 +30,7 @@ Todos os jogadores precisam estar conectados em uma LAN e usando o sistema opera
 
     • Lucas Dias [https://github.com/lucdias]
     
-## Imagens:
+## Images:
  
 ![MenuBOF](https://user-images.githubusercontent.com/48449247/59805182-ea15fc00-92c6-11e9-9e9f-cf778bb5c4ab.png)
  
